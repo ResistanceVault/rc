@@ -146,6 +146,7 @@ mouse:
 	move.w 	#1-1,d7
 moversloop:
 	bsr.w	DISPLAY
+	bsr.w   ACCELERATE
 	adda.w  #MOVER_SIZE,a0
 	dbra 	d7,moversloop
 
