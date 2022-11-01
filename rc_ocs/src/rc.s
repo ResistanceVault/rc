@@ -148,6 +148,7 @@ moversloop:
 	move.w  #0,d0
 	bsr.w   MANAGE_INPUT
 	bsr.w   ACCELERATE
+	bsr.w	MOVE
 	bsr.w	DISPLAY
 	adda.w  #MOVER_SIZE,a0
 	dbra 	d7,moversloop
@@ -176,6 +177,7 @@ Aspetta:
 	include "display.s"
 	include "accelerate.s"
 	include "manage_input.s"
+	include "move.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
