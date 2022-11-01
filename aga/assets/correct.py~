@@ -1,0 +1,47 @@
+import time
+
+global bytecounter
+global colorcounter
+
+def print_byte(byte):
+    global bytecounter
+    global colorcounter
+    if bytecounter%4 == 0:
+        if colorcounter > 0:
+            print(" ; color {}".format(colorcounter), end = '')
+        print("\ndc.l $00", end = '')
+        bytecounter = bytecounter + 1
+        colorcounter = colorcounter + 1
+    print(str(byte), end = '')
+    bytecounter = bytecounter +1
+    return
+
+# Using readlines()
+file1 = open('pista640x460_corrected.col', 'r')
+Lines = file1.readlines()
+count = 0
+bytecounter = 0
+colorcounter = 0
+# Strips the newline character
+for line in Lines:
+    count += 1
+    #print("\nLine{}: {}\n".format(count, line.strip()))
+
+    countword = 0;
+    for word in line.split(','):
+        if 'DC.W' in word:
+            word = word.split()[1]
+        #print(" Word<<{}>>: <<{}>>\n".format(countword, word))
+        countword = countword +1
+        if word[0]=='$':
+            print_byte(str(word[1])+str(word[2]))
+            print_byte(str(word[3])+str(word[4]))
+            
+    #time.sleep(5)
+            
+            
+
+            
+                
+            
+            
