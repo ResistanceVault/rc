@@ -145,8 +145,10 @@ mouse:
 	lea MOVERS,a0
 	move.w 	#1-1,d7
 moversloop:
-	bsr.w	DISPLAY
+	move.w  #0,d0
+	bsr.w   MANAGE_INPUT
 	bsr.w   ACCELERATE
+	bsr.w	DISPLAY
 	adda.w  #MOVER_SIZE,a0
 	dbra 	d7,moversloop
 
@@ -173,6 +175,7 @@ Aspetta:
 	include "calculate_wheel_positions.s"
 	include "display.s"
 	include "accelerate.s"
+	include "manage_input.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
