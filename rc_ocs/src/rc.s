@@ -143,7 +143,7 @@ mouse:
 
 	; for each car
 	lea MOVERS,a0
-	move.w 	#2-1,d7
+	move.w 	#1-1,d7
 moversloop:
 	bsr.w	DISPLAY
 	adda.w  #MOVER_SIZE,a0
@@ -171,6 +171,7 @@ Aspetta:
 	include "car_inits.s"
 	include "calculate_wheel_positions.s"
 	include "display.s"
+	include "accelerate.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1

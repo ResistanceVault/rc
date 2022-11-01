@@ -6,13 +6,6 @@ DISPLAY:
     ; save a0 - point routine trashes it
     move.l a0,a2
 
-           ; DEBUG 1256
-        move.w MOVER_BACK_WHEEL_X_VECTOR_OFFSET(a2),d0
-        move.w MOVER_BACK_WHEEL_Y_VECTOR_OFFSET(a2),d1
-
-        move.w MOVER_FRONT_WHEEL_X_VECTOR_OFFSET(a2),d0
-        move.w MOVER_FRONT_WHEEL_Y_VECTOR_OFFSET(a2),d1
-
     ; Front wheel
     STROKE #1
     move.w MOVER_FRONT_WHEEL_X_VECTOR_OFFSET(a2),d0
@@ -20,7 +13,6 @@ DISPLAY:
 
     asr.w #6,d0
     asr.w #6,d1
-    ;DEBUG 1234
     jsr POINT
 
 
@@ -30,7 +22,6 @@ DISPLAY:
     move.w MOVER_BACK_WHEEL_Y_VECTOR_OFFSET(a2),d1
     asr.w #6,d0
     asr.w #6,d1
-    ;DEBUG 1234
     jsr POINT
 
     ; Car position
@@ -39,7 +30,6 @@ DISPLAY:
     move.w MOVER_Y_POSITION_OFFSET(a2),d1
     asr.w #6,d0
     asr.w #6,d1
-    ;DEBUG 1234
     jsr POINT
     
     rts
