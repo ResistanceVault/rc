@@ -5,7 +5,7 @@
 ACCELERATE_VECTOR_1: dc.l 0
 
 ACCELERATE:
-    DEBUG 1234
+    movem.l a0/d7,-(sp)
     move.l a0,a2
 
     ; if the car is not accellerating just exit (rts)
@@ -27,7 +27,9 @@ ACCELERATE:
     ; add accelleration to velocity
     ; a0 is already set
     move.l a2,a1
+    adda.w #MOVER_VELOCITY_OFFSET,a1
     ADD2DVECTOR
     
-accellerate_end:    
+accellerate_end:
+    movem.l (sp)+,a0/d7 
     rts

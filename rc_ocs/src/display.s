@@ -31,5 +31,8 @@ DISPLAY:
     asr.w #6,d0
     asr.w #6,d1
     jsr POINT
+
+    ; restore old a0
+    move.l a2,a0
     
     rts
