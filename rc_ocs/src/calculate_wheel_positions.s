@@ -10,6 +10,7 @@ WHEEL_VECTOR_OUTPUT:
     dc.l 0
 
 CALCULATE_WHEEL_POSITIONS:
+    DEBUG 1235
     ; save car address into a2
     move.l              a0,a2
 
@@ -21,13 +22,12 @@ CALCULATE_WHEEL_POSITIONS:
     move.w              MOVER_WHEEL_BASE_OFFSET(a2),(a1)
     move.w              MOVER_WHEEL_BASE_OFFSET(a2),2(a1)
     MUL2DVECTORSTATIC   WHEEL_VECTOR_OUTPUT
-    lea WHEEL_VECTOR_OUTPUT,a3
-
+    lea                 WHEEL_VECTOR_OUTPUT,a3
     
     ; Divide by 2 and then divide by to no normalize (divide by 128)
-    lea WHEEL_VECTOR_OUTPUT(PC),a0
-    lea WHEEL_VECTOR_2(PC),a1
-    move.l #$00020002,(a1)
+    lea                 WHEEL_VECTOR_OUTPUT(PC),a0
+    lea                 WHEEL_VECTOR_2(PC),a1
+    move.l              #$00020002,(a1)
     DIV2DVECTOR
 
     ; restore address of the car

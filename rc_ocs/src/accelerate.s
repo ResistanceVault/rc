@@ -29,6 +29,7 @@ ACCELERATE:
     move.l a2,a1
     adda.w #MOVER_VELOCITY_OFFSET,a1
     ADD2DVECTOR
+    DEBUG 5555
     
 accellerate_end:
     movem.l (sp)+,a0/d7 

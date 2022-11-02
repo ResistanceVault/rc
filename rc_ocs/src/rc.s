@@ -145,7 +145,7 @@ mouse:
 	lea MOVERS,a0
 	move.w 	#1-1,d7
 moversloop:
-	move.w  #0,d0
+	move.w  #%0100,d0
 	bsr.w   MANAGE_INPUT
 	bsr.w   ACCELERATE
 	bsr.w	MOVE
