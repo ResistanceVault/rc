@@ -10,7 +10,6 @@ WHEEL_VECTOR_OUTPUT:
     dc.l 0
 
 CALCULATE_WHEEL_POSITIONS:
-    DEBUG 1235
     ; save car address into a2
     move.l              a0,a2
 

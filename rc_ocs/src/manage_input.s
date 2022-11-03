@@ -22,9 +22,9 @@ manage_input_noleft:
 manage_input_noright:
 
     ; if steer_direction is negative add 360
-    ;btst #15,MOVER_STEER_DIRECTION_OFFSET(a0)
-    ;beq.s manage_input_direction_positive
-    ;addi.w #360,MOVER_STEER_DIRECTION_OFFSET(a0)
+    btst #15,MOVER_STEER_DIRECTION_OFFSET(a0)
+    beq.s manage_input_direction_positive
+    addi.w #360,MOVER_STEER_DIRECTION_OFFSET(a0)
 manage_input_direction_positive:
 
     ; Update direction vector
