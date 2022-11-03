@@ -13,7 +13,6 @@ MOVE:
     adda.w #MOVER_VELOCITY_OFFSET,a0
     adda.w #MOVER_POSITION_OFFSET,a1
     ADD2DVECTOR
-    DEBUG 6666
 
     ; Calculate new wheel position according to new position
     move.l a2,a0

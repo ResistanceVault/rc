@@ -1,4 +1,8 @@
 ; Init car 1
+
+CAR1_MAX_SPEED 		EQU %1100000
+CAR1_ENGINE_POWER 	EQU 128*64/32
+
 CAR1_INIT:
 	lea 	MOVER1,a0
 	move.w 	#100*64,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
@@ -14,7 +18,7 @@ CAR1_INIT:
 	move.w  #2,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 	move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
 
-	move.w  #2,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction)
+	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction)
 
 	; calculate forward vector
 	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
@@ -28,8 +32,8 @@ CAR1_INIT:
 	move.w d7,2(a0)
 	suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 
-	move.w  #128*64,MOVER_ENGINE_POWER_OFFSET(a0) 	  	 	; engine power , high number means the car will reach max speed faster (engine_power)
-	move.w 	#1*64,MOVER_MAX_SPEED_OFFSET(a0) 	  		 	; max speed of the car, limit maximum amount of movement pixel for each frame (max_speed)
+	move.w  #CAR1_ENGINE_POWER,MOVER_ENGINE_POWER_OFFSET(a0) 	  	 	; engine power , high number means the car will reach max speed faster (engine_power)
+	move.w 	#CAR1_MAX_SPEED,MOVER_MAX_SPEED_OFFSET(a0) 	  		 	; max speed of the car, limit maximum amount of movement pixel for each frame (max_speed)
 
 	move.w  #1,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
