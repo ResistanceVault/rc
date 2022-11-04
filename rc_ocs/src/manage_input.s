@@ -16,19 +16,26 @@ MANAGE_INPUT:
     move.w #1,MOVER_IS_ACCELERATING_OFFSET(a0)
 manage_input_no_acceleration:
 
-    ; if left is pressed steer direction -= steering angle
-    btst #0,d0
-    beq.s manage_input_noleft
-    move.w MOVER_STEERING_ANGLE_OFFSET(a0),d1
-    sub.w  d1,MOVER_STEER_DIRECTION_OFFSET(a0)
-manage_input_noleft:
+    ; manage braking
+    btst #3,d0
+    move.w #0,MOVER_IS_BRAKING_OFFSET(a0)
+    beq.s manage_input_no_brake
+    move.w #1,MOVER_IS_BRAKING_OFFSET(a0)
+manage_input_no_brake:
 
-     ; if right is pressed steer direction += steering angle
-    btst #1,d0
+    ; if right is pressed steer direction += steering angle
+    btst #0,d0
     beq.s manage_input_noright
     move.w MOVER_STEERING_ANGLE_OFFSET(a0),d1
     add.w  d1,MOVER_STEER_DIRECTION_OFFSET(a0)
 manage_input_noright:
+
+    ; if left is pressed steer direction -= steering angle
+    btst #1,d0
+    beq.s manage_input_noleft
+    move.w MOVER_STEERING_ANGLE_OFFSET(a0),d1
+    sub.w  d1,MOVER_STEER_DIRECTION_OFFSET(a0)
+manage_input_noleft:
 
     ; if steer_direction is negative add 360
     move.w MOVER_STEER_DIRECTION_OFFSET(a0),d0
@@ -36,6 +43,12 @@ manage_input_noright:
     beq.s manage_input_direction_positive
     addi.w #360,MOVER_STEER_DIRECTION_OFFSET(a0)
 manage_input_direction_positive:
+
+    ; if steer direction is >= 360 subtract 360
+    cmpi.w  #360,MOVER_STEER_DIRECTION_OFFSET(a0)
+    blt.s manage_input_direction_ok
+    subi.w #360,MOVER_STEER_DIRECTION_OFFSET(a0)
+manage_input_direction_ok:
 
     ; Update direction vector
     move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
@@ -49,13 +62,5 @@ manage_input_direction_positive:
 	move.w d7,2(a0)
     suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 
-    
-
-    ; manage braking
-    btst #3,d0
-    move.w #0,MOVER_IS_BRAKING_OFFSET(a0)
-    beq.s manage_input_no_brake
-    move.w #1,MOVER_IS_BRAKING_OFFSET(a0)
-manage_input_no_brake:
     movem.l (sp)+,a0/d7 
     rts
