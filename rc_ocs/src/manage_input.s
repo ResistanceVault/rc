@@ -6,7 +6,16 @@
 ; - bit 3 : brake is pressed
 ; - a0 must point to the car object
 MANAGE_INPUT:
+    movem.l a0/d7,-(sp)
     move.l a0,a2
+
+    ; manage acceleration
+    move.w #0,MOVER_IS_ACCELERATING_OFFSET(a0)
+    btst #2,d0
+    beq.s manage_input_no_acceleration
+    move.w #1,MOVER_IS_ACCELERATING_OFFSET(a0)
+manage_input_no_acceleration:
+
     ; if left is pressed steer direction -= steering angle
     btst #0,d0
     beq.s manage_input_noleft
@@ -22,23 +31,25 @@ manage_input_noleft:
 manage_input_noright:
 
     ; if steer_direction is negative add 360
+    move.w MOVER_STEER_DIRECTION_OFFSET(a0),d0
     btst #15,MOVER_STEER_DIRECTION_OFFSET(a0)
     beq.s manage_input_direction_positive
     addi.w #360,MOVER_STEER_DIRECTION_OFFSET(a0)
 manage_input_direction_positive:
 
     ; Update direction vector
-    ;move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
-	;adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
-	;CREATE2DVECTORFROMANGLE
-    ;suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+    move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
+	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+	CREATE2DVECTORFROMANGLE
+    move.w (a0),d7
+	asr.w #5,d7
+	move.w d7,(a0)
+	move.w 2(a0),d7
+	asr.w #5,d7
+	move.w d7,2(a0)
+    suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 
-    ; manage acceleration
-    move.w #0,MOVER_IS_ACCELERATING_OFFSET(a0)
-    btst #2,d0
-    beq.s manage_input_no_acceleration
-    move.w #1,MOVER_IS_ACCELERATING_OFFSET(a0)
-manage_input_no_acceleration:
+    
 
     ; manage braking
     btst #3,d0
@@ -46,5 +57,5 @@ manage_input_no_acceleration:
     beq.s manage_input_no_brake
     move.w #1,MOVER_IS_BRAKING_OFFSET(a0)
 manage_input_no_brake:
-    move.l a2,a0
+    movem.l (sp)+,a0/d7 
     rts

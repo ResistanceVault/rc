@@ -145,10 +145,9 @@ mouse:
 	lea MOVERS,a0
 	move.w 	#1-1,d7
 moversloop:
-	;move.w  #%0100,d0
+	;move.w  #%0101,d0
 	 ; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
 	bsr.w	LeggiJoyst
-
 	bsr.w   MANAGE_INPUT
 	bsr.w 	APPLY_FRICTION
 	bsr.w   ACCELERATE
