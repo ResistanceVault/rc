@@ -141,6 +141,23 @@ mouse:
 
 	WAITBLITTER
 
+	STROKE #1
+	move.w #0,d0
+    move.w #0,d1
+    jsr POINT
+
+	move.w #WIDTH-1,d0
+    move.w #0,d1
+    jsr POINT
+
+	move.w #WIDTH-1,d0
+    move.w #HEIGHT-1,d1
+    jsr POINT
+
+	move.w #0,d0
+    move.w #HEIGHT-1,d1
+    jsr POINT
+
 	; for each car
 	lea MOVERS,a0
 	move.w 	#1-1,d7
