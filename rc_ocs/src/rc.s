@@ -149,10 +149,23 @@ moversloop:
 	 ; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
 	bsr.w	LeggiJoyst
 	;move.w  #%0101,d0
+
+	; Change the internal state of the mover object according to player input on data register d0
 	bsr.w   MANAGE_INPUT
+
+	; Calculate friction
 	bsr.w 	APPLY_FRICTION
+
+	; Calculate acceleration
 	bsr.w   ACCELERATE
+
+	; Move the mover object (calculate next position)
 	bsr.w	MOVE
+
+    ; check collisions
+    bsr.w 	CHECK_COLLISIONS
+    
+	; show the mover obkect on the screen
 	bsr.w	DISPLAY
 	adda.w  #MOVER_SIZE,a0
 	dbra 	d7,moversloop
@@ -183,6 +196,7 @@ Aspetta:
 	include "friction.s"
 	include "manage_input.s"
 	include "move.s"
+	include "check_collisions.s"
 
 	include "joystickinput.s"
 
