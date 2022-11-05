@@ -176,6 +176,9 @@ moversloop:
 	; Calculate acceleration
 	bsr.w   ACCELERATE
 
+	; Calculate braking
+	bsr.w   BRAKE
+
 	; Move the mover object (calculate next position)
 	bsr.w	MOVE
 
@@ -210,6 +213,7 @@ Aspetta:
 	include "calculate_wheel_positions.s"
 	include "display.s"
 	include "accelerate.s"
+	include "brake.s"
 	include "friction.s"
 	include "manage_input.s"
 	include "move.s"

@@ -17,8 +17,8 @@ MANAGE_INPUT:
 manage_input_no_acceleration:
 
     ; manage braking
-    btst #3,d0
     move.w #0,MOVER_IS_BRAKING_OFFSET(a0)
+    btst #3,d0
     beq.s manage_input_no_brake
     move.w #1,MOVER_IS_BRAKING_OFFSET(a0)
 manage_input_no_brake:
