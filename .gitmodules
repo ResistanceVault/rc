@@ -1,0 +1,3 @@
+[submodule "AProcessing"]
+	path = rc_ocs/src/AProcessing
+	url = https://github.com/Ozzyboshi/AProcessing

@@ -4,15 +4,6 @@
 ; and takes direction from forward vector
 ; Car pointer must be in a0
 
-MUL2DVECTOR1X2 MACRO
-    move.w   (a1),d0
-    move.w    2(a1),d1
-    muls.w    (a0),d0
-    muls.w    (a0),d1
-    move.w    d0,(a1)
-    move.w    d1,2(a1)
-    ENDM
-
 ACCELERATE:
     movem.l a0/d7,-(sp)
     movea.l a0,a2
