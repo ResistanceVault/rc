@@ -18,7 +18,7 @@ CAR1_INIT:
 	move.w  #2,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 	move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
 
-	move.w  #300,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction)
+	move.w  #300,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
 	; calculate forward vector
 	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7

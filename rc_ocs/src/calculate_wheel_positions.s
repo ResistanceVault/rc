@@ -6,8 +6,6 @@ WHEEL_VECTOR_1:
     dc.l 0
 WHEEL_VECTOR_2:
     dc.l 0
-WHEEL_VECTOR_OUTPUT:
-    dc.l 0
 
 CALCULATE_WHEEL_POSITIONS:
     ; save car address into a2
@@ -15,19 +13,18 @@ CALCULATE_WHEEL_POSITIONS:
 
     ; step 1 - get the vector representing the distance from the center
     ; up to a generic wheel according to forward vector and wheel base
-    lea                 WHEEL_VECTOR_1(PC),a0
-    lea                 WHEEL_VECTOR_2(PC),a1
-    move.l              MOVER_FORWARD_VECTOR_OFFSET(a2),(a0)
-    move.w              MOVER_WHEEL_BASE_OFFSET(a2),(a1)
-    move.w              MOVER_WHEEL_BASE_OFFSET(a2),2(a1)
-    MUL2DVECTORSTATIC   WHEEL_VECTOR_OUTPUT
-    lea                 WHEEL_VECTOR_OUTPUT,a3
     
-    ; Divide by 2 and then divide by to no normalize (divide by 128)
-    lea                 WHEEL_VECTOR_OUTPUT(PC),a0
+    ; wheel distance / 2 in a0 (scalar)
+    lea                 WHEEL_VECTOR_1(PC),a0
+    move.w              MOVER_WHEEL_BASE_OFFSET(a2),d0
+    lsr.w               #1,d0
+    move.w              d0,(a0)
+
+    ; forward vector copy in a1
     lea                 WHEEL_VECTOR_2(PC),a1
-    move.l              #$00020002,(a1)
-    DIV2DVECTOR
+    move.l              MOVER_FORWARD_VECTOR_OFFSET(a2),(a1)
+
+    MUL2DVECTOR1X2
 
     ; restore address of the car
     move.l              a2,a0
@@ -38,9 +35,6 @@ CALCULATE_WHEEL_POSITIONS:
     lea WHEEL_VECTOR_2(PC),a1
     SUB2DVECTORSTATIC WHEEL_VECTOR_1
     move.l WHEEL_VECTOR_1,(a0)
-
-
-
 
     ; restore address of the car
     move.l              a2,a0
