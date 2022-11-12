@@ -1,7 +1,7 @@
 
 ; Lezione8n2.s - Plot point on a 2 bitplane playfield
 
-	Section	dotta,CODE
+	Section	rc,CODE
 
 MOVER_POSITION_OFFSET				EQU 0
 MOVER_X_POSITION_OFFSET 			EQU 0
@@ -102,19 +102,30 @@ DMASET	EQU	%1000001111000000	; copper e bitplane DMA abilitati
 	include "AProcessing/libs/precalc/map.s"
 
 START:
-;	 PUNTIAMO IL NOSTRO BITPLANE
+	
+	; Print track image
 
-	MOVE.L	#SCREEN_0,d0
-	LEA	BPLPOINTERS,A1
-	move.w	d0,6(a1)
-	swap	d0
-	move.w	d0,2(a1)
+TRACK_DATA_HEIGHT	EQU 240
 
-	MOVE.L	#SCREEN_1,d0
-	LEA	BPLPOINTERS1,A1
-	move.w	d0,6(a1)
-	swap	d0
-	move.w	d0,2(a1)
+	move.l              #TRACK_DATA_1,d0
+  	lea                 BPLPTR1,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+  	move.l              #TRACK_DATA_2,d0
+  	lea                 BPLPTR3,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+  	move.l              #TRACK_DATA_3,d0
+  	lea                 BPLPTR5,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+	; set track data colors
+	lea 				TRACK_DATA_COLORS,a0
+	lea					$dff180,a1
+	moveq				#8-1,d7
+looptrackcolors:
+	move.w				(a0)+,(a1)+
+	dbra				d7,looptrackcolors
 
 	; Puntiamo la cop...
 
@@ -194,11 +205,11 @@ Aspetta:
     cmpi.b  #$ff,$dff006    ; linea 255?
     beq.s   Aspetta
 
-	lea                 BPLPTR1,a1
+	lea                 BPLPTR2,a1
 	move.l              SCREEN_PTR_0,d0
 	POINTINCOPPERLIST
 
-	lea                 BPLPTR2,a1
+	lea                 BPLPTR4,a1
 	move.l              SCREEN_PTR_1,d0
 	POINTINCOPPERLIST
 
@@ -244,40 +255,40 @@ CLEARTOP:
 
             rts
 
+POINTINCOPPERLIST_FUNCT:
+  POINTINCOPPERLIST
+  rts
+
 	include "AProcessing/libs/rasterizers/processing_bitplanes_fast.s"
 
+	include "copperlist.s"
 
-	SECTION	GRAPHIC,DATA_C
+	
+	SECTION	MIOPLANE,DATA_C
+	IFND DEBUG
 
-COPPERLIST:
+TRACK_DATA:
+TRACK_DATA_1:
+	incbin  "assets/images/raw/rc045_320X240X8.raw.aa"
+	dcb.b   40*16,0
+TRACK_DATA_2:
+	incbin  "assets/images/raw/rc045_320X240X8.raw.ab"
+	dcb.b   40*16,0
+TRACK_DATA_3:
+	incbin  "assets/images/raw/rc045_320X240X8.raw.ac"
+	dcb.b   40*16,0
 
-	dc.w	$8E,$2c81	; DiwStrt
-	dc.w	$90,$2cc1	; DiwStop
-	dc.w	$92,$0038	; DdfStart
-	dc.w	$94,$00d0	; DdfStop
-	dc.w	$102,0		; BplCon1
-	dc.w	$104,$24	; BplCon2 - Tutti gli sprite sopra i bitplane
-	dc.w	$108,0		; Bpl1Mod
-	dc.w	$10a,0		; Bpl2Mod
-		    ; 5432109876543210
-	dc.w	$100,%0010001000000000	; 2 bitplane LOWRES 320x256
+	ELSE
+	TRACK_DATA:
+TRACK_DATA_1:
+	dcb.b   40*256,0
+TRACK_DATA_2:
+	dcb.b   40*256,0
+TRACK_DATA_3:
 
-BPLPOINTERS:
-BPLPTR1:
-	dc.w $e0,0,$e2,0	;primo	 bitplane
-BPLPOINTERS1:
-BPLPTR2:
-	dc.w $e4,0,$e6,0	;secondo	 bitplane
-
-	dc.w	$0180,$000	; color0 - SFONDO
-	dc.w	$0182,$f00	; color1 - SCRITTE
-	dc.w	$0184,$0f0	; color2 - SCRITTE
-	dc.w	$0186,$00f	; color3 - SCRITTE
-
-	dc.w	$FFFF,$FFFE	; Fine della copperlist
-
-
-*****************************************************************************
-
-	SECTION	MIOPLANE,BSS_C
+	dcb.b   40*256,0
+	ENDC
+	
+TRACK_DATA_COLORS:
+	incbin  "assets/images/raw/rc045_320X240X8.pal"
 	
