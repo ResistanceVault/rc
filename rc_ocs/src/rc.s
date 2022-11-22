@@ -76,6 +76,9 @@ SWAP_BPL MACRO
 DMASET	EQU	%1000001111000000	; copper e bitplane DMA abilitati
 ;		 -----a-bcdefghij
 
+	include "AProcessing/libs/vectors/sqrt_q10_6_lookup_table.i"
+
+
 	include "AProcessing/libs/rasterizers/globaloptions.s"
 	
 	include "AProcessing/libs/trigtables.i"
@@ -176,7 +179,7 @@ moversloop:
 	
 	 ; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
 	bsr.w	LeggiJoyst
-	;move.w  #%0101,d0
+	;move.w  #%0100,d0
 
 	; Change the internal state of the mover object according to player input on data register d0
 	bsr.w   MANAGE_INPUT
@@ -231,6 +234,9 @@ Aspetta:
 	include "check_collisions.s"
 
 	include "joystickinput.s"
+	IFD DEBUG
+    include "debug.s"
+    ENDC
 
 MOVERS:
 	MOVER_INIT_MEM 1

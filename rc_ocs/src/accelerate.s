@@ -12,6 +12,8 @@ ACCELERATE:
     tst.w MOVER_IS_ACCELERATING_OFFSET(a0)
     beq.s accellerate_end
 
+    move.w #$FFF,$dff180
+
     ; the new acceleration is given by the
     ; forward vector multipled by engine power
     ;  this.accelleration = this.forward_vector.copy();
@@ -43,6 +45,21 @@ ACCELERATE:
     adda.w #MOVER_VELOCITY_OFFSET,a1 ; a2 now points to the velocity vector
 
     ; a0 is set to car accelleration vector*engine_power
+    ; a1 is set to car velocity vector
+    ADD2DVECTOR
+
+    ; a0 is set to forward vector
+    move.l a2,a0
+    adda.w #MOVER_FORWARD_VECTOR_OFFSET,a0
+    move.w (a0),d0
+    move.w 2(a0),d1
+    ;asr.w #7,d0
+    ;asr.w #7,d1
+    move.w d0,FRICTION_VECTOR
+    move.w d1,FRICTION_VECTOR+2
+    lea FRICTION_VECTOR,a0
+    move.w #%111000,d7
+    jsr SET2DMAGNITUDE_Q10_6_TABLE_LOOKUP
     ; a1 is set to car velocity vector
     ADD2DVECTOR
     

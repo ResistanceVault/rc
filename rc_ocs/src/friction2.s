@@ -38,25 +38,19 @@ APPLY_FRICTION:
         DEBUG 0002
 
 
-    ;move.w                                        #WIDTH/2,d0
-    ;move.w                                        #HEIGHT/2,d1
+    move.w                                        #WIDTH/2,d0
+    move.w                                        #HEIGHT/2,d1
     ;jsr                                           LOADIDENTITYANDTRANSLATE
    
-    ;move.w FRICTION_VECTOR,d0
-    ;move.w FRICTION_VECTOR+2,d1
+    move.w FRICTION_VECTOR,d0
+    move.w FRICTION_VECTOR+2,d1
     
-    ;muls #4,d0
-    ;muls #4,d1
-    ;add.w #160,d0
-    ;add.w #128,d1
-    ;LINE #160,#128,d0,d1
+    muls #4,d0
+    muls #4,d1
+    add.w #160,d0
+    add.w #128,d1
+    LINE #160,#128,d0,d1
     ;RESETMATRIX
-    IFD DEBUG
-    move.w #20,DEBUGVECTORCENTER
-    move.w #20,DEBUGVECTORCENTER+2
-    move.l FRICTION_VECTOR,DEBUGVECTOR
-    jsr DRAWDEBUGVECTOR
-    ENDC
 
     ; put velocity into a1
     move.l a2,a1
@@ -65,8 +59,6 @@ APPLY_FRICTION:
     ; a0 is set to friction vector
     ; a1 is set to car velocity vector
     ADD2DVECTOR
-
-    
 
     movem.l (sp)+,a0/d7
 end_apply_friction:

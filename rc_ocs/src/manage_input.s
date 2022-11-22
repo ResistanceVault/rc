@@ -51,6 +51,7 @@ manage_input_direction_positive:
 manage_input_direction_ok:
 
     ; Update direction vector
+    move.l a2,a0
     move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
 	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 	CREATE2DVECTORFROMANGLE

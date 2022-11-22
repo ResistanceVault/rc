@@ -5,7 +5,6 @@ BRAKE:
     tst.w MOVER_IS_BRAKING_OFFSET(a0)
     beq.s end_brake
 
-
     move.w #$0f0,$dff180
 
     movem.l a0/d7,-(sp)
