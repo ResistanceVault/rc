@@ -71,6 +71,12 @@ MOVE:
         ;DEBUG 8888
 
     jsr LIMIT2DVECTOR
+    IFD DEBUG
+    move.w #WIDTH/2,DEBUGVECTORCENTER
+    move.w #HEIGHT/2,DEBUGVECTORCENTER+2
+    move.l (a0),DEBUGVECTOR
+    jsr DRAWDEBUGVECTOR
+    ENDC
     ;DEBUG 9999
 
     ; Add velocity to position

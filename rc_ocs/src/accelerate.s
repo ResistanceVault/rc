@@ -10,7 +10,7 @@ ACCELERATE:
 
     ; if the car is not accellerating just exit (rts)
     tst.w MOVER_IS_ACCELERATING_OFFSET(a0)
-    beq.s accellerate_end
+    beq.w accellerate_end
 
     move.w #$FFF,$dff180
 
@@ -38,6 +38,13 @@ ACCELERATE:
     move.w 2(a1),d0
     asr.w #6,d0
     move.w d0,2(a1)
+
+    IFD DEBUG
+    move.w #100,DEBUGVECTORCENTER
+    move.w #20,DEBUGVECTORCENTER+2
+    move.l (a1),DEBUGVECTOR
+    jsr DRAWDEBUGVECTOR
+    ENDC
 
     ; add accelleration to velocity
     movea.l a1,a0 ; a0 now points to the acceleration vector
