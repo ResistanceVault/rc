@@ -39,10 +39,7 @@ APPLY_FRICTION:
 
 
     IFD DEBUG
-    move.w #20,DEBUGVECTORCENTER
-    move.w #20,DEBUGVECTORCENTER+2
-    move.l FRICTION_VECTOR,DEBUGVECTOR
-    jsr DRAWDEBUGVECTOR
+    DV #20,#20,(a0)
     ENDC
 
     ; put velocity into a1

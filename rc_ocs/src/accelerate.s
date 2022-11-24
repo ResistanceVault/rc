@@ -40,10 +40,7 @@ ACCELERATE:
     move.w d0,2(a1)
 
     IFD DEBUG
-    move.w #100,DEBUGVECTORCENTER
-    move.w #20,DEBUGVECTORCENTER+2
-    move.l (a1),DEBUGVECTOR
-    jsr DRAWDEBUGVECTOR
+    DV #100,#20,(a1)
     ENDC
 
     ; add accelleration to velocity

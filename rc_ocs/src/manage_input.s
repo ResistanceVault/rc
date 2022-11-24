@@ -61,6 +61,11 @@ manage_input_direction_ok:
 	move.w 2(a0),d7
 	asr.w #5,d7
 	move.w d7,2(a0)
+
+    IFD DEBUG
+    DV #WIDTH/2+50,#HEIGHT/2+50,(a0)
+    ENDC
+
     suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 
     movem.l (sp)+,a0/d7 

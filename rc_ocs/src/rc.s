@@ -223,6 +223,9 @@ Aspetta:
 	bne.w	mouse
 	rts			; esci
 
+	IFD DEBUG
+    include "debug.s"
+    ENDC
 	include "car_inits.s"
 	include "calculate_wheel_positions.s"
 	include "display.s"
@@ -232,11 +235,7 @@ Aspetta:
 	include "manage_input.s"
 	include "move.s"
 	include "check_collisions.s"
-
-	include "joystickinput.s"
-	IFD DEBUG
-    include "debug.s"
-    ENDC
+	include "joystickinput.s"s
 
 MOVERS:
 	MOVER_INIT_MEM 1
