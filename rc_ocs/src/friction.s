@@ -32,24 +32,26 @@ APPLY_FRICTION:
     ; we must scale it according to friction factor
     move.w MOVER_FRICTION_COEFFICIENT_OFFSET(a2),d7
     move.w               #%10,d7
-    DEBUG 0001
+    ;DEBUG 0001
     ;jsr SET2DMAGNITUDE
     jsr SET2DMAGNITUDE_Q10_6_TABLE_LOOKUP
-        DEBUG 0002
+     ;   DEBUG 0002
 
 
     IFD DEBUG
-    DV #20,#20,(a0)
+    DV #20,#64,(a0),#4
     ENDC
 
     ; put velocity into a1
-    move.l a2,a1
-    adda.w #MOVER_VELOCITY_OFFSET,a1 ; a1 now points to the velocity vector
+    SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a1  
+    ; a1 now points to the velocity vector
 
     ; a0 is set to friction vector
     ; a1 is set to car velocity vector
     ADD2DVECTOR
-
+    IFD DEBUG
+    DV #160,#64,(a1),#1
+    ENDC
     
 
     movem.l (sp)+,a0/d7

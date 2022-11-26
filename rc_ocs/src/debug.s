@@ -2,9 +2,11 @@ DV MACRO
     move.w  \1,DEBUGVECTORCENTER
     move.w  \2,DEBUGVECTORCENTER+2
     move.l  \3,DEBUGVECTOR
+    move.w  \4,DEBUGVECTORMULT
     jsr     DRAWDEBUGVECTOR
     ENDM
 
+DEBUGVECTORMULT: dc.w 0
 DEBUGVECTOR: dc.l 0
 DEBUGVECTORCENTER: dc.l 0
 DRAWDEBUGVECTOR:
@@ -16,13 +18,10 @@ DRAWDEBUGVECTOR:
     moveq #0,d0
     moveq #0,d1
     jsr POINT
-
     move.w DEBUGVECTOR,d2
     move.w DEBUGVECTOR+2,d3
-    ;asr.w #5,d2
-    ;asr.w #5,d3
-    muls #4,d2
-    muls #4,d3
+    muls DEBUGVECTORMULT,d2
+    muls DEBUGVECTORMULT,d3
     STROKE #2
     LINEDRAW #0,#0,d2,d3
 

@@ -20,11 +20,11 @@ BRAKE:
     ; we must scale it according to brake factor
     move.l a1,a0
     move.w MOVER_BRAKE_COEFFICIENT_OFFSET(a2),d7
-    jsr SET2DMAGNITUDE
+     move.w               #%11,d7
+    jsr SET2DMAGNITUDE_Q10_6_TABLE_LOOKUP
 
     ; put velocity into a1
-    move.l a2,a1
-    adda.w #MOVER_VELOCITY_OFFSET,a1 ; a2 now points to the velocity vector
+    SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a1 ; a2 now points to the velocity vector
 
     ; a0 is set to brake vector
     ; a1 is set to car velocity vector

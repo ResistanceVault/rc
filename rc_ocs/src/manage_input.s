@@ -51,19 +51,18 @@ manage_input_direction_positive:
 manage_input_direction_ok:
 
     ; Update direction vector
-    move.l a2,a0
     move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
-	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+	SETCARPROPERTYADDR MOVER_FORWARD_VECTOR_OFFSET,a0
 	CREATE2DVECTORFROMANGLE
     move.w (a0),d7
-	asr.w #5,d7
+	asr.w #11-DECIMAL_SHIFT,d7
 	move.w d7,(a0)
 	move.w 2(a0),d7
-	asr.w #5,d7
+	asr.w #11-DECIMAL_SHIFT,d7
 	move.w d7,2(a0)
 
     IFD DEBUG
-    DV #WIDTH/2+50,#HEIGHT/2+50,(a0)
+    DV #80,#20,(a0),#1
     ENDC
 
     suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0

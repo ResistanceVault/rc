@@ -11,25 +11,24 @@ DISPLAY:
     move.w MOVER_FRONT_WHEEL_X_VECTOR_OFFSET(a2),d0
     move.w MOVER_FRONT_WHEEL_Y_VECTOR_OFFSET(a2),d1
 
-    asr.w #6,d0
-    asr.w #6,d1
+    lsr.w #DECIMAL_SHIFT,d0
+    asr.w #DECIMAL_SHIFT,d1
     jsr POINT
-
 
     ; Back wheel
     STROKE #2
     move.w MOVER_BACK_WHEEL_X_VECTOR_OFFSET(a2),d0
     move.w MOVER_BACK_WHEEL_Y_VECTOR_OFFSET(a2),d1
-    asr.w #6,d0
-    asr.w #6,d1
+    lsr.w #DECIMAL_SHIFT,d0
+    asr.w #DECIMAL_SHIFT,d1
     jsr POINT
 
     ; Car position
     STROKE #3
     move.w MOVER_X_POSITION_OFFSET(a2),d0
     move.w MOVER_Y_POSITION_OFFSET(a2),d1
-    asr.w #6,d0
-    asr.w #6,d1
+    lsr.w #DECIMAL_SHIFT,d0
+    asr.w #DECIMAL_SHIFT,d1
     jsr POINT
 
     ; restore old a0
