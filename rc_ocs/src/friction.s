@@ -9,8 +9,8 @@ FRICTION_VECTOR: dc.l 0
 
 APPLY_FRICTION:
     ;rts
-    tst.w MOVER_IS_ACCELERATING_OFFSET(a0)
-    bne.w end_apply_friction
+    ;tst.w MOVER_IS_ACCELERATING_OFFSET(a0)
+    ;bne.w end_apply_friction
 
     tst.w MOVER_IS_BRAKING_OFFSET(a0)
     bne.w end_apply_friction

@@ -43,6 +43,8 @@ MOVER_SIZE					 		EQU 48
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
 
+	include "macros.i"
+
 MOVER_INIT_MEM MACRO
 	MOVER\1:
 	dcb.b MOVER_SIZE,0
@@ -64,14 +66,6 @@ SWAP_BPL MACRO
     add.l d1,SCREEN_PTR_0
     add.l d1,SCREEN_PTR_1
     ENDM
-
-; Macro to store addr of a car property into ad address register
-; Usage : SETCARPROPERTYADDR,offset addr_register
-; Example: SETCARPROPERTYADDR MOVER_ACCELERATION_VECTOR_OFFSET,a0
-SETCARPROPERTYADDR MACRO
-	movea.l		a2,\2
-	adda.w		#\1,\2
-	ENDM
 
 MUL2DVECTOR1X2_Q10_6 MACRO
     move.w   (a1),d0
