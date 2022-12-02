@@ -27,7 +27,7 @@ do_acceleration:
 
     ; now the acceleration vector is scaled according to the engine power
     IFD DEBUG
-    DV                  #160,#20,(a0),#1 ; prima fila centrale
+    DV                  #160,#20,(a0),#4 ; prima fila centrale
     ENDC
 
     ; add accelleration to velocity

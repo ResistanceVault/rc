@@ -4,6 +4,32 @@
 
 COPPERLIST:
 
+	; Sprites pointer init
+SpritePointers:
+Sprite0pointers:
+  dc.w       $120,$0000,$122,$0000
+
+Sprite1pointers:
+  dc.w       $124,$0000,$126,$0000
+
+Sprite2pointers:
+  dc.w       $128,$0000,$12a,$0000
+
+Sprite3pointers:
+  dc.w       $12c,$0000,$12e,$0000
+
+Sprite4pointers:
+  dc.w       $130,$0000,$132,$0000
+
+Sprite5pointers:
+  dc.w       $134,$0000,$136,$0000
+
+Sprite6pointers;
+  dc.w       $138,$0000,$13a,$0000
+
+Sprite7pointers:
+  dc.w       $13c,$0000,$13e,$0000
+
 	dc.w	$8E,$2c81	; DiwStrt
 	dc.w	$90,$2cc1	; DiwStop
 	dc.w	$92,$0038	; DdfStart
@@ -47,5 +73,21 @@ BPLPTR5:
 	dc.w	$0192,$f00	; color1 - SCRITTE
 	dc.w	$0194,$0f0	; color2 - SCRITTE
 	dc.w	$0196,$00f	; color3 - SCRITTE
+
+	dc.w    $1a2,$001    ; color17
+	dc.w    $1a4,$aaa    ; color18
+	dc.w    $1a6,$ddd    ; color19
+	dc.w    $1a8,$a00    ; color20
+	dc.w    $1aa,$390    ; color21
+	dc.w    $1ac,$f0f    ; color22
+	dc.w    $1ae,$f0f    ; color23
+	dc.w    $1b0,$f0f    ; color24
+	dc.w    $1b2,$f0f    ; color25
+	dc.w    $1b4,$f0f    ; color26
+	dc.w    $1b6,$f0f    ; color27
+	dc.w    $1b8,$f0f    ; color28
+	dc.w    $1ba,$f0f    ; color29
+	dc.w    $1bc,$f0f    ; color30
+	dc.w    $1be,$f0f    ; color31
 
 	dc.w	$FFFF,$FFFE	; Fine della copperlist

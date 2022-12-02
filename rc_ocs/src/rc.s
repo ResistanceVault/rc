@@ -85,26 +85,14 @@ MUL2DVECTOR1X2_Q10_6 MACRO
 				; riscriverla ogni volta!
 *****************************************************************************
 
-
-; Con DMASET decidiamo quali canali DMA aprire e quali chiudere
-
-		;5432109876543210
-DMASET	EQU	%1000001111000000	; copper e bitplane DMA abilitati
-;		 -----a-bcdefghij
+DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 
 	include "AProcessing/libs/vectors/sqrt_q10_6_lookup_table.i"
-
-
 	include "AProcessing/libs/rasterizers/globaloptions.s"
-	
 	include "AProcessing/libs/trigtables.i"
-	
 	include "AProcessing/libs/rasterizers/processing_table_plotrefs.s"
 	include "AProcessing/libs/rasterizers/processingfill.s"
 	include "AProcessing/libs/rasterizers/clipping.s"
-	
-	
-
 	include "AProcessing/libs/rasterizers/line.s"
 	include "AProcessing/libs/rasterizers/processingclearfunctions.s"
 	include "AProcessing/libs/matrix/matrixcommon.s"
@@ -121,7 +109,6 @@ DMASET	EQU	%1000001111000000	; copper e bitplane DMA abilitati
 	include "AProcessing/libs/precalc/map.s"
 
 START:
-	
 	; Print track image
 
 TRACK_DATA_HEIGHT	EQU 240
@@ -145,6 +132,16 @@ TRACK_DATA_HEIGHT	EQU 240
 looptrackcolors:
 	move.w				(a0)+,(a1)+
 	dbra				d7,looptrackcolors
+
+	; Car sprite
+	move.l    #CAR_180_0,d0
+  	lea       Sprite0pointers,a1
+  	jsr       POINTINCOPPERLIST_FUNCT
+
+	move.l    #CAR_180_1,d0
+  	lea       Sprite1pointers,a1
+  	jsr       POINTINCOPPERLIST_FUNCT
+
 
 	; Puntiamo la cop...
 
@@ -192,7 +189,7 @@ mouse:
 	lea MOVERS,a0
 	move.w 	#1-1,d7
 moversloop:
-	
+
 	 ; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
 	bsr.w	LeggiJoyst
 	;move.w  #%0100,d0
@@ -214,7 +211,7 @@ moversloop:
 
     ; check collisions
     bsr.w 	CHECK_COLLISIONS
-    
+
 	; show the mover obkect on the screen
 	bsr.w	DISPLAY
 	adda.w  #MOVER_SIZE,a0
@@ -251,7 +248,7 @@ Aspetta:
 	include "manage_input.s"
 	include "move.s"
 	include "check_collisions.s"
-	include "joystickinput.s"s
+	include "joystickinput.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -280,11 +277,13 @@ POINTINCOPPERLIST_FUNCT:
   POINTINCOPPERLIST
   rts
 
+CAR_DATA:
+	include "assets/cars/car180.i"
+
 	include "AProcessing/libs/rasterizers/processing_bitplanes_fast.s"
 
 	include "copperlist.s"
 
-	
 	SECTION	MIOPLANE,DATA_C
 	IFND DEBUG
 
@@ -309,7 +308,5 @@ TRACK_DATA_3:
 
 	dcb.b   40*256,0
 	ENDC
-	
 TRACK_DATA_COLORS:
 	incbin  "assets/images/raw/rc045_320X240X8.pal"
-	
