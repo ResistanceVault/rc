@@ -88,6 +88,7 @@ MUL2DVECTOR1X2_Q10_6 MACRO
 DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 
 	include "AProcessing/libs/vectors/sqrt_q10_6_lookup_table.i"
+	include "tables.i"
 	include "AProcessing/libs/rasterizers/globaloptions.s"
 	include "AProcessing/libs/trigtables.i"
 	include "AProcessing/libs/rasterizers/processing_table_plotrefs.s"
