@@ -49,9 +49,9 @@ APPLY_FRICTION:
     ; a0 is set to friction vector
     ; a1 is set to car velocity vector
     ADD2DVECTOR
-    IFD DEBUG
-    DV_DIV #160,#64,(a1),#64
-    ENDC
+    ;IFD DEBUG
+    ;DV_DIV #160,#64,(a1),#64
+    ;ENDC
     
 
     movem.l (sp)+,a0/d7
