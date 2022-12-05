@@ -210,7 +210,7 @@ moversloop:
 	bsr.w	MOVE
 
     ; check collisions
-    bsr.w 	CHECK_COLLISIONS
+    ;bsr.w 	CHECK_COLLISIONS
 
 	; show the mover obkect on the screen
 	bsr.w	DISPLAY
