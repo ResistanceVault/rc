@@ -76,7 +76,7 @@ BPLPTR5:
 
 	dc.w    $1a2,$001    ; color17
 	dc.w    $1a4,$aaa    ; color18
-	dc.w    $1a6,$ddd    ; color19
+	dc.w    $1a6,$a00    ; color19
 	dc.w    $1a8,$a00    ; color20
 	dc.w    $1aa,$390    ; color21
 	dc.w    $1ac,$f0f    ; color22

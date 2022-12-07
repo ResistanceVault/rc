@@ -4,6 +4,7 @@ CAR1_MAX_SPEED 		EQU %0001100000000000 ; 1.5 pixels per frame of max speed
 CAR1_ENGINE_POWER 	EQU %1001
 CAR1_FRICTION		EQU 2
 CAR1_STEERING_ANGLE EQU 2
+CAR1_WHEEL_BASE_LENGTH EQU 6
 
 CAR1_INIT:
 	lea 	MOVER1,a0
@@ -16,7 +17,7 @@ CAR1_INIT:
 	move.w  #0*DECIMAL_MULTIPLIER,MOVER_X_ACCELERATION_OFFSET(a0)   	; initial x accelleration (accelleration)
 	move.w  #0*DECIMAL_MULTIPLIER,MOVER_Y_ACCELERATION_OFFSET(a0)   	; initial y accelleration (accelleration)
 
-	move.w  #5,MOVER_WHEEL_BASE_OFFSET(a0)     	 	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
 	move.w  #CAR1_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 	move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
 
