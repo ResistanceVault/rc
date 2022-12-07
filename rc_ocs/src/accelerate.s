@@ -36,25 +36,11 @@ do_acceleration:
 
     ; a0 is set to car acceleration vector*engine_power
     ; a1 is set to car velocity vector
-    BTST    #2,$dff016
-    bne.s alessiosalta
-    DEBUG 7777
     ADD2DVECTOR
-    move.w MOVER_MAX_SPEED_OFFSET(a2),d7
-    DEBUG 8888
-    bra.s alessiofine
-alessiosalta:
-    ADD2DVECTOR
-alessiofine:
 
     SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a0
-    move.w #%0001100000000000,d7
+    STORECARPROPERTY MOVER_MAX_SPEED_OFFSET,d7
     jsr LIMIT2DVECTOR
-
-
-    ;IFD DEBUG
-    ;DV #240,#20,(a1),#1
-    ;ENDC
 
 accellerate_end:
     movem.l (sp)+,a0/d7
