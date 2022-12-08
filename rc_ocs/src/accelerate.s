@@ -23,11 +23,14 @@ do_acceleration:
     SETCARPROPERTYADDR MOVER_ACCELERATION_OFFSET,a0
 	CREATE2DVECTORFROMANGLE
 
-    NORMALIZEVECTOR #4,(a0)
+    ;NORMALIZEVECTOR #4,(a0)
+    SETCARPROPERTYADDR MOVER_ENGINE_POWER_OFFSET,a0
+    SETCARPROPERTYADDR MOVER_ACCELERATION_OFFSET,a1
+    DIV2DVECTOR1X2
 
     ; now the acceleration vector is scaled according to the engine power
     IFD DEBUG
-    DV                  #160,#20,(a0),#1 ; prima fila centrale
+    DV                  #160,#20,(a1),#1 ; prima fila centrale
     ENDC
 
     ; add accelleration to velocity
