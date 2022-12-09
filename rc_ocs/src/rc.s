@@ -274,15 +274,15 @@ CLEARTOP:
             rts
 
 POINTINCOPPERLIST_FUNCT:
-  POINTINCOPPERLIST
-  rts
-
-CAR_DATA:
-	include "assets/cars/car180.i"
+  	POINTINCOPPERLIST
+  	rts
 
 	include "AProcessing/libs/rasterizers/processing_bitplanes_fast.s"
 
 	include "copperlist.s"
+	SECTION	SPRITES,DATA_C
+CAR_DATA:
+	include "assets/cars/car180.i"
 
 	SECTION	MIOPLANE,DATA_C
 	IFND DEBUG
