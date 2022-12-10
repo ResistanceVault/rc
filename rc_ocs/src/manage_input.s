@@ -67,5 +67,5 @@ manage_input_direction_ok:
 
     suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 
-    movem.l (sp)+,a0/d7 
+    movem.l (sp)+,a0/d7
     rts

@@ -134,13 +134,13 @@ looptrackcolors:
 	dbra				d7,looptrackcolors
 
 	; Car sprite
-	move.l    #CAR_180_0,d0
-  	lea       Sprite0pointers,a1
-  	jsr       POINTINCOPPERLIST_FUNCT
+	move.l    			#CAR_180,d0
+  	lea       			Sprite0pointers,a1
+  	jsr       			POINTINCOPPERLIST_FUNCT
 
-	move.l    #CAR_180_1,d0
-  	lea       Sprite1pointers,a1
-  	jsr       POINTINCOPPERLIST_FUNCT
+	;move.l    #CAR_180_1,d0
+  	;lea       Sprite1pointers,a1
+  	;jsr       POINTINCOPPERLIST_FUNCT
 
 
 	; Puntiamo la cop...
@@ -212,8 +212,9 @@ moversloop:
     ; check collisions
     ;bsr.w 	CHECK_COLLISIONS
 
-	; show the mover obkect on the screen
+	; show the mover object on the screen
 	bsr.w	DISPLAY
+
 	adda.w  #MOVER_SIZE,a0
 	dbra 	d7,moversloop
 
@@ -230,7 +231,6 @@ Aspetta:
 	POINTINCOPPERLIST
 
 	SWAP_BPL
-
 
 	btst	#6,$bfe001	; mouse premuto?
 	bne.w	mouse
@@ -249,6 +249,7 @@ Aspetta:
 	include "move.s"
 	include "check_collisions.s"
 	include "joystickinput.s"
+	include "car_management.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -282,7 +283,15 @@ POINTINCOPPERLIST_FUNCT:
 	include "copperlist.s"
 	SECTION	SPRITES,DATA_C
 CAR_DATA:
-	include "assets/cars/car180.i"
+CAR_0:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars/car0_16x16.sprite"
+	dc.w 0,0
+
+CAR_180:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars/car180_16x16.sprite"
+	dc.w 0,0
 
 	SECTION	MIOPLANE,DATA_C
 	IFND DEBUG

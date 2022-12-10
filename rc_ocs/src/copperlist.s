@@ -74,8 +74,8 @@ BPLPTR5:
 	dc.w	$0194,$0f0	; color2 - SCRITTE
 	dc.w	$0196,$00f	; color3 - SCRITTE
 
-	dc.w    $1a2,$001    ; color17
-	dc.w    $1a4,$aaa    ; color18
+	dc.w    $1a2,$222    ; color17
+	dc.w    $1a4,$000    ; color18
 	dc.w    $1a6,$a00    ; color19
 	dc.w    $1a8,$a00    ; color20
 	dc.w    $1aa,$390    ; color21

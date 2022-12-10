@@ -33,5 +33,5 @@ DISPLAY:
 
     ; restore old a0
     move.l a2,a0
-    
+    jsr CREATE_CAR_SPRITE
     rts
