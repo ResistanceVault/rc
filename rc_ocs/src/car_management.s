@@ -1,8 +1,14 @@
-CAR_SPRITE_DEGREES EQU 180
+CAR_SPRITE_DEGREES EQU 45
 
 CAR_SPRITES_LIST:
     dc.l             CAR_0
+    dc.l             CAR_315
+    dc.l             CAR_270
+    dc.l             CAR_215
     dc.l             CAR_180
+    dc.l             CAR_135
+    dc.l             CAR_90
+    dc.l             CAR_45
     dc.l             CAR_0
 
 ; Routine to point the correct sprite into copperlist
