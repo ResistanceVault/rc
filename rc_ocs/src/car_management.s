@@ -36,10 +36,10 @@ CREATE_CAR_SPRITE:
     move.l    	     (a1),a0
     STORECARPROPERTY MOVER_X_POSITION_OFFSET,d0
     STORECARPROPERTY MOVER_Y_POSITION_OFFSET,d1
-    lsr.w #DECIMAL_SHIFT+1,d0
-    asr.w #DECIMAL_SHIFT,d1
-    add.w #60,d0
-    add.w #33,d1
+    lsr.w            #DECIMAL_SHIFT+1,d0
+    asr.w            #DECIMAL_SHIFT,d1
+    add.w            #60,d0
+    add.w            #33,d1
 
     btst             #0,d0
     beq.s            car_no_odd_x
@@ -50,12 +50,29 @@ car_no_odd_x:
 car_place_coords:
     move.b           d0,1(a0)
     move.b           d1,(a0)
+
+    btst             #8,d1
+    beq.s            car_y_vstartset
+    bset.b           #2,3(a0)
+    bra.s            car_y_gotovstop
+car_y_vstartset:
+    bclr.b           #2,3(a0)
+
+car_y_gotovstop:
     add.w            #16,d1
     move.b           d1,2(a0)
 
+    btst             #8,d1
+    beq.s            car_y_vstopset
+    bset.b           #1,3(a0)
+    bra.s            car_y_end
+car_y_vstopset:
+    bclr.b           #1,3(a0)
+car_y_end:
+
     move.l    	     (a1),d0
-  	lea       		   Sprite0pointers,a1
-  	jsr       		   POINTINCOPPERLIST_FUNCT
+  	lea       		 Sprite0pointers,a1
+  	jsr       		 POINTINCOPPERLIST_FUNCT
 
     movem.l          (sp)+,a0/a1/d7
     rts
