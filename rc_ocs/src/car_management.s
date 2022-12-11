@@ -1,3 +1,4 @@
+SPRITES_VSTART		   equ  $2C
 CAR_SPRITE_DEGREES EQU 45
 
 CAR_SPRITES_LIST:
@@ -30,6 +31,27 @@ CREATE_CAR_SPRITE:
     lea              CAR_SPRITES_LIST(PC),a1
     lsl.w            #2,d7
     adda.w           d7,a1
+
+    ; compute X position
+    move.l    	     (a1),a0
+    STORECARPROPERTY MOVER_X_POSITION_OFFSET,d0
+    STORECARPROPERTY MOVER_Y_POSITION_OFFSET,d1
+    lsr.w #DECIMAL_SHIFT+1,d0
+    asr.w #DECIMAL_SHIFT,d1
+    add.w #60,d0
+    add.w #33,d1
+
+    btst             #0,d0
+    beq.s            car_no_odd_x
+    bset             #0,3(a0)
+car_no_odd_x:
+    bra.s            car_place_coords
+    bclr             #0,3(a0)
+car_place_coords:
+    move.b           d0,1(a0)
+    move.b           d1,(a0)
+    add.w            #16,d1
+    move.b           d1,2(a0)
 
     move.l    	     (a1),d0
   	lea       		   Sprite0pointers,a1
