@@ -20,6 +20,9 @@ MOVE:
     DV #WIDTH/2,#HEIGHT/2,(a0),#1
     ENDC
 
+    ; Save old position into previous position
+    move.l MOVER_POSITION_OFFSET(a2),MOVER_PREVIOUS_POSITION_OFFSET(a2)
+
     ; Add velocity to position
     SETCARPROPERTYADDR MOVER_HEADING_OFFSET,a0
     SETCARPROPERTYADDR MOVER_POSITION_OFFSET,a1
