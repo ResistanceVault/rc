@@ -15,6 +15,7 @@ CAR_SPRITES_LIST:
 ; Routine to point the correct sprite into copperlist
 ; Input: a0 base address of the car
 CREATE_CAR_SPRITE:
+    ;rts
     movem.l          a0/a1/d7,-(sp)
     movea.l          a0,a2
 

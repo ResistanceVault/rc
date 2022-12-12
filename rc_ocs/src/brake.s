@@ -3,10 +3,7 @@
 BRAKE_VECTOR: dc.l 0
 BRAKE:
     tst.w MOVER_IS_BRAKING_OFFSET(a0)
-    beq.s end_brake
-
-    move.w #$0f0,$dff180
-    
+    beq.s end_brake    
 
     movem.l a0/d7,-(sp)
     move.l a2,a0
@@ -41,5 +38,4 @@ BRAKE:
 
     movem.l (sp)+,a0/d7 
 end_brake:
-    move.w #$000,$dff180
     rts

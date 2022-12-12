@@ -209,6 +209,9 @@ moversloop:
 	; Move the mover object (calculate next position)
 	bsr.w	MOVE
 
+	; Car behaviour must change according to the map metadata
+	bsr.w   CHECK_MAP
+
     ; check collisions
     ;bsr.w 	CHECK_COLLISIONS
 
@@ -250,6 +253,7 @@ Aspetta:
 	include "check_collisions.s"
 	include "joystickinput.s"
 	include "car_management.s"
+	include "check_against_map.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -413,3 +417,5 @@ TRACK_DATA_3:
 	ENDC
 TRACK_DATA_COLORS:
 	incbin  "assets/images/raw/rc045_320X240X8.pal"
+TRACK_METADATA:
+	incbin "assets/tracks/track1/rc045_320X240X8.data"
