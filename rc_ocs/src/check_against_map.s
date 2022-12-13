@@ -66,8 +66,9 @@ GET_MAP_PIXEL_DATA:
 SET_CAR_BEHAVIOUR:
     tst.b            d0
     bne.s            track_walkable
-    move.w           #$fff,$dff180
 
+    ; manage a car hitting an obstacle
+    move.w           #$fff,$dff180
     move.l           MOVER_PREVIOUS_POSITION_OFFSET(a2),MOVER_POSITION_OFFSET(a2)
     tst.w            MOVER_IS_COLLIDING_OFFSET(a2)
     bne.s            set_car_behaviour_end_checks

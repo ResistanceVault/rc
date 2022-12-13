@@ -3,6 +3,7 @@
 CAR1_MAX_SPEED 		EQU %0001100000000000 ; 1.5 pixels per frame of max speed
 CAR1_ENGINE_POWER 	EQU 16
 CAR1_FRICTION		EQU %10000000
+CAR_BRAKE			EQU %100000000
 CAR1_STEERING_ANGLE EQU 2
 CAR1_WHEEL_BASE_LENGTH EQU 6
 
@@ -42,7 +43,7 @@ CAR1_INIT:
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
 
-	move.w  #1*DECIMAL_MULTIPLIER/20,MOVER_BRAKE_COEFFICIENT_OFFSET(a0)	; brake coefficient, the higher the value, the strongest the brakes of the car (brake_factor)
+	move.w  #CAR_BRAKE,MOVER_BRAKE_COEFFICIENT_OFFSET(a0)	; brake coefficient, the higher the value, the strongest the brakes of the car (brake_factor)
 	move.w  #CAR1_FRICTION,MOVER_FRICTION_COEFFICIENT_OFFSET(a0) ; friction coefficientl, the higher the value, the greater the gravity force (friction_factor) 
 
 	jsr		CALCULATE_WHEEL_POSITIONS
