@@ -6,6 +6,7 @@ CAR1_FRICTION		EQU %10000000
 CAR_BRAKE			EQU %100000000
 CAR1_STEERING_ANGLE EQU 2
 CAR1_WHEEL_BASE_LENGTH EQU 6
+CAR_BOUNCE_WALL_FORCE EQU %0000101000000000
 
 CAR1_INIT:
 	lea 	MOVER1,a0
@@ -45,6 +46,11 @@ CAR1_INIT:
 
 	move.w  #CAR_BRAKE,MOVER_BRAKE_COEFFICIENT_OFFSET(a0)	; brake coefficient, the higher the value, the strongest the brakes of the car (brake_factor)
 	move.w  #CAR1_FRICTION,MOVER_FRICTION_COEFFICIENT_OFFSET(a0) ; friction coefficientl, the higher the value, the greater the gravity force (friction_factor) 
+
+	; repulsion force to bounce a car when hits the wall (high value means big bounce)
+	move.w  #CAR_BOUNCE_WALL_FORCE,d0
+	neg.w   d0
+	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0) 
 
 	jsr		CALCULATE_WHEEL_POSITIONS
 	rts

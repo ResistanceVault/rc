@@ -9,7 +9,6 @@ CHECK_MAP:
     lsr.w            #DECIMAL_SHIFT,d0
     asr.w            #DECIMAL_SHIFT,d1
 
-    DEBUG 1111
     bsr.w            GET_MAP_PIXEL_DATA
     bsr.w            SET_CAR_BEHAVIOUR
     tst.w            d0
@@ -72,8 +71,22 @@ SET_CAR_BEHAVIOUR:
     move.l           MOVER_PREVIOUS_POSITION_OFFSET(a2),MOVER_POSITION_OFFSET(a2)
     tst.w            MOVER_IS_COLLIDING_OFFSET(a2)
     bne.s            set_car_behaviour_end_checks
-    neg.w            MOVER_X_VELOCITY_OFFSET(a2)
-    neg.w            MOVER_Y_VELOCITY_OFFSET(a2)
+    
+    ;neg.w            MOVER_X_VELOCITY_OFFSET(a2)
+    ;neg.w            MOVER_Y_VELOCITY_OFFSET(a2)
+    ;move.w MOVER_X_VELOCITY_OFFSET(a2),d0
+    ;move.w MOVER_Y_VELOCITY_OFFSET(a2),d1
+    ;asr.w #1,d0
+    ;asr.w #1,d1
+    ;move.w d0,MOVER_X_VELOCITY_OFFSET(a2)
+    ;move.w d1,MOVER_Y_VELOCITY_OFFSET(a2)
+    ;asr.w            #1,MOVER_X_VELOCITY_OFFSET(a2)
+    
+    SETCARPROPERTYADDR MOVER_BOUNCE_WALL_OFFSET,a0
+    SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a1
+    DEBUG 1234
+    MUL2DVECTOR1X2_Q4_12
+    DEBUG 2345
     move.w           #1,MOVER_IS_COLLIDING_OFFSET(a2)
 set_car_behaviour_end_checks:
 
