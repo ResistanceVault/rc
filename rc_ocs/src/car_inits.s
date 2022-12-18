@@ -8,6 +8,9 @@ CAR1_STEERING_ANGLE EQU 2
 CAR1_WHEEL_BASE_LENGTH EQU 6
 CAR_BOUNCE_WALL_FORCE EQU %0000101000000000
 
+TRACK_START_PIXEL_DATA:
+	dc.w %10110000
+
 CAR1_INIT:
 	lea 	MOVER1,a0
 	move.w 	#100*DECIMAL_MULTIPLIER,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
@@ -50,7 +53,16 @@ CAR1_INIT:
 	; repulsion force to bounce a car when hits the wall (high value means big bounce)
 	move.w  #CAR_BOUNCE_WALL_FORCE,d0
 	neg.w   d0
-	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0) 
+	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
+
+	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   			   ; because when the race starts, all car must be placed 
+																			   ; on the last zone
+
+	move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)	
+
+	move.w 	#0,LAP_COUNTER_OFFSET(a0) ; race starts at lap number zero
 
 	jsr		CALCULATE_WHEEL_POSITIONS
 	rts

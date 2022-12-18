@@ -21,6 +21,7 @@ CHECK_MAP:
     lsr.w            #DECIMAL_SHIFT,d0
     asr.w            #DECIMAL_SHIFT,d1
     bsr.w            GET_MAP_PIXEL_DATA
+    move.w           d0,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a2) ; save information about where the front wheel is in the map
     bsr.w            SET_CAR_BEHAVIOUR
     tst.w            d0
     beq.s            end_check_track
@@ -40,16 +41,72 @@ end_check_track:
 
     cmpi.w           #3,d7
     bne.s            dontresetcolliding
+
+    ; if we are here it means the front wheel, the rear wheel and the back wheel position are on a walkable space
+    ; in this case we reset MOVER_IS_COLLIDING_OFFSET
     move.w           #0,MOVER_IS_COLLIDING_OFFSET(a2)
+
+    ; detect the zone of the car
+    ; copy d0 which holds the zone in the upper nibble of the least significant byte into d1 then shift to the right
+    ; for 4 position to move data from high nibble to low nibble
+    STORECARPROPERTY CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET,d0
+    
+    ; put red intensity according to this value for debug
+    move.w d0,d1
+    andi.w #$00F0,d1
+    lsl.w #4,d1
+    move.w d1,$dff180
+
+    ; check if next zone has been reached
+    move.w d0,d1
+    andi.w #$00F0,d1
+    lsr.w #4,d1
+    cmp.w CAR_NEXT_ZONE_OFFSET(a2),d1
+    bne.s no_next_zone_update
+    move.w CAR_NEXT_ZONE_OFFSET(a2),d2
+
+    ; here manage next zone update
+    addi.w #1,CAR_NEXT_ZONE_OFFSET(a2)
+
+    cmpi.w #2,CAR_NEXT_ZONE_OFFSET(a2)
+    bne.s lap_not_completed
+    ; start managing lap completed
+    DEBUG 4567
+    ; increase lap counter
+    addi.w #1,LAP_COUNTER_OFFSET(a2)
+    cmp.w #3,LAP_COUNTER_OFFSET(a2)
+    bne.s lap_not_completed
+    move.w #1,RACE_STATUS
+lap_not_completed:
+
+    ; if next zone is last zone reset to 1 to start another lap
+    moveq #0,d1
+    move.w TRACK_START_PIXEL_DATA,d1
+    lsr.w #4,d1
+    move.w CAR_NEXT_ZONE_OFFSET(a2),d2
+    cmp.w CAR_NEXT_ZONE_OFFSET(a2),d1
+    bne.s no_next_zone_update
+    ; I reach this part only when entering LAST zone
+    move.w #1,CAR_NEXT_ZONE_OFFSET(a2)
+    ;DEBUG 1111
+no_next_zone_update:
+
 dontresetcolliding:
 
     movem.l          (sp)+,a0/a1/d7
     rts
 
 ;0000 0000 blocker
-;0001 0001 zone 1 road
-;0001 0002 zone 1 grass (slow)
-;0001 0003 zone 1 ice (slippery)
+;0001 0000 zone 1 road
+;0001 0001 zone 1 grass (slow)
+;0001 0002 zone 1 ice (slippery)
+;0010 0000 zone 1 road
+;0010 0001 zone 1 grass (slow)
+;0010 0002 zone 1 ice (slippery)
+;....
+;1111 0000 zone 15 road
+;1111 0001 zone 15 grass (slow)
+;1111 0002 zone 15 ice (slippery)
 GET_MAP_PIXEL_DATA:
      ; Load map metadata memory address
     lea              TRACK_METADATA,a1
@@ -84,15 +141,12 @@ SET_CAR_BEHAVIOUR:
     
     SETCARPROPERTYADDR MOVER_BOUNCE_WALL_OFFSET,a0
     SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a1
-    DEBUG 1234
     MUL2DVECTOR1X2_Q4_12
-    DEBUG 2345
     move.w           #1,MOVER_IS_COLLIDING_OFFSET(a2)
 set_car_behaviour_end_checks:
 
     moveq            #0,d0
     rts
 track_walkable:
-    move.w           #$000,$dff180
     moveq            #1,d0
     rts

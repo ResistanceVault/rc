@@ -44,7 +44,11 @@ MOVER_PREVIOUS_Y_POSITION_OFFSET 	EQU 50
 
 MOVER_BOUNCE_WALL_OFFSET			EQU 52
 
-MOVER_SIZE					 		EQU 54
+CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET	EQU 54
+CAR_NEXT_ZONE_OFFSET				EQU 56
+LAP_COUNTER_OFFSET					EQU 58
+
+MOVER_SIZE					 		EQU 60
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -241,9 +245,15 @@ Aspetta:
 
 	SWAP_BPL
 
+	tst.w RACE_STATUS
+	bne.s exit
+
 	btst	#6,$bfe001	; mouse premuto?
 	bne.w	mouse
+exit:
 	rts			; esci
+
+RACE_STATUS: dc.w 0 
 
 	IFD DEBUG
     include "debug.s"
