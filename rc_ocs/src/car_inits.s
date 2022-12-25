@@ -60,9 +60,12 @@ CAR1_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 
-	move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)	
+	move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
 	move.w 	#0,LAP_COUNTER_OFFSET(a0) ; race starts at lap number zero
+
+	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
+	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
 	jsr		CALCULATE_WHEEL_POSITIONS
 	rts

@@ -40,7 +40,7 @@ CHECK_MAP:
 end_check_track:
 
     cmpi.w           #3,d7
-    bne.s            dontresetcolliding
+    bne.w            dontresetcolliding
 
     ; if we are here it means the front wheel, the rear wheel and the back wheel position are on a walkable space
     ; in this case we reset MOVER_IS_COLLIDING_OFFSET
@@ -50,7 +50,7 @@ end_check_track:
     ; copy d0 which holds the zone in the upper nibble of the least significant byte into d1 then shift to the right
     ; for 4 position to move data from high nibble to low nibble
     STORECARPROPERTY CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET,d0
-    
+
     ; put red intensity according to this value for debug
     move.w d0,d1
     andi.w #$00F0,d1
@@ -72,9 +72,21 @@ end_check_track:
     bne.s lap_not_completed
     ; start managing lap completed
     DEBUG 4567
+    ; update best lap timer if not first lap
+    tst.w LAP_COUNTER_OFFSET(a2)
+    beq.s noupdatebesttime
+    move.w TIME_OFFSET(a2),d0
+    cmp.w BEST_TIME_OFFSET(a2),d0
+    bcc.s noupdatebesttime
+    move.w d0,BEST_TIME_OFFSET(a2)
+    jsr UPDATE_BEST_TIMER
+noupdatebesttime:
+    ; reset timer
+    move.w #0,TIME_OFFSET(a2)
+
     ; increase lap counter
     addi.w #1,LAP_COUNTER_OFFSET(a2)
-    cmp.w #3,LAP_COUNTER_OFFSET(a2)
+    cmp.w #5,LAP_COUNTER_OFFSET(a2)
     bne.s lap_not_completed
     move.w #1,RACE_STATUS
 lap_not_completed:

@@ -47,8 +47,10 @@ MOVER_BOUNCE_WALL_OFFSET			EQU 52
 CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET	EQU 54
 CAR_NEXT_ZONE_OFFSET				EQU 56
 LAP_COUNTER_OFFSET					EQU 58
+TIME_OFFSET							EQU 60
+BEST_TIME_OFFSET					EQU 62
 
-MOVER_SIZE					 		EQU 60
+MOVER_SIZE					 		EQU 64
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -117,6 +119,7 @@ DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 	include "AProcessing/libs/vectors/operations.s"
 	include "AProcessing/libs/vectors/trigtables.i"
 	include "AProcessing/libs/precalc/map.s"
+	include "AProcessing/libs/precalc/dec2txt.s"
 
 START:
 	; Print track image
@@ -200,7 +203,7 @@ mouse:
 	move.w 	#1-1,d7
 moversloop:
 
-	 ; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
+	; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
 	bsr.w	LeggiJoyst
 	;move.w  #%0100,d0
 
@@ -228,6 +231,8 @@ moversloop:
 	; show the mover object on the screen
 	bsr.w	DISPLAY
 
+	bsr.w   UPDATE_TIMER
+
 	adda.w  #MOVER_SIZE,a0
 	dbra 	d7,moversloop
 
@@ -253,7 +258,7 @@ Aspetta:
 exit:
 	rts			; esci
 
-RACE_STATUS: dc.w 0 
+RACE_STATUS: dc.w 0
 
 	IFD DEBUG
     include "debug.s"
@@ -270,6 +275,7 @@ RACE_STATUS: dc.w 0
 	include "joystickinput.s"
 	include "car_management.s"
 	include "check_against_map.s"
+	include "time.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -413,22 +419,27 @@ CAR_315:
 TRACK_DATA:
 TRACK_DATA_1:
 	incbin  "assets/images/raw/rc045_320X240X8.raw.aa"
+DASHBOARD_DATA_1:
 	dcb.b   40*16,0
 TRACK_DATA_2:
 	incbin  "assets/images/raw/rc045_320X240X8.raw.ab"
+DASHBOARD_DATA_2:
 	dcb.b   40*16,0
 TRACK_DATA_3:
 	incbin  "assets/images/raw/rc045_320X240X8.raw.ac"
+DASHBOARD_DATA_3:
 	dcb.b   40*16,0
 
 	ELSE
 	TRACK_DATA:
 TRACK_DATA_1:
+DASHBOARD_DATA_1:
 	dcb.b   40*256,0
 TRACK_DATA_2:
+DASHBOARD_DATA_2:
 	dcb.b   40*256,0
 TRACK_DATA_3:
-
+DASHBOARD_DATA_3:
 	dcb.b   40*256,0
 	ENDC
 TRACK_DATA_COLORS:
