@@ -32,7 +32,7 @@ do_acceleration:
     DV                  #160,#20,(a1),#1
     ENDC
 
-    ; add accelleration to velocity
+    ; add acceleration to velocity
     SETCARPROPERTYADDR MOVER_ACCELERATION_OFFSET,a0  ; a0 now points to the acceleration vector
     SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a1      ; a1 now points to the velocity vector
 
@@ -44,7 +44,6 @@ do_acceleration:
     STORECARPROPERTY MOVER_MAX_SPEED_OFFSET,d7
     jsr LIMIT2DVECTOR
 
-accellerate_end:
     movem.l (sp)+,a0/d7
     rts
 
