@@ -222,8 +222,10 @@ moversloop:
 	; Move the mover object (calculate next position)
 	bsr.w	MOVE
 
+	IFND DEBUG
 	; Car behaviour must change according to the map metadata
 	bsr.w   CHECK_MAP
+	ENDC
 
     ; check collisions
     ;bsr.w 	CHECK_COLLISIONS

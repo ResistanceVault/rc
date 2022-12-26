@@ -61,9 +61,9 @@ manage_input_direction_ok:
 	asr.w #11-DECIMAL_SHIFT,d7
 	move.w d7,2(a0)
 
-    IFD DEBUG
-    DV #80,#20,(a0),#1
-    ENDC
+    ;IFD DEBUG
+    ;DV #80,#20,(a0),#1
+    ;ENDC
 
     suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 
