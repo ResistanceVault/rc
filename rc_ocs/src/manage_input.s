@@ -27,6 +27,13 @@ manage_input_no_brake:
     btst #0,d0
     beq.s manage_input_noright
     move.w MOVER_STEERING_ANGLE_OFFSET(a0),d1
+
+    ; If we are on ice , maxvelocity /= 2
+    tst.w              MOVER_IS_ON_ICE(a0)
+    beq.s              nodoublesteer1
+    lsl.w              #1,d1
+nodoublesteer1:
+
     add.w  d1,MOVER_STEER_DIRECTION_OFFSET(a0)
 manage_input_noright:
 
@@ -34,6 +41,13 @@ manage_input_noright:
     btst #1,d0
     beq.s manage_input_noleft
     move.w MOVER_STEERING_ANGLE_OFFSET(a0),d1
+
+    ; If we are on ice , maxvelocity /= 2
+    tst.w              MOVER_IS_ON_ICE(a0)
+    beq.s              nodoublesteer2
+    lsl.w              #1,d1
+nodoublesteer2
+
     sub.w  d1,MOVER_STEER_DIRECTION_OFFSET(a0)
 manage_input_noleft:
 

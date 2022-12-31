@@ -10,6 +10,10 @@ CHECK_MAP:
     asr.w            #DECIMAL_SHIFT,d1
 
     bsr.w            GET_MAP_PIXEL_DATA
+
+    ; set flags relative to terrain
+    bsr.w            SET_TERRAIN_FLAGS
+
     bsr.w            SET_CAR_BEHAVIOUR
     tst.w            d0
     beq.s            end_check_track
@@ -71,7 +75,7 @@ end_check_track:
     cmpi.w #2,CAR_NEXT_ZONE_OFFSET(a2)
     bne.s lap_not_completed
     ; start managing lap completed
-    DEBUG 4567
+    
     ; update best lap timer if not first lap
     tst.w LAP_COUNTER_OFFSET(a2)
     beq.s noupdatebesttime
@@ -130,7 +134,7 @@ GET_MAP_PIXEL_DATA:
     rts
 
 ; tests d0 for the behaviour to apply
-; if after routine call d0 is zero sto processing next wheel
+; if after routine call d0 is zero I am processing next wheel
 SET_CAR_BEHAVIOUR:
     tst.b            d0
     bne.s            track_walkable
@@ -140,7 +144,7 @@ SET_CAR_BEHAVIOUR:
     move.l           MOVER_PREVIOUS_POSITION_OFFSET(a2),MOVER_POSITION_OFFSET(a2)
     tst.w            MOVER_IS_COLLIDING_OFFSET(a2)
     bne.s            set_car_behaviour_end_checks
-    
+
     ;neg.w            MOVER_X_VELOCITY_OFFSET(a2)
     ;neg.w            MOVER_Y_VELOCITY_OFFSET(a2)
     ;move.w MOVER_X_VELOCITY_OFFSET(a2),d0
@@ -150,7 +154,7 @@ SET_CAR_BEHAVIOUR:
     ;move.w d0,MOVER_X_VELOCITY_OFFSET(a2)
     ;move.w d1,MOVER_Y_VELOCITY_OFFSET(a2)
     ;asr.w            #1,MOVER_X_VELOCITY_OFFSET(a2)
-    
+
     SETCARPROPERTYADDR MOVER_BOUNCE_WALL_OFFSET,a0
     SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a1
     MUL2DVECTOR1X2_Q4_12
@@ -161,4 +165,29 @@ set_car_behaviour_end_checks:
     rts
 track_walkable:
     moveq            #1,d0
+    rts
+
+SET_TERRAIN_FLAGS:
+    move.l           d0,d1
+    andi.b           #%00001111,d1 ; i keep only the lower part of the nibble
+    DEBUG 4567
+    cmpi.b           #1,d1      ; check if we are on grass
+    bne.s            set_terrain_flags_no_grass
+    move.w           #1,MOVER_IS_ON_GRASS(a2)
+    move.w           #0,MOVER_IS_ON_ICE(a2)
+    move.w #$00F0,$dff180
+    rts
+set_terrain_flags_no_grass:
+    cmpi.b           #2,d1      ; check if we are on ice
+    bne.s            set_terrain_flags_no_ice
+    move.w           #1,MOVER_IS_ON_ICE(a2)
+    move.w           #0,MOVER_IS_ON_GRASS(a2)
+    move.w #$0fff,$dff180
+    rts
+set_terrain_flags_no_ice:
+
+    ; is we are here it mens no grass an no ice , the default is road
+    move.w           #0,MOVER_IS_ON_ICE(a2)
+    move.w           #0,MOVER_IS_ON_GRASS(a2)
+    move.w #$0000,$dff180
     rts

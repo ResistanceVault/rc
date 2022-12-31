@@ -34,6 +34,8 @@ DISPLAY:
     ; restore old a0
     move.l a2,a0
     IFND DEBUG
+    IFNE SPRITES
     jsr CREATE_CAR_SPRITE
+    ENDC
     ENDC
     rts

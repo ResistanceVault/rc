@@ -27,6 +27,13 @@ do_acceleration:
     SETCARPROPERTYADDR MOVER_ACCELERATION_OFFSET,a1
     DIV2DVECTOR1X2
 
+    ; If we are on grass , maxvelocity /= 2
+    tst.w              MOVER_IS_ON_ICE(a2)
+    beq.s              nohalfmaxengine
+    lea                VECTORHALF,a0
+    DIV2DVECTOR1X2
+nohalfmaxengine
+
     ; now the acceleration vector is scaled according to the engine power
     IFD DEBUG
     DV                  #160,#20,(a1),#1
@@ -42,8 +49,15 @@ do_acceleration:
 
     SETCARPROPERTYADDR MOVER_VELOCITY_OFFSET,a0
     STORECARPROPERTY MOVER_MAX_SPEED_OFFSET,d7
+
+    ; If we are on grass , maxvelocity /= 2
+    tst.w              MOVER_IS_ON_GRASS(a2)
+    beq.s              nohalfmaxvelocity
+    lsr.w              #1,d7
+nohalfmaxvelocity
     jsr LIMIT2DVECTOR_Q4_12_TABLE_LOOKUP
 
     movem.l (sp)+,a0/d7
     rts
 
+VECTORHALF: dc.w 4
