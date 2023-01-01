@@ -10,16 +10,12 @@ BRAKE:
 
     ; brake vector = velocity vector * -1
     lea                 BRAKE_VECTOR(PC),a0
-    move.w              MOVER_X_VELOCITY_OFFSET(a2),d0
-    move.w              MOVER_Y_VELOCITY_OFFSET(a2),d1
-    neg.w               d0
-    neg.w               d1
+    move.l              MOVER_VELOCITY_OFFSET(a2),(a0)
+    neg.w               (a0)
+    neg.w               2(a0)
 
     ;BRAKE_VECTOR now holds the opposite direction of VELOCITY VECTOR
     ; we must scale it according to brake factor
-    ;lea                 BRAKE_VECTOR(PC),a0
-    move.w              d0,(a0)
-    move.w              d1,2(a0)
 
     ; set magnitude of brake vector according to the car brake coefficient
     STORECARPROPERTY    MOVER_BRAKE_COEFFICIENT_OFFSET,d7
@@ -30,7 +26,7 @@ BRAKE:
     ENDC
 
     ; put velocity into a1
-    SETCARPROPERTYADDR  MOVER_VELOCITY_OFFSET,a1 ; a2 now points to the velocity vector
+    SETCARPROPERTYADDR  MOVER_VELOCITY_OFFSET,a1 ; a1 now points to the velocity vector
 
     ; a0 is set to brake vector
     ; a1 is set to car velocity vector
