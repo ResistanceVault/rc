@@ -248,3 +248,31 @@ UPDATE_BEST_TIMER:
 
     movem.l             (sp)+,a0/a1/d0/d7
     rts
+LAPTXT: dc.b 0,0,0,0,0,0
+UPDATE_LAP_COUNTER_HID:
+
+    movem.l             a0/a1/d0/d1/d7,-(sp)
+    move.l              a0,a2
+
+    ; convert to text
+    STORECARPROPERTY    LAP_COUNTER_OFFSET,d1
+    lea                 LAPTXT(pc),a0
+    jsr                 dec2txt
+
+    moveq               #0,d0
+    move.b              LAPTXT+4,d0
+    lsl.w               #3,d0
+    lea                 TIMER_FONTS(PC),a0
+    adda.w d0,a0
+    lea                 DASHBOARD_DATA_1+20,a1
+    move.b              (a0)+,(a1)
+    move.b              (a0)+,40(a1)
+    move.b              (a0)+,80(a1)
+    move.b              (a0)+,120(a1)
+    move.b              (a0)+,160(a1)
+    move.b              (a0)+,200(a1)
+    move.b              (a0)+,240(a1)
+    move.b              (a0)+,280(a1)
+
+    movem.l             (sp)+,a0/a1/d0/d1/d7
+    rts

@@ -90,6 +90,7 @@ noupdatebesttime:
 
     ; increase lap counter
     addi.w #1,LAP_COUNTER_OFFSET(a2)
+    jsr UPDATE_LAP_COUNTER_HID
     cmp.w #5,LAP_COUNTER_OFFSET(a2)
     bne.s lap_not_completed
     move.w #1,RACE_STATUS
@@ -170,7 +171,7 @@ track_walkable:
 SET_TERRAIN_FLAGS:
     move.l           d0,d1
     andi.b           #%00001111,d1 ; i keep only the lower part of the nibble
-    DEBUG 4567
+    ;DEBUG 4567
     cmpi.b           #1,d1      ; check if we are on grass
     bne.s            set_terrain_flags_no_grass
     move.w           #1,MOVER_IS_ON_GRASS(a2)
