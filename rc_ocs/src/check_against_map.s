@@ -75,7 +75,7 @@ end_check_track:
     cmpi.w #2,CAR_NEXT_ZONE_OFFSET(a2)
     bne.s lap_not_completed
     ; start managing lap completed
-    
+
     ; update best lap timer if not first lap
     tst.w LAP_COUNTER_OFFSET(a2)
     beq.s noupdatebesttime
@@ -91,7 +91,7 @@ noupdatebesttime:
     ; increase lap counter
     addi.w #1,LAP_COUNTER_OFFSET(a2)
     jsr UPDATE_LAP_COUNTER_HID
-    cmp.w #5,LAP_COUNTER_OFFSET(a2)
+    cmp.w #MAX_LAPS,LAP_COUNTER_OFFSET(a2)
     bne.s lap_not_completed
     move.w #1,RACE_STATUS
 lap_not_completed:

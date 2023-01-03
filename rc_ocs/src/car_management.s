@@ -37,16 +37,18 @@ CREATE_CAR_SPRITE:
     move.l    	     (a1),a0
     STORECARPROPERTY MOVER_X_POSITION_OFFSET,d0
     STORECARPROPERTY MOVER_Y_POSITION_OFFSET,d1
-    lsr.w            #DECIMAL_SHIFT+1,d0
+    lsr.w            #DECIMAL_SHIFT,d0
+    move.w           d0,d7 ; d7 holds the least sig bit to determine if the number is odd or even
+    lsr.w            #1,d0
     asr.w            #DECIMAL_SHIFT,d1
     add.w            #60,d0
-    add.w            #33,d1
+    add.w            #36,d1
 
-    btst             #0,d0
+    btst             #0,d7
     beq.s            car_no_odd_x
     bset             #0,3(a0)
-car_no_odd_x:
     bra.s            car_place_coords
+car_no_odd_x:
     bclr             #0,3(a0)
 car_place_coords:
     move.b           d0,1(a0)

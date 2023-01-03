@@ -55,7 +55,8 @@ Sprite7pointers:
 ; BplCon2
 ; Playfield 2 priority over Playfield 1 ON
 ; Sprites max priority over playfields
-  dc.w       $104,$0064
+  ;dc.w       $104,$0064 uncomment this and comment the following line to get sprites over everything
+  dc.w       $104,$0044;
 
 ; Bitplanes Pointers
 BPLPTR1:

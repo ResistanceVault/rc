@@ -60,6 +60,8 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
+MAX_LAPS							EQU 10
+
 	include "macros.i"
 
 MOVER_INIT_MEM MACRO
