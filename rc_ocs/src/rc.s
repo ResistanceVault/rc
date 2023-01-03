@@ -102,8 +102,11 @@ MUL2DVECTOR1X2_Q10_6 MACRO
 				; riscriverla ogni volta!
 *****************************************************************************
 
+	IFD SOUND
+DMASET EQU %1000011111100100 ;Master,Copper,Blitter,Bitplanes;Sprites;Audio
+	ELSE
 DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
-
+	ENDC
 	include "AProcessing/libs/vectors/sqrt_q4_12_lookup_table.i"
 	include "AProcessing/libs/rasterizers/globaloptions.s"
 	include "AProcessing/libs/trigtables.i"
@@ -160,6 +163,12 @@ looptrackcolors:
   	;lea       Sprite1pointers,a1
   	;jsr       POINTINCOPPERLIST_FUNCT
 
+	IFD SOUND
+	move.l #MOTOR1_SND,$dff0c0  ; pun ta AUD2LC a $60000
+	move.w #3449/2,$dff0c4; size
+	move.w #168,$dff0c6 
+	move.w #64,$dff0c8
+	ENDC
 
 	; Puntiamo la cop...
 
@@ -314,6 +323,11 @@ POINTINCOPPERLIST_FUNCT:
 	include "AProcessing/libs/rasterizers/processing_bitplanes_fast.s"
 
 	include "copperlist.s"
+
+	SECTION SOUNDS_DATA_C
+MOTOR1_SND:
+	incbin "assets/sounds/Squares.wav.asd"
+
 	SECTION	SPRITES,DATA_C
 CAR_DATA:
 CAR_0:
@@ -425,15 +439,15 @@ CAR_315:
 
 TRACK_DATA:
 TRACK_DATA_1:
-	incbin  "assets/images/raw/rc045_320X240X8.raw.aa"
+	incbin  "assets/tracks/track1/rc045_320X240X8.raw.aa"
 DASHBOARD_DATA_1:
 	dcb.b   40*16,0
 TRACK_DATA_2:
-	incbin  "assets/images/raw/rc045_320X240X8.raw.ab"
+	incbin  "assets/tracks/track1/rc045_320X240X8.raw.ab"
 DASHBOARD_DATA_2:
 	dcb.b   40*16,0
 TRACK_DATA_3:
-	incbin  "assets/images/raw/rc045_320X240X8.raw.ac"
+	incbin  "assets/tracks/track1/rc045_320X240X8.raw.ac"
 DASHBOARD_DATA_3:
 	dcb.b   40*16,0
 
@@ -450,6 +464,6 @@ DASHBOARD_DATA_3:
 	dcb.b   40*256,0
 	ENDC
 TRACK_DATA_COLORS:
-	incbin  "assets/images/raw/rc045_320X240X8.pal"
+	incbin "assets/tracks/track1/rc045_320X240X8.pal"
 TRACK_METADATA:
 	incbin "assets/tracks/track1/rc045_320X240X8.data"

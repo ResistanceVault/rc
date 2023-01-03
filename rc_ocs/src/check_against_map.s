@@ -59,7 +59,7 @@ end_check_track:
     move.w d0,d1
     andi.w #$00F0,d1
     lsl.w #4,d1
-    move.w d1,$dff180
+    ;move.w d1,$dff180
 
     ; check if next zone has been reached
     move.w d0,d1
@@ -141,7 +141,7 @@ SET_CAR_BEHAVIOUR:
     bne.s            track_walkable
 
     ; manage a car hitting an obstacle
-    move.w           #$fff,$dff180
+    ;move.w           #$fff,$dff180
     move.l           MOVER_PREVIOUS_POSITION_OFFSET(a2),MOVER_POSITION_OFFSET(a2)
     tst.w            MOVER_IS_COLLIDING_OFFSET(a2)
     bne.s            set_car_behaviour_end_checks
@@ -176,19 +176,19 @@ SET_TERRAIN_FLAGS:
     bne.s            set_terrain_flags_no_grass
     move.w           #1,MOVER_IS_ON_GRASS(a2)
     move.w           #0,MOVER_IS_ON_ICE(a2)
-    move.w #$00F0,$dff180
+    ;move.w #$00F0,$dff180
     rts
 set_terrain_flags_no_grass:
     cmpi.b           #2,d1      ; check if we are on ice
     bne.s            set_terrain_flags_no_ice
     move.w           #1,MOVER_IS_ON_ICE(a2)
     move.w           #0,MOVER_IS_ON_GRASS(a2)
-    move.w #$0fff,$dff180
+    ;move.w #$0fff,$dff180
     rts
 set_terrain_flags_no_ice:
 
     ; is we are here it mens no grass an no ice , the default is road
     move.w           #0,MOVER_IS_ON_ICE(a2)
     move.w           #0,MOVER_IS_ON_GRASS(a2)
-    move.w #$0000,$dff180
+    ;move.w #$0000,$dff180
     rts
