@@ -1,5 +1,5 @@
 
-; Lezione8n2.s - Plot point on a 2 bitplane playfield
+; Rally Cross - A top down racing game for OCS/ECS Amigas
 
 	Section	rc,CODE
 
@@ -86,16 +86,16 @@ SWAP_BPL MACRO
     add.l d1,SCREEN_PTR_1
     ENDM
 
-MUL2DVECTOR1X2_Q10_6 MACRO
-    move.w   (a1),d0
-    move.w    2(a1),d1
-    muls.w    (a0),d0
-    muls.w    (a0),d1
-	asr.l     #6,d0
-	asr.l	  #6,d1
-    move.w    d0,(a1)
-    move.w    d1,2(a1)
-    ENDM
+;MUL2DVECTOR1X2_Q10_6 MACRO
+;    move.w   (a1),d0
+;   move.w    2(a1),d1
+;    muls.w    (a0),d0
+;    muls.w    (a0),d1
+;	asr.l     #6,d0
+;	asr.l	  #6,d1
+;   move.w    d0,(a1)
+;    move.w    d1,2(a1)
+;    ENDM
 
 ;	Include	"DaWorkBench.s"	; togliere il ; prima di salvare con "WO"
 
@@ -104,11 +104,8 @@ MUL2DVECTOR1X2_Q10_6 MACRO
 				; riscriverla ogni volta!
 *****************************************************************************
 
-	IFD SOUND
-DMASET EQU %1000011111100100 ;Master,Copper,Blitter,Bitplanes;Sprites;Audio
-	ELSE
 DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
-	ENDC
+
 	include "AProcessing/libs/vectors/sqrt_q4_12_lookup_table.i"
 	include "AProcessing/libs/rasterizers/globaloptions.s"
 	include "AProcessing/libs/trigtables.i"
@@ -130,6 +127,8 @@ DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 	include "AProcessing/libs/vectors/trigtables.i"
 	include "AProcessing/libs/precalc/map.s"
 	include "AProcessing/libs/precalc/dec2txt.s"
+
+PLAY_SOUND: dc.w 1
 
 START:
 	; Print track image
@@ -165,18 +164,23 @@ looptrackcolors:
   	;lea       Sprite1pointers,a1
   	;jsr       POINTINCOPPERLIST_FUNCT
 
+	move.w #DMASET,d1
+
 	IFD SOUND
-	move.l #MOTOR1_SND,$dff0c0  ; pun ta AUD2LC a $60000
-	move.w #3449/2,$dff0c4; size
-	move.w #168,$dff0c6 
+	tst.w PLAY_SOUND
+	beq.s nosound1
+	move.l #MOTOR1_SND,$dff0c0
+	move.w #8,$dff0c4; size
+	move.w #680,$dff0c6
 	move.w #64,$dff0c8
+	ori.w #%0100,d1
+	nop
+nosound1:
 	ENDC
 
-	; Puntiamo la cop...
+	MOVE.W	d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
 
-	MOVE.W	#DMASET,$96(a5)		; DMACON - abilita bitplane, copper
-					; e sprites.
-
+	; copperlist setup
 	move.l	#COPPERLIST,$80(a5)	; Puntiamo la nostra COP
 	move.w	d0,$88(a5)		; Facciamo partire la COP
 	move.w	#0,$1fc(a5)		; Disattiva l'AGA
@@ -325,10 +329,12 @@ POINTINCOPPERLIST_FUNCT:
 	include "AProcessing/libs/rasterizers/processing_bitplanes_fast.s"
 
 	include "copperlist.s"
-
-	SECTION SOUNDS_DATA_C
-MOTOR1_SND:
-	incbin "assets/sounds/Squares.wav.asd"
+	IFD SOUND
+	SECTION SOUNDS,DATA_C
+	MOTOR1_SND:
+	dc.b	0,40,90,110,127,110,90,40,0,-40,-90,-110,-127,-110,-90,-40
+	;incbin "assets/sounds/Squares.wav.asd"
+	ENDC
 
 	SECTION	SPRITES,DATA_C
 CAR_DATA:
