@@ -135,6 +135,38 @@ START:
 
 TRACK_DATA_HEIGHT	EQU 240
 
+	IFD COLOR
+
+	move.l              #TRACK_DATA_1,d0
+  	lea                 BPLPTR1,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+  	move.l              #TRACK_DATA_2,d0
+  	lea                 BPLPTR2,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+  	move.l              #TRACK_DATA_3,d0
+  	lea                 BPLPTR3,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+	move.l              #TRACK_DATA_4,d0
+  	lea                 BPLPTR4,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+	move.l              #TRACK_DATA_5,d0
+  	lea                 BPLPTR5,A1
+  	bsr.w               POINTINCOPPERLIST_FUNCT
+
+	; set track data colors
+	lea 				TRACK_DATA_COLORS,a0
+	lea					$dff180,a1
+	moveq				#32-1,d7
+looptrackcolors:
+	move.w				(a0)+,(a1)+
+	dbra				d7,looptrackcolors
+
+	ELSE
+
 	move.l              #TRACK_DATA_1,d0
   	lea                 BPLPTR1,A1
   	bsr.w               POINTINCOPPERLIST_FUNCT
@@ -154,6 +186,8 @@ TRACK_DATA_HEIGHT	EQU 240
 looptrackcolors:
 	move.w				(a0)+,(a1)+
 	dbra				d7,looptrackcolors
+
+	ENDC
 
 	; Car sprite
 	;move.l    			#CAR_180,d0
@@ -262,6 +296,7 @@ Aspetta:
     cmpi.b  #$ff,$dff006    ; linea 255?
     beq.s   Aspetta
 
+	IFND COLOR
 	lea                 BPLPTR2,a1
 	move.l              SCREEN_PTR_0,d0
 	POINTINCOPPERLIST
@@ -271,6 +306,7 @@ Aspetta:
 	POINTINCOPPERLIST
 
 	SWAP_BPL
+	ENDC
 
 	tst.w RACE_STATUS
 	bne.s exit
@@ -496,6 +532,10 @@ DASHBOARD_DATA_3:
 	dcb.b   40*256,0
 	ENDC
 TRACK_DATA_COLORS:
+	IFD COLOR
+	incbin "assets/tracks/track1/rc045_320X240X32.pal"
+	ELSE
 	incbin "assets/tracks/track1/rc045_320X240X8.pal"
+	ENDC
 TRACK_METADATA:
 	incbin "assets/tracks/track1/rc045_320X240X8.data"

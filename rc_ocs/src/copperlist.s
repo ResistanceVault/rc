@@ -1,5 +1,10 @@
     include "AProcessing/libs/copperlistmacros.i"
 
+COPSET5BPL MACRO
+  dc.w       $100
+  dc.w       %0101001000000000
+  ENDM
+
     SECTION	GRAPHIC,DATA_C
 
 COPPERLIST:
@@ -50,13 +55,20 @@ Sprite7pointers:
 
 ; Set dual playfield mode, activating PLAYFIELD 1 with bitplanes 1 3 5 and PLAYFIELD 2 with bitplanes 2 4
 ; Bitplanes 2 4 are double buffered and will be used to paint stuff, PLAYFIELD 1 will contain static image.
+  IFD COLOR
+  COPSET5BPL
+  ELSE
   COPSET23BPL
+  ENDC
 
 ; BplCon2
 ; Playfield 2 priority over Playfield 1 ON
 ; Sprites max priority over playfields
-  ;dc.w       $104,$0064 uncomment this and comment the following line to get sprites over everything
+  IFD COLOR
+  dc.w       $104,$0064 ;uncomment this and comment the following line to get sprites over everything
+  ELSE
   dc.w       $104,$0044;
+  ENDC
 
 ; Bitplanes Pointers
 BPLPTR1:
@@ -70,6 +82,7 @@ BPLPTR4:
 BPLPTR5:
   dc.w       $f0,$0000,$f2,$0000                                       ;fifth	 bitplane - BPL4PT
 
+	IFND COLOR
 	;dc.w	$0190,$000	; color0 - SFONDO
 	dc.w	$0192,$f00	; color1 - SCRITTE
 	dc.w	$0194,$0f0	; color2 - SCRITTE
@@ -90,5 +103,6 @@ BPLPTR5:
 	dc.w    $1ba,$f0f    ; color29
 	dc.w    $1bc,$f0f    ; color30
 	dc.w    $1be,$f0f    ; color31
+	ENDC
 
 	dc.w	$FFFF,$FFFE	; Fine della copperlist
