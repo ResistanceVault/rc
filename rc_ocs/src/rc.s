@@ -445,6 +445,29 @@ CAR_315:
 	SECTION	MIOPLANE,DATA_C
 	IFND DEBUG
 
+	IFD COLOR
+TRACK_DATA_1:
+	incbin  "assets/tracks/track1/rc045_320X240X32.raw.aa"
+DASHBOARD_DATA_1:
+	dcb.b   40*16,0
+TRACK_DATA_2:
+	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ab"
+DASHBOARD_DATA_2:
+	dcb.b   40*16,0
+TRACK_DATA_3:
+	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ac"
+DASHBOARD_DATA_3:
+	dcb.b   40*16,0
+TRACK_DATA_4:
+	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ad"
+DASHBOARD_DATA_4:
+	dcb.b   40*16,0
+TRACK_DATA_5:
+	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ae"
+DASHBOARD_DATA_5:
+	dcb.b   40*16,0
+	ELSE
+
 TRACK_DATA:
 TRACK_DATA_1:
 	incbin  "assets/tracks/track1/rc045_320X240X8.raw.aa"
@@ -458,6 +481,7 @@ TRACK_DATA_3:
 	incbin  "assets/tracks/track1/rc045_320X240X8.raw.ac"
 DASHBOARD_DATA_3:
 	dcb.b   40*16,0
+	ENDC
 
 	ELSE
 	TRACK_DATA:
