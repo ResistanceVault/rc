@@ -1,16 +1,5 @@
-SPRITES_VSTART		   equ  $2C
-CAR_SPRITE_DEGREES EQU 45
-
-CAR_SPRITES_LIST:
-    dc.l             CAR_0
-    dc.l             CAR_315
-    dc.l             CAR_270
-    dc.l             CAR_215
-    dc.l             CAR_180
-    dc.l             CAR_135
-    dc.l             CAR_90
-    dc.l             CAR_45
-    dc.l             CAR_0
+SPRITES_VSTART		   EQU  $2C
+CAR_SPRITE_DEGREES     EQU 45
 
 ; Routine to point the correct sprite into copperlist
 ; Input: a0 base address of the car
@@ -29,7 +18,7 @@ CREATE_CAR_SPRITE:
     divu.w           #CAR_SPRITE_DEGREES,d7
 
     ; Point the car frame address
-    lea              CAR_SPRITES_LIST(PC),a1
+    SETCARPROPERTYADDR CAR_SPRITES_LIST_OFFSET,a1
     lsl.w            #2,d7
     adda.w           d7,a1
 
@@ -74,8 +63,10 @@ car_y_vstopset:
 car_y_end:
 
     move.l    	     (a1),d0
-  	lea       		 Sprite0pointers,a1
-  	jsr       		 POINTINCOPPERLIST_FUNCT
+  	;lea       		 Sprite0pointers,a1
+  	;SETCARPROPERTYADDR  CAR_SPRITE_POINTER_OFFSET,a1
+    move.l           CAR_SPRITE_POINTER_OFFSET(a2),a1
+    jsr       		 POINTINCOPPERLIST_FUNCT
 
     movem.l          (sp)+,a0/a1/d7
     rts

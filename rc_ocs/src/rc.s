@@ -53,7 +53,20 @@ BEST_TIME_OFFSET					EQU 62
 MOVER_IS_ON_GRASS					EQU 64
 MOVER_IS_ON_ICE						EQU 66
 
-MOVER_SIZE					 		EQU 68
+CAR_SPRITES_LIST_OFFSET				EQU 68
+CAR_SPRITES_LIST_OFFSET_0			EQU 68
+CAR_SPRITES_LIST_OFFSET_1			EQU 72
+CAR_SPRITES_LIST_OFFSET_2			EQU 76
+CAR_SPRITES_LIST_OFFSET_3			EQU 80
+CAR_SPRITES_LIST_OFFSET_4			EQU 84
+CAR_SPRITES_LIST_OFFSET_5			EQU 88
+CAR_SPRITES_LIST_OFFSET_6			EQU 92
+CAR_SPRITES_LIST_OFFSET_7			EQU 96
+CAR_SPRITES_LIST_OFFSET_8			EQU 100
+
+CAR_SPRITE_POINTER_OFFSET			EQU 104
+
+MOVER_SIZE					 		EQU 108
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -129,6 +142,7 @@ DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 	include "AProcessing/libs/precalc/dec2txt.s"
 
 PLAY_SOUND: dc.w 1
+CARS_IN_PLAY: dc.w %0000000000000011
 
 START:
 	; Print track image
@@ -190,8 +204,8 @@ looptrackcolors:
 	ENDC
 
 	; Car sprite
-	;move.l    			#CAR_180,d0
-  	;lea       			Sprite0pointers,a1
+	;move.l    			#CAR1_180,d0
+  	;lea       			Sprite1pointers,a1
   	;jsr       			POINTINCOPPERLIST_FUNCT
 
 	;move.l    #CAR_180_1,d0
@@ -223,16 +237,19 @@ nosound1:
 
 	ENABLE_CLIPPING
 
-	; Car initialization
+	; Car 1 initialization
 	jsr		CAR1_INIT
+
+	; Car 2 initialization
+	jsr		CAR2_INIT
 
 	; Start of gameloop
 mouse:
     cmpi.b  #$ff,$dff006    ; Linea 255?
     bne.s   mouse
 
+	IFND COLOR
 	jsr CLEARTOP
-
 	WAITBLITTER
 
 	STROKE #1
@@ -251,11 +268,16 @@ mouse:
 	move.w #0,d0
     move.w #HEIGHT-1,d1
     jsr POINT
+	ENDC
 
 	; for each car
 	lea MOVERS,a0
-	move.w 	#1-1,d7
+	move.w 	#2-1,d7
 moversloop:
+
+	; if the car is not in play skip
+	btst.b 	d7,CARS_IN_PLAY+1
+	beq.w   next_car
 
 	; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
 	bsr.w	LeggiJoyst
@@ -289,6 +311,7 @@ moversloop:
 
 	bsr.w   UPDATE_TIMER
 
+next_car:
 	adda.w  #MOVER_SIZE,a0
 	dbra 	d7,moversloop
 
@@ -373,110 +396,7 @@ POINTINCOPPERLIST_FUNCT:
 	ENDC
 
 	SECTION	SPRITES,DATA_C
-CAR_DATA:
-CAR_0:
-	dc.b $50,$90,$60,$00
-	incbin "assets/cars/car0_16x16.sprite"
-	dc.w 0,0
-
-CAR_45:
-	dc.b $50,$90,$60,$00
-	incbin "assets/cars/car45_16x16.sprite"
-	dc.w 0,0
-
-CAR_90:
-	dc.b $50,$90,$60,$00
-	incbin "assets/cars/car90_16x16.sprite"
-	dc.w 0,0
-
-CAR_135:
-	dc.b $50,$90,$60,$00
-	;incbin "assets/cars/car135_16x16.sprite"
-		dc.w $0000,$0000 ; line 1
-		dc.w $0000,$0000 ; line 2
-		dc.w $0000,$0000 ; line 3
-		dc.w $0000,$0000 ; line 4
-		dc.w $0200,$0000 ; line 5
-		dc.w $0680,$0300 ; line 6
-		dc.w $0F80,$07C0 ; line 7
-		dc.w $02E0,$07C0 ; line 8
-		dc.w $07F0,$0360 ; line 9
-		dc.w $01E0,$03C0 ; line 10
-		dc.w $01C0,$0080 ; line 11
-		dc.w $0080,$0000 ; line 12
-		dc.w $0000,$0000 ; line 13
-		dc.w $0000,$0000 ; line 14
-		dc.w $0000,$0000 ; line 15
-		dc.w $0000,$0000 ; line 16
-		dc.w 0,0
-
-CAR_180:
-	dc.b $50,$90,$60,$00
-	incbin "assets/cars/car180_16x16.sprite"
-	dc.w 0,0
-
-CAR_215:
-	dc.b $50,$90,$60,$00
-	;incbin "assets/cars/car215_16x16.sprite"
-		dc.w $0000,$0000 ; line 1
-		dc.w $0000,$0000 ; line 2
-		dc.w $0000,$0000 ; line 3
-		dc.w $0000,$0000 ; line 4
-		dc.w $0080,$0000 ; line 5
-		dc.w $01C0,$0080 ; line 6
-		dc.w $01E0,$03C0 ; line 7
-		dc.w $07F0,$0360 ; line 8
-		dc.w $02E0,$07C0 ; line 9
-		dc.w $0F80,$07C0 ; line 10
-		dc.w $0680,$0300 ; line 11
-		dc.w $0200,$0000 ; line 12
-		dc.w $0000,$0000 ; line 13
-		dc.w $0000,$0000 ; line 14
-		dc.w $0000,$0000 ; line 15
-		dc.w $0000,$0000 ; line 16
-		dc.w 0,0
-
-CAR_270:
-	dc.b $50,$90,$60,$00
-	;incbin "assets/cars/car270_16x16.sprite"
-		dc.w $0000,$0000 ; line 1
-		dc.w $0000,$0000 ; line 2
-		dc.w $0000,$0000 ; line 3
-		dc.w $0000,$0000 ; line 4
-		dc.w $07E0,$0000 ; line 5
-		dc.w $0180,$0000 ; line 6
-		dc.w $07E0,$03C0 ; line 7
-		dc.w $03C0,$0660 ; line 8
-		dc.w $03C0,$03C0 ; line 9
-		dc.w $07E0,$03C0 ; line 10
-		dc.w $0080,$0520 ; line 11
-		dc.w $03C0,$0000 ; line 12
-		dc.w $0000,$0000 ; line 13
-		dc.w $0000,$0000 ; line 14
-		dc.w $0000,$0000 ; line 15
-		dc.w $0000,$0000 ; line 16
-		dc.w 0,0
-
-CAR_315:
-	dc.b $50,$90,$60,$00
-	;incbin "assets/cars/car135_16x16.sprite"
-		dc.w $0000,$0000 ; line 1
-	dc.w $0000,$0000 ; line 2
-	dc.w $0000,$0000 ; line 3
-	dc.w $0000,$0000 ; line 4
-	dc.w $0100,$0000 ; line 5
-	dc.w $0380,$0100 ; line 6
-	dc.w $0780,$03C0 ; line 7
-	dc.w $0FE0,$06C0 ; line 8
-	dc.w $0740,$03E0 ; line 9
-	dc.w $01F0,$03E0 ; line 10
-	dc.w $0160,$00C0 ; line 11
-	dc.w $0040,$0000 ; line 12
-	dc.w $0000,$0000 ; line 13
-	dc.w $0000,$0000 ; line 14
-	dc.w $0000,$0000 ; line 15
-	dc.w $0000,$0000 ; line 16
-	dc.w 0,0
+	include "carsprites.i"
 
 	SECTION	MIOPLANE,DATA_C
 	IFND DEBUG
