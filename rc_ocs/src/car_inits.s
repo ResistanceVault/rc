@@ -67,17 +67,20 @@ CAR1_INIT:
 	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
+	; input routine
+	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+
 	; car sprites address list
-	move.l             #CAR_0,CAR_SPRITES_LIST_OFFSET_0(a0)
-    move.l             #CAR_315,CAR_SPRITES_LIST_OFFSET_1(a0)
-    move.l             #CAR_270,CAR_SPRITES_LIST_OFFSET_2(a0)
-    move.l             #CAR_215,CAR_SPRITES_LIST_OFFSET_3(a0)
-    move.l             #CAR_180,CAR_SPRITES_LIST_OFFSET_4(a0)
-    move.l             #CAR_135,CAR_SPRITES_LIST_OFFSET_5(a0)
-    move.l             #CAR_90,CAR_SPRITES_LIST_OFFSET_6(a0)
-    move.l             #CAR_45,CAR_SPRITES_LIST_OFFSET_7(a0)
-    move.l             #CAR_0,CAR_SPRITES_LIST_OFFSET_8(a0)
-	move.l			   #Sprite0pointers,CAR_SPRITE_POINTER_OFFSET(a0)
+	move.l  #CAR_0,CAR_SPRITES_LIST_OFFSET_0(a0)
+    move.l  #CAR_315,CAR_SPRITES_LIST_OFFSET_1(a0)
+    move.l  #CAR_270,CAR_SPRITES_LIST_OFFSET_2(a0)
+    move.l  #CAR_215,CAR_SPRITES_LIST_OFFSET_3(a0)
+    move.l  #CAR_180,CAR_SPRITES_LIST_OFFSET_4(a0)
+    move.l  #CAR_135,CAR_SPRITES_LIST_OFFSET_5(a0)
+    move.l  #CAR_90,CAR_SPRITES_LIST_OFFSET_6(a0)
+    move.l  #CAR_45,CAR_SPRITES_LIST_OFFSET_7(a0)
+    move.l  #CAR_0,CAR_SPRITES_LIST_OFFSET_8(a0)
+	move.l	#Sprite0pointers,CAR_SPRITE_POINTER_OFFSET(a0)
 
 	jsr		CALCULATE_WHEEL_POSITIONS
 
@@ -139,17 +142,20 @@ CAR2_INIT:
 	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
+	; input routine
+	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+
 	; car sprites address list
-	move.l             #CAR1_0,CAR_SPRITES_LIST_OFFSET_0(a0)
-    move.l             #CAR1_315,CAR_SPRITES_LIST_OFFSET_1(a0)
-    move.l             #CAR1_270,CAR_SPRITES_LIST_OFFSET_2(a0)
-    move.l             #CAR1_215,CAR_SPRITES_LIST_OFFSET_3(a0)
-    move.l             #CAR1_180,CAR_SPRITES_LIST_OFFSET_4(a0)
-    move.l             #CAR1_135,CAR_SPRITES_LIST_OFFSET_5(a0)
-    move.l             #CAR1_90,CAR_SPRITES_LIST_OFFSET_6(a0)
-    move.l             #CAR1_45,CAR_SPRITES_LIST_OFFSET_7(a0)
-    move.l             #CAR1_0,CAR_SPRITES_LIST_OFFSET_8(a0)
-	move.l			   #Sprite2pointers,CAR_SPRITE_POINTER_OFFSET(a0)
+	move.l  #CAR1_0,CAR_SPRITES_LIST_OFFSET_0(a0)
+    move.l  #CAR1_315,CAR_SPRITES_LIST_OFFSET_1(a0)
+    move.l  #CAR1_270,CAR_SPRITES_LIST_OFFSET_2(a0)
+    move.l  #CAR1_215,CAR_SPRITES_LIST_OFFSET_3(a0)
+    move.l  #CAR1_180,CAR_SPRITES_LIST_OFFSET_4(a0)
+    move.l  #CAR1_135,CAR_SPRITES_LIST_OFFSET_5(a0)
+    move.l  #CAR1_90,CAR_SPRITES_LIST_OFFSET_6(a0)
+    move.l  #CAR1_45,CAR_SPRITES_LIST_OFFSET_7(a0)
+    move.l  #CAR1_0,CAR_SPRITES_LIST_OFFSET_8(a0)
+	move.l	#Sprite2pointers,CAR_SPRITE_POINTER_OFFSET(a0)
 
 	jsr		CALCULATE_WHEEL_POSITIONS
 

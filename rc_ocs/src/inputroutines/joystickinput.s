@@ -1,4 +1,4 @@
-LeggiJoyst:
+READJOY1:
     moveq   #0,d0
 	MOVE.w	$dff00c,D3	; JOY1DAT
 	BTST.l	#1,D3		; il bit 1 ci dice se si va a destra

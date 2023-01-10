@@ -53,20 +53,22 @@ BEST_TIME_OFFSET					EQU 62
 MOVER_IS_ON_GRASS					EQU 64
 MOVER_IS_ON_ICE						EQU 66
 
-CAR_SPRITES_LIST_OFFSET				EQU 68
-CAR_SPRITES_LIST_OFFSET_0			EQU 68
-CAR_SPRITES_LIST_OFFSET_1			EQU 72
-CAR_SPRITES_LIST_OFFSET_2			EQU 76
-CAR_SPRITES_LIST_OFFSET_3			EQU 80
-CAR_SPRITES_LIST_OFFSET_4			EQU 84
-CAR_SPRITES_LIST_OFFSET_5			EQU 88
-CAR_SPRITES_LIST_OFFSET_6			EQU 92
-CAR_SPRITES_LIST_OFFSET_7			EQU 96
-CAR_SPRITES_LIST_OFFSET_8			EQU 100
+INPUT_ROUTINE_OFFSET				EQU 68
 
-CAR_SPRITE_POINTER_OFFSET			EQU 104
+CAR_SPRITES_LIST_OFFSET				EQU 72
+CAR_SPRITES_LIST_OFFSET_0			EQU 72
+CAR_SPRITES_LIST_OFFSET_1			EQU 76
+CAR_SPRITES_LIST_OFFSET_2			EQU 80
+CAR_SPRITES_LIST_OFFSET_3			EQU 84
+CAR_SPRITES_LIST_OFFSET_4			EQU 88
+CAR_SPRITES_LIST_OFFSET_5			EQU 92
+CAR_SPRITES_LIST_OFFSET_6			EQU 96
+CAR_SPRITES_LIST_OFFSET_7			EQU 100
+CAR_SPRITES_LIST_OFFSET_8			EQU 104
 
-MOVER_SIZE					 		EQU 108
+CAR_SPRITE_POINTER_OFFSET			EQU 108
+
+MOVER_SIZE					 		EQU 112
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -280,7 +282,9 @@ moversloop:
 	beq.w   next_car
 
 	; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
-	bsr.w	LeggiJoyst
+	;bsr.w	READJOY1
+	move.l  INPUT_ROUTINE_OFFSET(a0),a1
+	jsr		(a1)
 	;move.w  #%0100,d0
 
 	; Change the internal state of the mover object according to player input on data register d0
@@ -353,7 +357,7 @@ RACE_STATUS: dc.w 0
 	include "manage_input.s"
 	include "move.s"
 	include "check_collisions.s"
-	include "joystickinput.s"
+	include "inputroutines/joystickinput.s"
 	include "car_management.s"
 	include "check_against_map.s"
 	include "time.s"
