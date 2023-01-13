@@ -68,7 +68,11 @@ CAR_SPRITES_LIST_OFFSET_8			EQU 104
 
 CAR_SPRITE_POINTER_OFFSET			EQU 108
 
-MOVER_SIZE					 		EQU 112
+MOTOR_SAMPLE_OFFSET					EQU 112
+AUDIO_CHANNEL_ADDRESS_OFFSET		EQU 116
+AUDIO_CHANNEL_DMA_BIT				EQU 120
+
+MOVER_SIZE					 		EQU 122
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -218,17 +222,24 @@ looptrackcolors:
   	;lea       Sprite1pointers,a1
   	;jsr       POINTINCOPPERLIST_FUNCT
 
-	move.w #DMASET,d1
+	move.w 	   #DMASET,d1
 
 	IFD SOUND
-	tst.w PLAY_SOUND
-	beq.s nosound1
-	move.l #MOTOR1_SND,$dff0c0
-	move.w #8,$dff0c4; size
-	move.w #680,$dff0c6
-	move.w #64,$dff0c8
-	ori.w #%0100,d1
-	nop
+	tst.w 		PLAY_SOUND
+	beq.w 		nosound1
+
+	; for each car
+	lea 		MOVERS,a0
+	move.w 		#2-1,d7
+carsaudioloop:
+	move.l 		AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
+	move.l 		MOTOR1_SND(a0),(a1)+
+	move.w 		#8,(a1)+; size
+	move.w 		#680,(a1)+
+	move.w 		#64,(a1)+
+	or.w 		AUDIO_CHANNEL_DMA_BIT(a0),d1
+	adda.w  	#MOVER_SIZE,a0
+	dbra 		d7,carsaudioloop
 nosound1:
 	ENDC
 
@@ -343,7 +354,7 @@ Aspetta:
 
 	tst.b KEY_ESC
 	bne.s exit
-	
+
 	tst.w RACE_STATUS
 	bne.s exit
 
