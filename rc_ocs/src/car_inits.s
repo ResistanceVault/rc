@@ -143,7 +143,7 @@ CAR2_INIT:
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
 	; input routine
-	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #KEYBOARD_WASD,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR1_0,CAR_SPRITES_LIST_OFFSET_0(a0)

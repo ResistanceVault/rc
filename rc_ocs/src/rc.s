@@ -115,11 +115,12 @@ SWAP_BPL MACRO
 ;	Include	"DaWorkBench.s"	; togliere il ; prima di salvare con "WO"
 
 *****************************************************************************
-	include	"startup1.s"	; con questo include mi risparmio di
+	include	"startup2.s"	; con questo include mi risparmio di
 				; riscriverla ogni volta!
 *****************************************************************************
 
 DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
+WaitDisk	EQU	30
 
 	include "AProcessing/libs/vectors/sqrt_q4_12_lookup_table.i"
 	include "AProcessing/libs/rasterizers/globaloptions.s"
@@ -205,6 +206,9 @@ looptrackcolors:
 
 	ENDC
 
+	move.l				BaseVBR,a0
+	MOVE.L	#MioInt68KeyB,$68(A0)	; Routine per la tastiera int. liv. 2
+
 	; Car sprite
 	;move.l    			#CAR1_180,d0
   	;lea       			Sprite1pointers,a1
@@ -236,6 +240,8 @@ nosound1:
 	move.w	#0,$1fc(a5)		; Disattiva l'AGA
 	move.w	#$c00,$106(a5)		; Disattiva l'AGA
 	move.w	#$11,$10c(a5)		; Disattiva l'AGA
+
+	move.w #$C008,$dff09a ; intena, enable interrupt lvl 2
 
 	ENABLE_CLIPPING
 
@@ -335,6 +341,9 @@ Aspetta:
 	SWAP_BPL
 	ENDC
 
+	tst.b KEY_ESC
+	bne.s exit
+	
 	tst.w RACE_STATUS
 	bne.s exit
 
@@ -358,6 +367,8 @@ RACE_STATUS: dc.w 0
 	include "move.s"
 	include "check_collisions.s"
 	include "inputroutines/joystickinput.s"
+	include "inputroutines/keyboard.s"
+	include "inputroutines/keyboard_wasd.s"
 	include "car_management.s"
 	include "check_against_map.s"
 	include "time.s"
