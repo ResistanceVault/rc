@@ -19,8 +19,8 @@ MOVE:
     move.w              #$FFFF,d1
     lsl.w               #2,d0
     sub.w               d0,d1
-    move.l 		        AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
-    move.w              d1,2(a1)
+    move.l 		        AUDIO_CHANNEL_ADDRESS_OFFSET(a2),a1
+    move.w              d1,6(a1)
 nosound2:
     ENDC
 

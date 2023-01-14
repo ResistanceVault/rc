@@ -80,6 +80,7 @@ DECIMAL_SHIFT						EQU 7
 SPRITES								EQU 1
 
 MAX_LAPS							EQU 10
+MAX_CARS							EQU 2
 
 	include "macros.i"
 
@@ -148,8 +149,9 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/precalc/map.s"
 	include "AProcessing/libs/precalc/dec2txt.s"
 
-PLAY_SOUND: dc.w 1
-CARS_IN_PLAY: dc.w %0000000000000011
+PLAY_SOUND: 	dc.w 1
+CARS_IN_PLAY: 	dc.w %0000000000000011
+RACE_STATUS: 	dc.w 0
 
 START:
 	; Print track image
@@ -210,135 +212,123 @@ looptrackcolors:
 
 	ENDC
 
+	; Cars init
+	jsr 				CAR1_INIT
+	jsr					CAR2_INIT
+
 	move.l				BaseVBR,a0
-	MOVE.L	#MioInt68KeyB,$68(A0)	; Routine per la tastiera int. liv. 2
+	MOVE.L				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
 
-	; Car sprite
-	;move.l    			#CAR1_180,d0
-  	;lea       			Sprite1pointers,a1
-  	;jsr       			POINTINCOPPERLIST_FUNCT
-
-	;move.l    #CAR_180_1,d0
-  	;lea       Sprite1pointers,a1
-  	;jsr       POINTINCOPPERLIST_FUNCT
-
-	move.w 	   #DMASET,d1
+	move.w 	   			#DMASET,d1
 
 	IFD SOUND
-	tst.w 		PLAY_SOUND
-	beq.w 		nosound1
+	tst.w 				PLAY_SOUND
+	beq.w 				nosound1
 
 	; for each car
-	lea 		MOVERS,a0
-	move.w 		#2-1,d7
+	lea 				MOVERS,a0
+	move.w 				#MAX_CARS-1,d7
 carsaudioloop:
-	move.l 		AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
-	move.l 		MOTOR1_SND(a0),(a1)+
-	move.w 		#8,(a1)+; size
-	move.w 		#680,(a1)+
-	move.w 		#64,(a1)+
-	or.w 		AUDIO_CHANNEL_DMA_BIT(a0),d1
-	adda.w  	#MOVER_SIZE,a0
-	dbra 		d7,carsaudioloop
+	DEBUG 4543
+	move.l 				AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
+	move.l 				MOTOR_SAMPLE_OFFSET(a0),(a1)+
+	move.w 				#8,(a1)+; size
+	move.w 				#680,(a1)+
+	move.w 				#64,(a1)+
+	or.w 				AUDIO_CHANNEL_DMA_BIT(a0),d1
+	adda.w  			#MOVER_SIZE,a0
+	dbra 				d7,carsaudioloop
 nosound1:
 	ENDC
 
-	MOVE.W	d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
+	MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
 
 	; copperlist setup
-	move.l	#COPPERLIST,$80(a5)	; Puntiamo la nostra COP
-	move.w	d0,$88(a5)		; Facciamo partire la COP
-	move.w	#0,$1fc(a5)		; Disattiva l'AGA
-	move.w	#$c00,$106(a5)		; Disattiva l'AGA
-	move.w	#$11,$10c(a5)		; Disattiva l'AGA
+	move.l				#COPPERLIST,$80(a5)	; Copperlist point
+	move.w				d0,$88(a5)			; Copperlist start
+	move.w				#0,$1fc(a5)			; AGA disable
+	move.w				#$c00,$106(a5)		; AGA disable
+	move.w				#$11,$10c(a5)		; AGA disable
 
-	move.w #$C008,$dff09a ; intena, enable interrupt lvl 2
+	move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
 
 	ENABLE_CLIPPING
 
-	; Car 1 initialization
-	jsr		CAR1_INIT
-
-	; Car 2 initialization
-	jsr		CAR2_INIT
-
 	; Start of gameloop
 mouse:
-    cmpi.b  #$ff,$dff006    ; Linea 255?
-    bne.s   mouse
+    cmpi.b  			#$ff,$dff006    ; Linea 255?
+    bne.s   			mouse
 
 	IFND COLOR
-	jsr CLEARTOP
+	jsr 				CLEARTOP
 	WAITBLITTER
 
-	STROKE #1
-	move.w #0,d0
-    move.w #0,d1
-    jsr POINT
+	STROKE 				#1
+	move.w 				#0,d0
+    move.w 				#0,d1
+    jsr 				POINT
 
-	move.w #WIDTH-1,d0
-    move.w #0,d1
-    jsr POINT
+	move.w 				#WIDTH-1,d0
+    move.w 				#0,d1
+    jsr 				POINT
 
-	move.w #WIDTH-1,d0
-    move.w #HEIGHT-1,d1
-    jsr POINT
+	move.w 				#WIDTH-1,d0
+    move.w 				#HEIGHT-1,d1
+    jsr 				POINT
 
-	move.w #0,d0
-    move.w #HEIGHT-1,d1
-    jsr POINT
+	move.w 				#0,d0
+    move.w 				#HEIGHT-1,d1
+    jsr 				POINT
 	ENDC
 
 	; for each car
-	lea MOVERS,a0
-	move.w 	#2-1,d7
+	lea 				MOVERS,a0
+	move.w 				#MAX_CARS-1,d7
 moversloop:
 
 	; if the car is not in play skip
-	btst.b 	d7,CARS_IN_PLAY+1
-	beq.w   next_car
+	btst.b 				d7,CARS_IN_PLAY+1
+	beq.w   			next_car
 
 	; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
-	;bsr.w	READJOY1
-	move.l  INPUT_ROUTINE_OFFSET(a0),a1
-	jsr		(a1)
-	;move.w  #%0100,d0
+	move.l  			INPUT_ROUTINE_OFFSET(a0),a1
+	jsr					(a1)
 
 	; Change the internal state of the mover object according to player input on data register d0
-	bsr.w   MANAGE_INPUT
+	bsr.w   			MANAGE_INPUT
 
 	; Calculate friction
-	bsr.w 	APPLY_FRICTION
+	bsr.w 				APPLY_FRICTION
 
 	; Calculate acceleration
-	bsr.w   ACCELERATE
+	bsr.w   			ACCELERATE
 
 	; Calculate braking
-	bsr.w   BRAKE
+	bsr.w   			BRAKE
 
 	; Move the mover object (calculate next position)
-	bsr.w	MOVE
+	bsr.w				MOVE
 
 	IFND DEBUG
 	; Car behaviour must change according to the map metadata
-	bsr.w   CHECK_MAP
+	bsr.w   			CHECK_MAP
 	ENDC
 
     ; check collisions
     ;bsr.w 	CHECK_COLLISIONS
 
 	; show the mover object on the screen
-	bsr.w	DISPLAY
+	bsr.w				DISPLAY
 
-	bsr.w   UPDATE_TIMER
+	bsr.w   			UPDATE_TIMER
 
 next_car:
-	adda.w  #MOVER_SIZE,a0
-	dbra 	d7,moversloop
+	adda.w  			#MOVER_SIZE,a0
+	dbra 				d7,moversloop
 
 Aspetta:
-    cmpi.b  #$ff,$dff006    ; linea 255?
-    beq.s   Aspetta
+    cmpi.b  			#$ff,$dff006    ; linea 255?
+    beq.s   			Aspetta
 
 	IFND COLOR
 	lea                 BPLPTR2,a1
@@ -352,18 +342,16 @@ Aspetta:
 	SWAP_BPL
 	ENDC
 
-	tst.b KEY_ESC
-	bne.s exit
+	tst.b 				KEY_ESC
+	bne.s 				exit
 
-	tst.w RACE_STATUS
-	bne.s exit
+	tst.w 				RACE_STATUS
+	bne.s 				exit
 
-	btst	#6,$bfe001	; mouse premuto?
-	bne.w	mouse
+	btst				#6,$bfe001	; mouse premuto?
+	bne.w				mouse
 exit:
 	rts			; esci
-
-RACE_STATUS: dc.w 0
 
 	IFD DEBUG
     include "debug.s"
