@@ -13,6 +13,9 @@ TRACK_START_PIXEL_DATA:
 
 CAR1_INIT:
 	lea 	MOVER1,a0
+
+	move.w 	#0,CAR_ID_OFFSET(a0)										; Car unique identifier
+
 	move.w 	#100*DECIMAL_MULTIPLIER,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 	move.w 	#200*DECIMAL_MULTIPLIER,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
@@ -94,6 +97,9 @@ CAR1_INIT:
 
 CAR2_INIT:
 	lea 	MOVER2,a0
+
+	move.w 	#1,CAR_ID_OFFSET(a0)										; Car unique identifier
+
 	move.w 	#120*DECIMAL_MULTIPLIER,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 	move.w 	#200*DECIMAL_MULTIPLIER,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 

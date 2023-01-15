@@ -90,7 +90,7 @@ noupdatebesttime:
 
     ; increase lap counter
     addi.w #1,LAP_COUNTER_OFFSET(a2)
-    jsr UPDATE_LAP_COUNTER_HID
+    jsr UPDATE_LAP_COUNTER_HUD
     cmp.w #MAX_LAPS,LAP_COUNTER_OFFSET(a2)
     bne.s lap_not_completed
     move.w #1,RACE_STATUS

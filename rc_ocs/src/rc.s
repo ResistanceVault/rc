@@ -72,7 +72,9 @@ MOTOR_SAMPLE_OFFSET					EQU 112
 AUDIO_CHANNEL_ADDRESS_OFFSET		EQU 116
 AUDIO_CHANNEL_DMA_BIT				EQU 120
 
-MOVER_SIZE					 		EQU 122
+CAR_ID_OFFSET 						EQU 122
+
+MOVER_SIZE					 		EQU 124
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -229,7 +231,6 @@ looptrackcolors:
 	lea 				MOVERS,a0
 	move.w 				#MAX_CARS-1,d7
 carsaudioloop:
-	DEBUG 4543
 	move.l 				AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
 	move.l 				MOTOR_SAMPLE_OFFSET(a0),(a1)+
 	move.w 				#8,(a1)+; size
@@ -370,7 +371,7 @@ exit:
 	include "inputroutines/keyboard_wasd.s"
 	include "car_management.s"
 	include "check_against_map.s"
-	include "time.s"
+	include "hud.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
