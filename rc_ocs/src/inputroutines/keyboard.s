@@ -38,7 +38,6 @@ MioInt68KeyB:	; $68
 	lea KEYBOARD_KEYS(PC),a0
     bne.s keynotreleased
     ; if we are here the key is released
-    DEBUG 8787
 	not.b d0
     lsr.b #1,d0
 	move.b #$00,(a0,d0.w)
@@ -67,11 +66,13 @@ send_key_confirmation:
 
 	moveq	#4-1,d0	; Numero di linee da aspettare = 4 (in pratica 3 piu'
 			; la frazione in cui siamo nel momento di inizio)
+	swap    d0
 waitlines:
-	move.b	6(a0),d1	; $dff006 - linea verticale attuale in d1
+	move.b	6(a0),d0	; $dff006 - linea verticale attuale in d1
 stepline:
-	cmp.b	6(a0),d1	; siamo sempre alla stessa linea?
+	cmp.b	6(a0),d0	; siamo sempre alla stessa linea?
 	beq.s	stepline	; se si aspetta
+	swap 	d0
 	dbra	d0,waitlines	; linea "aspettata", aspetta d0-1 linee
 
 ; Ora che abbiamo atteso, possiamo riportare $bfec01 in modo input...

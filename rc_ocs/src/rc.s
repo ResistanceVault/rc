@@ -72,9 +72,9 @@ MOTOR_SAMPLE_OFFSET					EQU 112
 AUDIO_CHANNEL_ADDRESS_OFFSET		EQU 116
 AUDIO_CHANNEL_DMA_BIT				EQU 120
 
-CAR_ID_OFFSET 						EQU 122
+CAR_ID_OFFSET 						EQU 124
 
-MOVER_SIZE					 		EQU 124
+MOVER_SIZE					 		EQU 126
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -324,7 +324,7 @@ moversloop:
 	bsr.w   			UPDATE_TIMER
 
 next_car:
-	adda.w  			#MOVER_SIZE,a0
+	adda.l  			#MOVER_SIZE,a0
 	dbra 				d7,moversloop
 
 Aspetta:
