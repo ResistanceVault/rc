@@ -70,6 +70,25 @@ Sprite7pointers:
   dc.w       $104,$0044;
   ENDC
 
+  IFD COLOR
+COPCOLOR0:
+  dc.w	$0180,$000
+COPCOLOR1:
+  dc.w	$0182,$000
+COPCOLOR2:
+  dc.w	$0184,$000
+COPCOLOR3:
+  dc.w	$0186,$000
+COPCOLOR4:
+  dc.w	$0188,$000
+COPCOLOR5:
+  dc.w	$018A,$000
+COPCOLOR6:
+  dc.w	$018C,$000
+COPCOLOR7:
+  dc.w	$018E,$000
+  ENDC
+
 ; Bitplanes Pointers
 BPLPTR1:
   dc.w       $e0,$0000,$e2,$0000                                       ;first	 bitplane - BPL0PT
@@ -103,6 +122,25 @@ BPLPTR5:
 	dc.w    $1ba,$f0f    ; color29
 	dc.w    $1bc,$f0f    ; color30
 	dc.w    $1be,$f0f    ; color31
+	ELSE
+	dc.w $ffdf,$fffe ; wait 255
+	dc.w $1c07,$fffe
+COPHUDCOLOR0:
+  	dc.w	$0180,$0000
+COPHUDCOLOR1:
+	dc.w	$0182,$0000
+COPHUDCOLOR2:
+	dc.w	$0184,$0000
+COPHUDCOLOR3:
+	dc.w	$0186,$0000
+COPHUDCOLOR4:
+	dc.w	$0188,$0000
+COPHUDCOLOR5:
+	dc.w	$018A,$0000
+COPHUDCOLOR6:
+	dc.w	$018C,$0000
+COPHUDCOLOR7:
+	dc.w	$018E,$0000
 	ENDC
 
 	dc.w	$FFFF,$FFFE	; Fine della copperlist

@@ -1,4 +1,18 @@
-SIZE_OF_CHAR_BITMAP     EQU 6
+SIZE_OF_CHAR_BITMAP     EQU 7
+TIMER_FONTS_SMALL:
+    incbin "assets/fonts/small/0.raw"
+    incbin "assets/fonts/small/1.raw"
+    incbin "assets/fonts/small/2.raw"
+    incbin "assets/fonts/small/3.raw"
+    incbin "assets/fonts/small/4.raw"
+    incbin "assets/fonts/small/5.raw"
+    incbin "assets/fonts/small/6.raw"
+    incbin "assets/fonts/small/7.raw"
+    incbin "assets/fonts/small/8.raw"
+    incbin "assets/fonts/small/9.raw"
+
+COLORS_FONTS_SMALL:    
+    incbin "assets/fonts/small/colors.plt"
 
 TIMETXT:                dc.b 0,0,0,0,0,0
 
@@ -10,14 +24,6 @@ TIMETXT:                dc.b 0,0,0,0,0,0
 PRINT_STRING_ON_HUD:
     ; get the starting point where to print into a1
     lea                 DASHBOARD_DATA_1,a1
-    cmp.w #10,d1
-    beq.s okd1
-    tst.w d1
-    beq.s okd1
-     ;   DEBUG 1234
-    nop
-    ;move.w #$1,RACE_STATUS
-okd1:
     adda.l              d1,a1
     adda.l              d2,a1
 
@@ -28,7 +34,7 @@ start_string_iteration:
     ; take the charater and multiply by <size of each character in bytes> to find the offset if the bitmap in memory
     moveq               #0,d0
     move.b              (a0)+,d0
-    muls.w              #SIZE_OF_CHAR_BITMAP,d0
+    muls.w              #SIZE_OF_CHAR_BITMAP*3,d0
     lea                 TIMER_FONTS_SMALL(PC),a3
     adda.l              d0,a3 ; a3 now holds the address of the bitmap to print on HUD
 
@@ -36,6 +42,11 @@ start_string_iteration:
     moveq               #0,d5
 
 start_string_iteration2
+    move.l a1,a4
+    adda.l              #40*256,a4;
+    move.b              SIZE_OF_CHAR_BITMAP(a3),(a4,d5.w)
+    adda.l              #40*256,a4;
+    move.b              SIZE_OF_CHAR_BITMAP*2(a3),(a4,d5.w)
     move.b              (a3)+,(a1,d5.w)
     add.w               #40,d5
     dbra                d6,start_string_iteration2
@@ -64,11 +75,6 @@ UPDATE_TIMER:
     ;add offset on x according to car id
     moveq.l #0,d1
     STORECARPROPERTY    CAR_ID_OFFSET,d1
-    cmp.w #1,d1
-    bls.s buono
-    move.w #$FF,RACE_STATUS
-    DEBUG 1111
-buono:
     muls.w              #80/8,d1
     move.l              #40,d2 ; y offset in bytes of where to print
     jsr                 PRINT_STRING_ON_HUD
@@ -94,11 +100,6 @@ UPDATE_BEST_TIMER:
     ;add offset on x according to car id
     moveq.l             #0,d1
     STORECARPROPERTY    CAR_ID_OFFSET,d1
-    cmp.w #1,d1
-    bls.s buono2
-    move.w #$FF,RACE_STATUS
-    DEBUG 2222
-buono2:
     muls.w              #80/8,d1
     move.l              #(1+8)*40,d2 ; y offset in bytes of where to print
     jsr                 PRINT_STRING_ON_HUD
@@ -124,11 +125,6 @@ UPDATE_LAP_COUNTER_HUD:
     ;add offset on x according to car id
     moveq.l             #0,d1
     STORECARPROPERTY    CAR_ID_OFFSET,d1
-    cmp.w #1,d1
-    bls.s buono3
-    move.w #$FF,RACE_STATUS
-    DEBUG 3333
-buono3:
     muls.w              #80/8,d1
     addq.w              #7,d1
     move.l              #(1+0)*40,d2 ; y offset in bytes of where to print
@@ -137,176 +133,3 @@ buono3:
 
     movem.l             (sp)+,a0/a1/d0/d1/d2/d7
     rts
-
-
-TIMER_FONTS:
-TIMER_FONT_0:
-    dc.b %11111111
-    dc.b %10000001
-    dc.b %10000001
-    dc.b %10000001
-    dc.b %10000001
-    dc.b %10000001
-    dc.b %10000001
-    dc.b %11111111
-
-TIMER_FONT_1:
-    dc.b %00011000
-    dc.b %00011000
-    dc.b %00011000
-    dc.b %00011000
-    dc.b %00011000
-    dc.b %00011000
-    dc.b %00011000
-    dc.b %00011000
-
-TIMER_FONT_2:
-    dc.b %11111111
-    dc.b %00000011
-    dc.b %00000011
-    dc.b %00000110
-    dc.b %00001100
-    dc.b %00011000
-    dc.b %00110000
-    dc.b %11111111
-
-TIMER_FONT_3:
-    dc.b %11111111
-    dc.b %00000011
-    dc.b %00000011
-    dc.b %00111111
-    dc.b %00000011
-    dc.b %00000011
-    dc.b %00000011
-    dc.b %11111111
-
-TIMER_FONT_4:
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000011
-    dc.b %11000011
-    dc.b %11111111
-    dc.b %00000011
-    dc.b %00000011
-
-TIMER_FONT_5:
-    dc.b %11111111
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11111111
-    dc.b %00000011
-    dc.b %00000011
-    dc.b %11111111
-
-TIMER_FONT_6:
-    dc.b %11111111
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000011
-    dc.b %11000011
-    dc.b %11111111
-
-TIMER_FONT_7:
-    dc.b %11111111
-    dc.b %00000011
-    dc.b %00000110
-    dc.b %00001100
-    dc.b %00011000
-    dc.b %00110000
-    dc.b %01100000
-    dc.b %11000000
-
-TIMER_FONT_8:
-    dc.b %11111111
-    dc.b %11000011
-    dc.b %11000011
-    dc.b %11111111
-    dc.b %11000011
-    dc.b %11000011
-    dc.b %11000011
-    dc.b %11111111
-
-TIMER_FONT_9:
-    dc.b %11111111
-    dc.b %11000011
-    dc.b %11000011
-    dc.b %11111111
-    dc.b %00000011
-    dc.b %00000011
-    dc.b %00000011
-    dc.b %11111111
-
-TIMER_FONTS_SMALL:
-    dc.b %11111110
-    dc.b %10000010
-    dc.b %10000010
-    dc.b %10000010
-    dc.b %10000010
-    dc.b %11111110
-
-    dc.b %00010000
-    dc.b %00010000
-    dc.b %00010000
-    dc.b %00010000
-    dc.b %00010000
-    dc.b %00010000
-
-    dc.b %11111110
-    dc.b %00000010
-    dc.b %00001100
-    dc.b %00011000
-    dc.b %00110000
-    dc.b %11111110
-
-    dc.b %11111110
-    dc.b %00000010
-    dc.b %00111110
-    dc.b %00000010
-    dc.b %00000010
-    dc.b %11111110
-
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000010
-    dc.b %11111110
-    dc.b %00000010
-    dc.b %00000010
-
-    dc.b %11111110
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11111110
-    dc.b %00000011
-    dc.b %11111110
-
-    dc.b %11111110
-    dc.b %11000000
-    dc.b %11000000
-    dc.b %11000010
-    dc.b %11000010
-    dc.b %11111110
-
-    dc.b %11111110
-    dc.b %00000010
-    dc.b %00001100
-    dc.b %00011000
-    dc.b %00110000
-    dc.b %11000000
-
-    dc.b %11111110
-    dc.b %11000010
-    dc.b %11111110
-    dc.b %11000010
-    dc.b %11000010
-    dc.b %11111110
-
-    dc.b %11111110
-    dc.b %11000010
-    dc.b %11111110
-    dc.b %00000010
-    dc.b %00000010
-    dc.b %11111110

@@ -184,6 +184,21 @@ TRACK_DATA_HEIGHT	EQU 240
 
 	; set track data colors
 	lea 				TRACK_DATA_COLORS,a0
+	move.w				(a0),COPCOLOR0+2
+	move.w				2(a0),COPCOLOR1+2
+	move.w				COLORS_FONTS_SMALL+2,COPHUDCOLOR1+2
+	move.w				4(a0),COPCOLOR2+2
+	move.w				COLORS_FONTS_SMALL+4,COPHUDCOLOR2+2
+	move.w				6(a0),COPCOLOR3+2
+	move.w				COLORS_FONTS_SMALL+6,COPHUDCOLOR3+2
+	move.w				8(a0),COPCOLOR4+2
+	move.w				COLORS_FONTS_SMALL+8,COPHUDCOLOR4+2
+	move.w				10(a0),COPCOLOR5+2
+	move.w				COLORS_FONTS_SMALL+10,COPHUDCOLOR5+2
+	move.w				12(a0),COPCOLOR6+2
+	move.w				COLORS_FONTS_SMALL+12,COPHUDCOLOR6+2
+	move.w				14(a0),COPCOLOR7+2
+	move.w				COLORS_FONTS_SMALL+14,COPHUDCOLOR7+2
 	lea					$dff180,a1
 	moveq				#32-1,d7
 looptrackcolors:
