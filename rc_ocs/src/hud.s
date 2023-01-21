@@ -11,7 +11,7 @@ TIMER_FONTS_SMALL:
     incbin "assets/fonts/small/8.raw"
     incbin "assets/fonts/small/9.raw"
 
-COLORS_FONTS_SMALL:    
+COLORS_FONTS_SMALL:
     incbin "assets/fonts/small/colors.plt"
 
 TIMETXT:                dc.b 0,0,0,0,0,0

@@ -1,0 +1,314 @@
+BIGFONTS:
+    dcb.b 2*16*3,$00 ; space
+    dcb.b 2*16*3,$00 ; !
+    dcb.b 2*16*3,$00 ; "
+    dcb.b 2*16*3,$00 ; #
+    dcb.b 2*16*3,$00 ; $
+    dcb.b 2*16*3,$00 ; %
+    dcb.b 2*16*3,$00 ; &
+    dcb.b 2*16*3,$00 ; '
+    dcb.b 2*16*3,$00 ; (
+    dcb.b 2*16*3,$00 ; )
+    dcb.b 2*16*3,$00 ; *
+    dcb.b 2*16*3,$00 ; +
+    dcb.b 2*16*3,$00 ; ,
+    dcb.b 2*16*3,$00 ; -
+    dcb.b 2*16*3,$00 ; .
+    dcb.b 2*16*3,$00 ; /
+    incbin "assets/fonts/big/0.raw"
+    incbin "assets/fonts/big/1.raw"
+    incbin "assets/fonts/big/2.raw"
+    incbin "assets/fonts/big/3.raw"
+    incbin "assets/fonts/big/4.raw"
+    incbin "assets/fonts/big/5.raw"
+    incbin "assets/fonts/big/6.raw"
+    incbin "assets/fonts/big/7.raw"
+    incbin "assets/fonts/big/8.raw"
+    incbin "assets/fonts/big/9.raw"
+    dcb.b 2*16*3,$00 ; :
+    dcb.b 2*16*3,$00 ; ;
+    dcb.b 2*16*3,$00 ; <
+    dcb.b 2*16*3,$00 ; =
+    dcb.b 2*16*3,$00 ; >
+    dcb.b 2*16*3,$00 ; ?
+    dcb.b 2*16*3,$00 ; @
+    incbin "assets/fonts/big/a.raw"
+    incbin "assets/fonts/big/b.raw"
+    incbin "assets/fonts/big/c.raw"
+    incbin "assets/fonts/big/d.raw"
+    incbin "assets/fonts/big/e.raw"
+    incbin "assets/fonts/big/f.raw"
+    incbin "assets/fonts/big/g.raw"
+    incbin "assets/fonts/big/h.raw"
+    incbin "assets/fonts/big/i.raw"
+    incbin "assets/fonts/big/j.raw"
+    incbin "assets/fonts/big/k.raw"
+    incbin "assets/fonts/big/l.raw"
+    incbin "assets/fonts/big/m.raw"
+    incbin "assets/fonts/big/n.raw"
+    incbin "assets/fonts/big/o.raw"
+    incbin "assets/fonts/big/p.raw"
+    incbin "assets/fonts/big/q.raw"
+    incbin "assets/fonts/big/r.raw"
+    incbin "assets/fonts/big/s.raw"
+    incbin "assets/fonts/big/t.raw"
+    incbin "assets/fonts/big/u.raw"
+    incbin "assets/fonts/big/v.raw"
+    incbin "assets/fonts/big/w.raw"
+    incbin "assets/fonts/big/x.raw"
+    incbin "assets/fonts/big/y.raw"
+    incbin "assets/fonts/big/z.raw"
+    even
+
+ENTRIES_PTR: dc.l ENTRY_1
+ENTRIES:
+ENTRY_1:
+    dc.l TXT1
+    dc.w 1
+    dc.w 1
+
+ENTRY_2:
+    dc.l TXT2
+    dc.w 1
+    dc.w 3
+
+ENTRY_3:
+    dc.l TXTSOUND
+    dc.w 1
+    dc.w 11
+
+ENTRY_4:
+    dc.l TXTSTART
+    dc.w 1
+    dc.w 15
+
+ENTRY_5:
+    dc.l 0
+    dc.w 0
+    dc.w 0
+ENTRY_END:
+
+
+ENTRY_SIZE EQU 8
+
+JOY1DOWNPRESSED: dc.w 0
+JOY1UPPRESSED: dc.w 0
+
+welcomescreen:
+
+    ; Init tiles bitplanes
+    move.l              #SCREEN_0,d0
+    lea                 BPLPTR1_WELCOME,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #SCREEN_1,d0
+    lea                 BPLPTR2_WELCOME,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #SCREEN_00,d0
+    lea                 BPLPTR3_WELCOME,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #SCREEN_11,d0
+    lea                 BPLPTR4_WELCOME,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.w 	   			#DMASET,d1
+
+    MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
+
+	move.w				COLORS_FONTS_SMALL+2,COPCOLOR_WELCOME_1+2
+	move.w				COLORS_FONTS_SMALL+4,COPCOLOR_WELCOME_2+2
+	move.w				COLORS_FONTS_SMALL+6,COPCOLOR_WELCOME_3+2
+	move.w				COLORS_FONTS_SMALL+8,COPCOLOR_WELCOME_4+2
+	move.w				COLORS_FONTS_SMALL+10,COPCOLOR_WELCOME_5+2
+	move.w				COLORS_FONTS_SMALL+12,COPCOLOR_WELCOME_6+2
+	move.w				COLORS_FONTS_SMALL+14,COPCOLOR_WELCOME_7+2
+
+	; copperlist setup
+	move.l				#COPPERLIST_WELCOME,$80(a5)	; Copperlist point
+	move.w				d0,$88(a5)			; Copperlist start
+	move.w				#0,$1fc(a5)			; AGA disable
+	move.w				#$c00,$106(a5)		; AGA disable
+	move.w				#$11,$10c(a5)		; AGA disable
+
+	move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
+
+    ;lea TXT1,a1
+    ;moveq #0,d0
+    ;moveq #1,d1
+    ;bsr.w printstring
+
+    ;lea TXT2,a1
+    ;moveq #0,d0
+    ;moveq #3,d1
+    ;bsr.w printstring
+
+    ;lea TXTSOUND,a1
+    ;moveq #0,d0
+    ;moveq #11,d1
+    ;bsr.w printstring
+
+    ;lea TXTSTART,a1
+    ;moveq #0,d0
+    ;moveq #15,d1
+    ;bsr.w printstring
+
+    move.l           #CURSOR,d0
+    lea       		 Sprite0Welcomepointers,a1
+    jsr       		 POINTINCOPPERLIST_FUNCT
+
+    lea ENTRIES(PC),a4
+starentries:
+    move.l (a4)+,a1
+    move.l a1,d0
+    tst.l d0
+    beq.s endentries
+    moveq #0,d0
+    moveq #0,d1
+    move.w (a4)+,d0
+    move.w (a4)+,d1
+    bsr.w printstring
+    bra.s starentries
+endentries:
+
+
+mousewelcome:
+    cmpi.b  			#$ff,$dff006    ; Linea 255?
+    bne.s   			mousewelcome
+
+waitwelcome:
+    cmpi.b  			#$ff,$dff006    ; linea 255?
+    beq.s   			waitwelcome
+
+    jsr                 READJOY1
+
+    ;manage joy down
+    btst	            #3,d0
+    beq.s               welcome_no_down
+    tst.w               JOY1DOWNPRESSED
+    bne.s               welcome_no_down
+    move.l              ENTRIES_PTR,a0
+    adda.l              #ENTRY_SIZE,a0
+    tst.l               (a0)
+    bne.s               joy1downpressed_no_reset
+    lea                 ENTRY_END-ENTRY_SIZE-ENTRY_SIZE,a0
+joy1downpressed_no_reset
+    move.l              a0,ENTRIES_PTR
+    move.w              #1,JOY1DOWNPRESSED
+welcome_no_down:
+
+    btst	            #3,d0
+    bne.s               joy1downpressed_no_release
+    move.w              #0,JOY1DOWNPRESSED
+joy1downpressed_no_release:
+
+    ;manage joy up
+    btst	            #2,d0
+    beq.s               welcome_no_up
+    tst.w               JOY1UPPRESSED
+    bne.s               welcome_no_up
+    move.l              ENTRIES_PTR,a0
+    suba.l              #ENTRY_SIZE,a0
+    cmp.l               #ENTRIES,a0
+    bhi.s               joy1uppressed_no_reset
+    lea                 ENTRIES,a0
+joy1uppressed_no_reset:
+    move.l              a0,ENTRIES_PTR
+    move.w              #1,JOY1UPPRESSED
+welcome_no_up:
+
+    btst	            #2,d0
+    bne.s               joy1uppressed_no_release
+    move.w              #0,JOY1UPPRESSED
+joy1uppressed_no_release:
+
+    ; move sprite
+    ; get Y position of the entry
+    move.b #0,3+CURSOR
+    move.l             ENTRIES_PTR,a0
+    move.w             6(a0),d1
+    muls               #16,d1
+    add.w              #$2b,d1
+    ;BVC.s               nounder255start
+    btst             #8,d1
+    beq.s nounder255start
+    bset.b           #2,3+CURSOR
+    bset.b           #1,3+CURSOR
+nounder255start:
+    move.b             d1,CURSOR
+    add.w              #16,d1
+
+    move.b             d1,CURSOR+2
+
+
+    btst				#6,$bfe001	; mouse premuto?
+	bne.w				mousewelcome
+
+    rts
+
+TXT1: dc.b "CAR 1   JOY PORT 2",255
+    even
+
+TXT2: dc.b "CAR 2   KEY WASD",255
+    even
+
+TXTSOUND: dc.b "SOUND   SFX",255
+    even
+
+TXTSTART: dc.b "START",255
+    even
+
+printstring:
+    moveq #0,d6
+    move.b (a1)+,d6
+    cmp.w #$FF,d6
+    beq.s printstringend
+    sub.w #32,d6
+    muls.w #2*16*3,d6
+
+    lea BIGFONTS,a0
+    adda.l d6,a0
+    bsr.s printbigfont
+    addq #1,d0
+    bra.s printstring
+
+printstringend:
+    rts
+
+printbigfont:
+    movem.l             a0/a1/a2/a3/d0/d1,-(sp)
+    lea                 SCREEN_0,a1
+    lea                 SCREEN_1,a2
+    lea                 SCREEN_00,a3
+
+    lsl.w               #1,d0
+    adda.w              d0,a1
+    adda.w              d0,a2
+    adda.w              d0,a3
+
+    mulu.w              #40*16,d1
+    adda.w              d1,a1
+    adda.w              d1,a2
+    adda.w              d1,a3
+
+
+    moveq               #16-1,d7
+bigfontcycle:
+    move.b              (a0),(a1)
+    move.b              1(a0),1(a1)
+
+    move.b              2*16*1(a0),(a2)
+    move.b              1+2*16*1(a0),1(a2)
+
+    move.b              2*16*2(a0),(a3)
+    move.b              1+2*16*2(a0),1(a3)
+
+    addq  #2,a0
+    adda.l #40,a1
+    adda.l #40,a2
+    adda.l #40,a3
+
+    dbra                d7,bigfontcycle
+    movem.l             (sp)+,a0/a1/a2/a3/d0/d1
+    rts

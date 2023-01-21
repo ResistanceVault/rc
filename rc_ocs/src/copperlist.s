@@ -1,9 +1,19 @@
     include "AProcessing/libs/copperlistmacros.i"
 
+COPSET4BPL MACRO
+	dc.w	$100
+	dc.w	%0100001000000000
+ENDM
+
 COPSET5BPL MACRO
   dc.w       $100
   dc.w       %0101001000000000
   ENDM
+
+COPSET2BPL MACRO
+	dc.w	$100
+	dc.w	%0010001000000000
+ENDM
 
     SECTION	GRAPHIC,DATA_C
 
@@ -144,3 +154,90 @@ COPHUDCOLOR7:
 	ENDC
 
 	dc.w	$FFFF,$FFFE	; Fine della copperlist
+
+; ************ COPPERLIST WELCOME SCREEN START *******************
+
+
+COPPERLIST_WELCOME:
+
+;	SpritePointers:
+Sprite0Welcomepointers:
+  dc.w       $120,$0000,$122,$0000
+
+;Sprite1pointers:
+  dc.w       $124,$0000,$126,$0000
+
+;Sprite2pointers:
+  dc.w       $128,$0000,$12a,$0000
+
+;Sprite3pointers:
+  dc.w       $12c,$0000,$12e,$0000
+
+;Sprite4pointers:
+  dc.w       $130,$0000,$132,$0000
+
+;Sprite5pointers:
+  dc.w       $134,$0000,$136,$0000
+
+;Sprite6pointers;
+  dc.w       $138,$0000,$13a,$0000
+
+;Sprite7pointers:
+  dc.w       $13c,$0000,$13e,$0000
+
+	dc.w	$8E,$2c81	; DiwStrt
+	dc.w	$90,$2cc1	; DiwStop
+	dc.w	$92,$0038	; DdfStart
+	dc.w	$94,$00d0	; DdfStop
+	dc.w	$102,0		; BplCon1
+	dc.w	$104,$24	; BplCon2
+	dc.w	$108,0		; Bpl1Mod
+	dc.w	$10a,0		; Bpl2Mod
+
+COPCOLOR_WELCOME_0:
+	dc.w	$0180,$000	; color0
+COPCOLOR_WELCOME_1:
+	dc.w	$0182,$f00	; color1
+COPCOLOR_WELCOME_2:
+	dc.w	$0184,$0f0	; color2
+COPCOLOR_WELCOME_3:
+	dc.w	$0186,$00f	; color3
+COPCOLOR_WELCOME_4:
+	dc.w	$0188,$000	; color4
+COPCOLOR_WELCOME_5:
+	dc.w	$018A,$f00	; color5
+COPCOLOR_WELCOME_6:
+	dc.w	$018C,$0f0	; color6
+COPCOLOR_WELCOME_7:
+	dc.w	$018E,$00f	; color7
+
+	dc.w    $1a2,$222    ; color17
+	dc.w    $1a4,$000    ; color18
+	dc.w    $1a6,$a00    ; color19
+	dc.w    $1a8,$a00    ; color20
+	dc.w    $1aa,$390    ; color21
+	dc.w    $1ac,$f0f    ; color22
+	dc.w    $1ae,$f0f    ; color23
+	dc.w    $1b0,$f0f    ; color24
+	dc.w    $1b2,$f0f    ; color25
+	dc.w    $1b4,$f0f    ; color26
+	dc.w    $1b6,$f0f    ; color27
+	dc.w    $1b8,$f0f    ; color28
+	dc.w    $1ba,$f0f    ; color29
+	dc.w    $1bc,$f0f    ; color30
+	dc.w    $1be,$f0f    ; color31
+
+
+	; Bitplanes Pointers
+BPLPTR1_WELCOME:
+  dc.w       $e0,$0000,$e2,$0000                                       ;first	 bitplane - BPL0PT
+BPLPTR2_WELCOME:
+  dc.w       $e4,$0000,$e6,$0000                                       ;second bitplane - BPL1PT
+BPLPTR3_WELCOME:
+  dc.w       $e8,$0000,$ea,$0000                                       ;third	 bitplane - BPL2PT
+BPLPTR4_WELCOME:
+  dc.w       $ec,$0000,$ee,$0000                                       ;fourth bitplane - BPL3PT
+
+  COPSET4BPL
+
+    dc.w	$FFFF,$FFFE	; Fine della copperlist

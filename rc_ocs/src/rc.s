@@ -156,8 +156,14 @@ CARS_IN_PLAY: 	dc.w %0000000000000011
 RACE_STATUS: 	dc.w 0
 
 START:
-	; Print track image
 
+	move.l				BaseVBR,a0
+	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
+
+	; Open welcome screen
+	jsr 				welcomescreen
+
+	; Print track image
 TRACK_DATA_HEIGHT	EQU 240
 
 	IFD COLOR
@@ -232,9 +238,6 @@ looptrackcolors:
 	; Cars init
 	jsr 				CAR1_INIT
 	jsr					CAR2_INIT
-
-	move.l				BaseVBR,a0
-	MOVE.L				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
 
 	move.w 	   			#DMASET,d1
 
@@ -387,6 +390,7 @@ exit:
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"
+	include "welcomescreen.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -427,6 +431,11 @@ POINTINCOPPERLIST_FUNCT:
 
 	SECTION	SPRITES,DATA_C
 	include "carsprites.i"
+
+CURSOR:
+	dc.b $3b,$40,$4b,$00
+	incbin "assets/cars/car0_16x16.sprite"
+	dc.w 0,0
 
 	SECTION	MIOPLANE,DATA_C
 	IFND DEBUG
