@@ -51,6 +51,7 @@ CHECK_COLLISIONS:
     tst.w  d7
     bne.w  check_collision_exit
 
+    IFD COLLISIONS_STRICT
     move.w MOVER_BACK_WHEEL_X_VECTOR_OFFSET(a0),d0
     move.w MOVER_BACK_WHEEL_Y_VECTOR_OFFSET(a0),d1
     lsr.w #DECIMAL_SHIFT,d0
@@ -58,6 +59,7 @@ CHECK_COLLISIONS:
     bsr.w  CHECK_COLLISION_POINT
     tst.w  d7
     bne.w  check_collision_exit
+    ENDC
 
     ;move.w MOVER_FRONT_WHEEL_Y_VECTOR_OFFSET(a0),d0
     ;bsr.w  CHECK_COLLISION_POINT

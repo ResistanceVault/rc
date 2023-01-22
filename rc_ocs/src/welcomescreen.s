@@ -66,33 +66,53 @@ ENTRY_1:
     dc.l TXT1
     dc.w 1
     dc.w 1
+    dc.l ACTION_CAR
+    dc.w 0
 
 ENTRY_2:
     dc.l TXT2
     dc.w 1
     dc.w 3
+    dc.l ACTION_CAR
+    dc.w 0
 
 ENTRY_3:
-    dc.l TXTSOUND
+    dc.l TXTSOUND_SFX
     dc.w 1
-    dc.w 11
+    dc.w 9
+    dc.l ACTION_SOUND
+    dc.w 0
 
 ENTRY_4:
     dc.l TXTSTART
     dc.w 1
-    dc.w 15
+    dc.w 11
+    dc.l ACTION_START_RACE
+    dc.w 0
 
 ENTRY_5:
+    dc.l TXT_RETURN_TO_OS
+    dc.w 1
+    dc.w 15
+    dc.l ACTION_RETURN_TO_OS
+    dc.w 0
+
+ENTRY_6:
     dc.l 0
     dc.w 0
+    dc.w 0
+    dc.l 0
     dc.w 0
 ENTRY_END:
 
 
-ENTRY_SIZE EQU 8
+ENTRY_SIZE EQU 14
 
+JOY1FIREPRESSED: dc.w 0
 JOY1DOWNPRESSED: dc.w 0
 JOY1UPPRESSED: dc.w 0
+START_RACE_FLAG: dc.w 0
+EXIT_TO_OS_FLAG: dc.w 0
 
 welcomescreen:
 
@@ -158,28 +178,24 @@ welcomescreen:
     lea       		 Sprite0Welcomepointers,a1
     jsr       		 POINTINCOPPERLIST_FUNCT
 
+mousewelcome:
+    cmpi.b  			#$ff,$dff006    ; Linea 255?
+    bne.s   			mousewelcome
+
     lea ENTRIES(PC),a4
 starentries:
-    move.l (a4)+,a1
+    move.l (a4),a1
     move.l a1,d0
     tst.l d0
     beq.s endentries
     moveq #0,d0
     moveq #0,d1
-    move.w (a4)+,d0
-    move.w (a4)+,d1
+    move.w 4(a4),d0
+    move.w 6(a4),d1
     bsr.w printstring
+    adda.l #ENTRY_SIZE,a4
     bra.s starentries
 endentries:
-
-
-mousewelcome:
-    cmpi.b  			#$ff,$dff006    ; Linea 255?
-    bne.s   			mousewelcome
-
-waitwelcome:
-    cmpi.b  			#$ff,$dff006    ; linea 255?
-    beq.s   			waitwelcome
 
     jsr                 READJOY1
 
@@ -238,12 +254,33 @@ joy1uppressed_no_release:
 nounder255start:
     move.b             d1,CURSOR
     add.w              #16,d1
-
     move.b             d1,CURSOR+2
 
+    btst				#7,$bfe001	; mouse premuto?
+	bne.w				noaction
+    tst.w               JOY1FIREPRESSED
+    bne.s               noaction
+    move.l              ENTRIES_PTR,a0
+    move.l              8(a0),a1
+    jsr                 (a1)
+    move.w              #1,JOY1FIREPRESSED
+noaction:
+    btst				#7,$bfe001	; mouse premuto?
+	beq.w				joy1firenotpressed
+    move.w              #0,JOY1FIREPRESSED
+joy1firenotpressed:
+
+    waitwelcome:
+    cmpi.b  			#$ff,$dff006    ; linea 255?
+    beq.s   			waitwelcome
+
+    tst.w               START_RACE_FLAG
+    bne.s               welcomescreen_end
 
     btst				#6,$bfe001	; mouse premuto?
 	bne.w				mousewelcome
+
+welcomescreen_end:
 
     rts
 
@@ -253,10 +290,17 @@ TXT1: dc.b "CAR 1   JOY PORT 2",255
 TXT2: dc.b "CAR 2   KEY WASD",255
     even
 
-TXTSOUND: dc.b "SOUND   SFX",255
+TXTSOUND_SFX: dc.b "SOUND   SFX",255
+    even
+
+TXTSOUND_OFF: dc.b "SOUND   OFF",255
     even
 
 TXTSTART: dc.b "START",255
+    even
+
+TXT_RETURN_TO_OS:
+    dc.b "EXITO TO OS",255
     even
 
 printstring:
@@ -311,4 +355,27 @@ bigfontcycle:
 
     dbra                d7,bigfontcycle
     movem.l             (sp)+,a0/a1/a2/a3/d0/d1
+    rts
+
+ACTION_START_RACE:
+    move.w #1,START_RACE_FLAG
+    rts
+
+ACTION_SOUND:
+    tst.w PLAY_SOUND
+    beq.s turn_sound_on
+    move.l #TXTSOUND_OFF,(a0)
+    move.w #0,PLAY_SOUND
+    rts
+turn_sound_on:
+    move.w #1,PLAY_SOUND
+    move.l #TXTSOUND_SFX,(a0)
+    rts
+
+ACTION_CAR:
+    rts
+
+ACTION_RETURN_TO_OS:
+    move.w #1,EXIT_TO_OS_FLAG
+    move.w #1,START_RACE_FLAG
     rts

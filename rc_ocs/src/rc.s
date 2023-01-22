@@ -162,6 +162,8 @@ START:
 
 	; Open welcome screen
 	jsr 				welcomescreen
+	tst.w               EXIT_TO_OS_FLAG
+    bne.w               exit
 
 	; Print track image
 TRACK_DATA_HEIGHT	EQU 240
