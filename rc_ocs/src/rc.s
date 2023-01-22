@@ -160,6 +160,10 @@ START:
 	move.l				BaseVBR,a0
 	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
 
+	; Cars init
+	jsr 				CAR1_INIT
+	jsr					CAR2_INIT
+
 	; Open welcome screen
 	jsr 				welcomescreen
 	tst.w               EXIT_TO_OS_FLAG
@@ -236,10 +240,6 @@ looptrackcolors:
 	dbra				d7,looptrackcolors
 
 	ENDC
-
-	; Cars init
-	jsr 				CAR1_INIT
-	jsr					CAR2_INIT
 
 	move.w 	   			#DMASET,d1
 

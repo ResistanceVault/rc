@@ -64,17 +64,17 @@ ENTRIES_PTR: dc.l ENTRY_1
 ENTRIES:
 ENTRY_1:
     dc.l TXT1
-    dc.w 1
+    dc.w 9
     dc.w 1
     dc.l ACTION_CAR
     dc.w 0
 
 ENTRY_2:
     dc.l TXT2
-    dc.w 1
+    dc.w 9
     dc.w 3
     dc.l ACTION_CAR
-    dc.w 0
+    dc.w 1
 
 ENTRY_3:
     dc.l TXTSOUND_SFX
@@ -107,6 +107,17 @@ ENTRY_END:
 
 
 ENTRY_SIZE EQU 14
+
+INPUTLIST:
+    dc.l READJOY1
+    dc.l KEYBOARD_WASD
+    dc.l 0
+INPUTLIST_END:
+
+INPUTLIST_DESCRIPTION:
+    dc.l TXT1
+    dc.l TXT2
+    dc.l 0
 
 JOY1FIREPRESSED: dc.w 0
 JOY1DOWNPRESSED: dc.w 0
@@ -154,25 +165,15 @@ welcomescreen:
 
 	move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
 
-    ;lea TXT1,a1
-    ;moveq #0,d0
-    ;moveq #1,d1
-    ;bsr.w printstring
+    lea CAR1_TXT,a1
+    moveq #1,d0
+    moveq #1,d1
+    bsr.w printstring
 
-    ;lea TXT2,a1
-    ;moveq #0,d0
-    ;moveq #3,d1
-    ;bsr.w printstring
-
-    ;lea TXTSOUND,a1
-    ;moveq #0,d0
-    ;moveq #11,d1
-    ;bsr.w printstring
-
-    ;lea TXTSTART,a1
-    ;moveq #0,d0
-    ;moveq #15,d1
-    ;bsr.w printstring
+    lea CAR1_TXT,a1
+    moveq #1,d0
+    moveq #3,d1
+    bsr.w printstring
 
     move.l           #CURSOR,d0
     lea       		 Sprite0Welcomepointers,a1
@@ -284,10 +285,16 @@ welcomescreen_end:
 
     rts
 
-TXT1: dc.b "CAR 1   JOY PORT 2",255
+CAR1_TXT: dc.b "CAR 1",255
     even
 
-TXT2: dc.b "CAR 2   KEY WASD",255
+CAR2_TXT: dc.b "CAR 2",255
+    even
+
+TXT1: dc.b "JOY PORT 2",255
+    even
+
+TXT2: dc.b "KEY WASD  ",255
     even
 
 TXTSOUND_SFX: dc.b "SOUND   SFX",255
@@ -300,7 +307,7 @@ TXTSTART: dc.b "START",255
     even
 
 TXT_RETURN_TO_OS:
-    dc.b "EXITO TO OS",255
+    dc.b "EXIT TO OS",255
     even
 
 printstring:
@@ -373,6 +380,47 @@ turn_sound_on:
     rts
 
 ACTION_CAR:
+
+    ;first get the get param id, should be 0 for fist car, 1 for the second and so on
+    move.w 12(a0),d0
+
+    ; the the mover offset
+    muls.w #MOVER_SIZE,d0
+    lea MOVERS,a1
+    add.l d0,a1
+
+    ; now get the routine input address
+    move.l INPUT_ROUTINE_OFFSET(a1),a2
+
+    ;search in lookup table
+    lea INPUTLIST,a3
+    lea INPUTLIST_DESCRIPTION,a6
+inputloop:
+    move.l (a3),a4
+    cmpa.l a2,a4
+    bne.s nextinputroutine
+
+    tst.l 4(a6)
+    bne.s notendofinputlist
+    move.l INPUTLIST_DESCRIPTION,(a0)
+    move.l INPUTLIST,INPUT_ROUTINE_OFFSET(a1)
+    rts
+notendofinputlist:
+
+    move.l 4(a6),(a0)
+    move.l 4(a3),INPUT_ROUTINE_OFFSET(a1)
+    rts
+
+    ; found it!!!!
+    move.w #1,EXIT_TO_OS_FLAG
+    move.w #1,START_RACE_FLAG
+    rts
+nextinputroutine
+
+    addq #4,a3
+    addq #4,a6
+    bra.s inputloop
+
     rts
 
 ACTION_RETURN_TO_OS:
