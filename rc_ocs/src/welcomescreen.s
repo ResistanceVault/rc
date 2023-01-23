@@ -68,6 +68,7 @@ ENTRY_1:
     dc.w 1
     dc.l ACTION_CAR
     dc.w 0
+    dc.w 1
 
 ENTRY_2:
     dc.l TXT2
@@ -75,12 +76,14 @@ ENTRY_2:
     dc.w 3
     dc.l ACTION_CAR
     dc.w 1
+    dc.w 0
 
 ENTRY_3:
     dc.l TXTSOUND_SFX
     dc.w 1
     dc.w 9
     dc.l ACTION_SOUND
+    dc.w 0
     dc.w 0
 
 ENTRY_4:
@@ -89,12 +92,14 @@ ENTRY_4:
     dc.w 11
     dc.l ACTION_START_RACE
     dc.w 0
+    dc.w 0
 
 ENTRY_5:
     dc.l TXT_RETURN_TO_OS
     dc.w 1
     dc.w 15
     dc.l ACTION_RETURN_TO_OS
+    dc.w 0
     dc.w 0
 
 ENTRY_6:
@@ -103,20 +108,29 @@ ENTRY_6:
     dc.w 0
     dc.l 0
     dc.w 0
+    dc.w 0
 ENTRY_END:
 
 
-ENTRY_SIZE EQU 14
+ENTRY_SIZE EQU 16
 
 INPUTLIST:
     dc.l READJOY1
     dc.l KEYBOARD_WASD
+    dc.l OFF
     dc.l 0
 INPUTLIST_END:
 
 INPUTLIST_DESCRIPTION:
     dc.l TXT1
     dc.l TXT2
+    dc.l TXT_OFF
+    dc.l 0
+
+INPUTLIST_ONOFF:
+    dc.w 1
+    dc.l 1
+    dc.l 0
     dc.l 0
 
 JOY1FIREPRESSED: dc.w 0
@@ -165,37 +179,37 @@ welcomescreen:
 
 	move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
 
-    lea CAR1_TXT,a1
-    moveq #1,d0
-    moveq #1,d1
-    bsr.w printstring
+    lea                 CAR1_TXT,a1
+    moveq               #1,d0
+    moveq               #1,d1
+    bsr.w               printstring
 
-    lea CAR2_TXT,a1
-    moveq #1,d0
-    moveq #3,d1
-    bsr.w printstring
+    lea                 CAR2_TXT,a1
+    moveq               #1,d0
+    moveq               #3,d1
+    bsr.w               printstring
 
-    move.l           #CURSOR,d0
-    lea       		 Sprite0Welcomepointers,a1
-    jsr       		 POINTINCOPPERLIST_FUNCT
+    move.l              #CURSOR,d0
+    lea       		    Sprite0Welcomepointers,a1
+    jsr       		    POINTINCOPPERLIST_FUNCT
 
 mousewelcome:
     cmpi.b  			#$ff,$dff006    ; Linea 255?
     bne.s   			mousewelcome
 
-    lea ENTRIES(PC),a4
+    lea                 ENTRIES(PC),a4
 starentries:
-    move.l (a4),a1
-    move.l a1,d0
-    tst.l d0
-    beq.s endentries
-    moveq #0,d0
-    moveq #0,d1
-    move.w 4(a4),d0
-    move.w 6(a4),d1
-    bsr.w printstring
-    adda.l #ENTRY_SIZE,a4
-    bra.s starentries
+    move.l              (a4),a1
+    move.l              a1,d0
+    tst.l               d0
+    beq.s               endentries
+    moveq               #0,d0
+    moveq               #0,d1
+    move.w              4(a4),d0
+    move.w              6(a4),d1
+    bsr.w               printstring
+    adda.l              #ENTRY_SIZE,a4
+    bra.s               starentries
 endentries:
 
     jsr                 READJOY1
@@ -242,20 +256,20 @@ joy1uppressed_no_release:
 
     ; move sprite
     ; get Y position of the entry
-    move.b #0,3+CURSOR
-    move.l             ENTRIES_PTR,a0
-    move.w             6(a0),d1
-    muls               #16,d1
-    add.w              #$2b,d1
+    move.b              #0,3+CURSOR
+    move.l              ENTRIES_PTR,a0
+    move.w              6(a0),d1
+    muls                #16,d1
+    add.w               #$2b,d1
     ;BVC.s               nounder255start
-    btst             #8,d1
-    beq.s nounder255start
-    bset.b           #2,3+CURSOR
-    bset.b           #1,3+CURSOR
+    btst                #8,d1
+    beq.s               nounder255start
+    bset.b              #2,3+CURSOR
+    bset.b              #1,3+CURSOR
 nounder255start:
-    move.b             d1,CURSOR
-    add.w              #16,d1
-    move.b             d1,CURSOR+2
+    move.b              d1,CURSOR
+    add.w               #16,d1
+    move.b              d1,CURSOR+2
 
     btst				#7,$bfe001	; mouse premuto?
 	bne.w				noaction
@@ -282,47 +296,57 @@ joy1firenotpressed:
 	bne.w				mousewelcome
 
 welcomescreen_end:
-
     rts
 
-CAR1_TXT: dc.b "CAR 1",255
+CAR1_TXT: 
+    dc.b                "CAR 1",255
     even
 
-CAR2_TXT: dc.b "CAR 2",255
+CAR2_TXT: 
+    dc.b                "CAR 2",255
     even
 
-TXT1: dc.b "JOY PORT 2",255
+TXT1: 
+    dc.b                "JOY PORT 1",255
     even
 
-TXT2: dc.b "KEY WASD  ",255
+TXT2:
+    dc.b                "KEY WASD  ",255
     even
 
-TXTSOUND_SFX: dc.b "SOUND   SFX",255
+TXT_OFF:
+    dc.b                "OFF       ",255
     even
 
-TXTSOUND_OFF: dc.b "SOUND   OFF",255
+TXTSOUND_SFX:
+    dc.b                "SOUND   SFX",255
     even
 
-TXTSTART: dc.b "START",255
+TXTSOUND_OFF:
+    dc.b                "SOUND   OFF",255
+    even
+
+TXTSTART:
+    dc.b                "START",255
     even
 
 TXT_RETURN_TO_OS:
-    dc.b "EXIT TO OS",255
+    dc.b                "EXIT TO OS",255
     even
 
 printstring:
-    moveq #0,d6
-    move.b (a1)+,d6
-    cmp.w #$FF,d6
-    beq.s printstringend
-    sub.w #32,d6
-    muls.w #2*16*3,d6
+    moveq               #0,d6
+    move.b              (a1)+,d6
+    cmp.w               #$FF,d6
+    beq.s               printstringend
+    sub.w               #32,d6
+    muls.w              #2*16*3,d6
 
-    lea BIGFONTS,a0
-    adda.l d6,a0
-    bsr.s printbigfont
-    addq #1,d0
-    bra.s printstring
+    lea                 BIGFONTS,a0
+    adda.l              d6,a0
+    bsr.s               printbigfont
+    addq                #1,d0
+    bra.s               printstring
 
 printstringend:
     rts
@@ -355,75 +379,118 @@ bigfontcycle:
     move.b              2*16*2(a0),(a3)
     move.b              1+2*16*2(a0),1(a3)
 
-    addq  #2,a0
-    adda.l #40,a1
-    adda.l #40,a2
-    adda.l #40,a3
+    addq                #2,a0
+    adda.l              #40,a1
+    adda.l              #40,a2
+    adda.l              #40,a3
 
     dbra                d7,bigfontcycle
     movem.l             (sp)+,a0/a1/a2/a3/d0/d1
     rts
 
 ACTION_START_RACE:
-    move.w #1,START_RACE_FLAG
+    move.w              #1,START_RACE_FLAG
     rts
 
 ACTION_SOUND:
-    tst.w PLAY_SOUND
-    beq.s turn_sound_on
-    move.l #TXTSOUND_OFF,(a0)
-    move.w #0,PLAY_SOUND
+    tst.w               PLAY_SOUND
+    beq.s               turn_sound_on
+    move.l              #TXTSOUND_OFF,(a0)
+    move.w              #0,PLAY_SOUND
     rts
 turn_sound_on:
-    move.w #1,PLAY_SOUND
-    move.l #TXTSOUND_SFX,(a0)
+    move.w              #1,PLAY_SOUND
+    move.l              #TXTSOUND_SFX,(a0)
     rts
 
 ACTION_CAR:
 
+    move.l              a5,-(sp)
+    ;DEBUG 1111
+
     ;first get the get param id, should be 0 for fist car, 1 for the second and so on
-    move.w 12(a0),d0
+    move.w              12(a0),d0
 
     ; the the mover offset
-    muls.w #MOVER_SIZE,d0
-    lea MOVERS,a1
-    add.l d0,a1
+    muls.w              #MOVER_SIZE,d0
+    lea                 MOVERS,a1
+    add.l               d0,a1
 
     ; now get the routine input address
-    move.l INPUT_ROUTINE_OFFSET(a1),a2
+    move.l              INPUT_ROUTINE_OFFSET(a1),a2
 
     ;search in lookup table
-    lea INPUTLIST,a3
-    lea INPUTLIST_DESCRIPTION,a6
+    lea                 INPUTLIST(PC),a3
+    lea                 INPUTLIST_DESCRIPTION(PC),a6
+    lea                 INPUTLIST_ONOFF(PC),a5
 inputloop:
-    move.l (a3),a4
-    cmpa.l a2,a4
-    bne.s nextinputroutine
+    move.l              (a3),a4
+    cmpa.l              a2,a4
+    bne.s               nextinputroutine
 
-    tst.l 4(a6)
-    bne.s notendofinputlist
-    move.l INPUTLIST_DESCRIPTION,(a0)
-    move.l INPUTLIST,INPUT_ROUTINE_OFFSET(a1)
+    tst.l               4(a6)
+    bne.s               notendofinputlist
+    move.l              INPUTLIST_DESCRIPTION,(a0)
+    move.l              INPUTLIST,INPUT_ROUTINE_OFFSET(a1)
+
+    bsr.w               disable_enable_car_first
+    move.l              (sp)+,a5
     rts
 notendofinputlist:
 
-    move.l 4(a6),(a0)
-    move.l 4(a3),INPUT_ROUTINE_OFFSET(a1)
+    move.l              4(a6),(a0)
+    move.l              4(a3),INPUT_ROUTINE_OFFSET(a1)
+    bsr.w               disable_enable_car
+    move.l              (sp)+,a5
     rts
 
-    ; found it!!!!
-    move.w #1,EXIT_TO_OS_FLAG
-    move.w #1,START_RACE_FLAG
+    move.l              (sp)+,a5
     rts
 nextinputroutine
 
-    addq #4,a3
-    addq #4,a6
-    bra.s inputloop
+    addq                #4,a3
+    addq                #4,a6
+    addq                #4,a5
+    bra.s               inputloop
 
     rts
 
+disable_enable_car_first:
+    move.l              d6,-(sp)
+    moveq               #0,d6
+    move.w              14(a0),d6
+    lea                 INPUTLIST_ONOFF,a5
+    tst.w               (a5)
+    beq.s               disablecar_first
+    bset                d6,CARS_IN_PLAY+1
+    move.l              (sp)+,d6
+    rts
+    disablecar_first:
+    bclr                d6,CARS_IN_PLAY+1
+    move.l              (sp)+,d6
+    rts
+
+disable_enable_car:
+    move.l              d6,-(sp)
+    moveq               #0,d6
+    move.w              14(a0),d6
+    tst.w               4(a5)
+    beq.s               disablecar
+
+    bset                d6,CARS_IN_PLAY+1
+    move.l              (sp)+,d6
+
+    rts
+
+disablecar:
+    bclr                d6,CARS_IN_PLAY+1
+    move.l              (sp)+,d6
+    rts
+
 ACTION_RETURN_TO_OS:
-    move.w #1,EXIT_TO_OS_FLAG
-    move.w #1,START_RACE_FLAG
+    move.w              #1,EXIT_TO_OS_FLAG
+    move.w              #1,START_RACE_FLAG
+    rts
+
+OFF:
     rts

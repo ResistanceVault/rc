@@ -251,12 +251,15 @@ looptrackcolors:
 	lea 				MOVERS,a0
 	move.w 				#MAX_CARS-1,d7
 carsaudioloop:
+	btst.b 				d7,CARS_IN_PLAY+1
+	beq.s 				carsaudionextloop
 	move.l 				AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
 	move.l 				MOTOR_SAMPLE_OFFSET(a0),(a1)+
 	move.w 				#8,(a1)+; size
 	move.w 				#680,(a1)+
 	move.w 				#64,(a1)+
 	or.w 				AUDIO_CHANNEL_DMA_BIT(a0),d1
+carsaudionextloop:
 	adda.w  			#MOVER_SIZE,a0
 	dbra 				d7,carsaudioloop
 nosound1:
@@ -308,6 +311,7 @@ mouse:
 moversloop:
 
 	; if the car is not in play skip
+	DEBUG 1234
 	btst.b 				d7,CARS_IN_PLAY+1
 	beq.w   			next_car
 
