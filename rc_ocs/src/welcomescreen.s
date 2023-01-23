@@ -170,7 +170,7 @@ welcomescreen:
     moveq #1,d1
     bsr.w printstring
 
-    lea CAR1_TXT,a1
+    lea CAR2_TXT,a1
     moveq #1,d0
     moveq #3,d1
     bsr.w printstring
