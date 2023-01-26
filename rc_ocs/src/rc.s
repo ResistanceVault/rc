@@ -157,6 +157,8 @@ RACE_STATUS: 	dc.w 0
 
 START:
 
+	jsr SETPOT
+
 	move.l				BaseVBR,a0
 	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
 
@@ -311,7 +313,6 @@ mouse:
 moversloop:
 
 	; if the car is not in play skip
-	DEBUG 1234
 	btst.b 				d7,CARS_IN_PLAY+1
 	beq.w   			next_car
 
@@ -391,6 +392,8 @@ exit:
 	include "move.s"
 	include "check_collisions.s"
 	include "inputroutines/joystickinput.s"
+	include "inputroutines/joystickinput_welcome.s"
+	include "inputroutines/joysetpot.s"
 	include "inputroutines/keyboard.s"
 	include "inputroutines/keyboard_wasd.s"
 	include "car_management.s"

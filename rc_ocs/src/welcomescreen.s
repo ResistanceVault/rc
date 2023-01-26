@@ -212,7 +212,7 @@ starentries:
     bra.s               starentries
 endentries:
 
-    jsr                 READJOY1
+    jsr                 READJOY1_WELCOME
 
     ;manage joy down
     btst	            #3,d0
@@ -298,15 +298,15 @@ joy1firenotpressed:
 welcomescreen_end:
     rts
 
-CAR1_TXT: 
+CAR1_TXT:
     dc.b                "CAR 1",255
     even
 
-CAR2_TXT: 
+CAR2_TXT:
     dc.b                "CAR 2",255
     even
 
-TXT1: 
+TXT1:
     dc.b                "JOY PORT 1",255
     even
 
@@ -406,7 +406,6 @@ turn_sound_on:
 ACTION_CAR:
 
     move.l              a5,-(sp)
-    ;DEBUG 1111
 
     ;first get the get param id, should be 0 for fist car, 1 for the second and so on
     move.w              12(a0),d0
