@@ -1,3 +1,5 @@
+.PHONY: adf
+
 all:
 	cd src
 	vasmm68k_mot -devpac -nocase -Fhunk -DSOUND -DQ4_12_TABLE_LOOKUP -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  -o ./src/rc.o ./src/rc.s
@@ -11,3 +13,8 @@ all:
 	vasmm68k_mot -devpac -nocase -Fhunk -DQ4_12_TABLE_LOOKUP -DDEBUG -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  -o ./src/rc_debug.o ./src/rc.s
 	vlink -bamigahunk -o ./bin/rc_debug -s -DQ4_12_TABLE_LOOKUP -DDEBUG -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  ./src/rc_debug.o
 	chmod 777 ./bin/rc_debug
+
+adf:
+	make all
+	$(eval $@_TMP := $(shell date +'%F_%T'))
+	exe2adf-linux64bit -i bin/rc32 -l rc_$($@_TMP) -a ./adf/rc_$($@_TMP).adf

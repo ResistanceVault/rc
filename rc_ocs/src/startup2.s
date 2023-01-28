@@ -42,7 +42,7 @@ VecchiaIntui:
 	move.l	VPfirstScreen(PC),a0
 	LEA	colore0(PC),A1	; colore $0RGB
 	MOVEQ	#1,D0		; count - solo il colore di sfondo da cambiare
-	JSR	-$C0(A6)	; LoadRGB4
+	;JSR	-$C0(A6)	; LoadRGB4
 
 ; Resettiamo lo schermo (con colore di sfondo annerito!)
 
@@ -143,7 +143,7 @@ Vecchissima:
 	LEA	Savedcolor0(PC),A1 ; colore0 originale
 	MOVEQ	#1,D0		; count - solo il colore di sfondo da cambiare
 	MOVE.L	GfxBase(PC),A6
-	JSR	-$C0(a6)	; LoadRGB4 - vecchio color0
+	;JSR	-$C0(a6)	; LoadRGB4 - vecchio color0
 
 	MOVE.L	WBVIEW(PC),A1	; Vecchio WBVIEW in A1
 	JSR	-$DE(A6)	; loadview - rimetti il vecchio View

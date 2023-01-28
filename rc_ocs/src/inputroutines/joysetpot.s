@@ -1,6 +1,8 @@
 SETPOT:
+    move.w #$C000,$dff034
+    rts
     MOVE.L  #$DFF000,A5
-  MOVE.W  #%1111111100000000,$34(A5) ;POTGO Set standard OS value
+  MOVE.W  #%1100000000000000,$34(A5) ;POTGO Set standard OS value
 
   MOVEQ   #5-1,D2            ;Wait 5 rasterlines (~320 µs)
   MOVE.L  #$0001FF00,D3      ;Mask for vertical beam position V0-V8
