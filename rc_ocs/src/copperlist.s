@@ -160,7 +160,6 @@ COPHUDCOLOR7:
 
 COPPERLIST_WELCOME:
 
-;	SpritePointers:
 Sprite0Welcomepointers:
   dc.w       $120,$0000,$122,$0000
 

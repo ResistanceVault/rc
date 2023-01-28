@@ -167,6 +167,7 @@ START:
 	jsr					CAR2_INIT
 
 	; Open welcome screen
+welcomescreen_start:
 	jsr 				welcomescreen
 	tst.w               EXIT_TO_OS_FLAG
     bne.w               exit
@@ -368,14 +369,16 @@ Aspetta:
 	SWAP_BPL
 	ENDC
 
+	; go to option screen if esc is pressed
 	tst.b 				KEY_ESC
-	bne.s 				exit
+	bne.w 				welcomescreen_start
 
 	tst.w 				RACE_STATUS
 	bne.s 				exit
 
-	btst				#6,$bfe001	; mouse premuto?
-	bne.w				mouse
+	;btst				#6,$bfe001	; mouse premuto?
+	;bne.w				mouse
+	bra.w 				mouse
 exit:
 	rts			; esci
 

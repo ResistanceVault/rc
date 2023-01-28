@@ -141,6 +141,22 @@ EXIT_TO_OS_FLAG: dc.w 0
 
 welcomescreen:
 
+    ; clear sprites pointers
+    move.w #0,Sprite0pointers+2
+    move.w #0,Sprite0pointers+6
+    move.w #0,Sprite1pointers+2
+    move.w #0,Sprite1pointers+6
+    move.w #0,Sprite2pointers+2
+    move.w #0,Sprite2pointers+6
+    move.w #0,Sprite3pointers+2
+    move.w #0,Sprite3pointers+6
+
+    ; reset a5
+    lea $dff000,a5
+
+    ;reset race flag in case we are returning here after the race
+    move.w              #0,START_RACE_FLAG
+
     ; Init tiles bitplanes
     move.l              #SCREEN_0,d0
     lea                 BPLPTR1_WELCOME,a1
@@ -159,8 +175,10 @@ welcomescreen:
     bsr.w               POINTINCOPPERLIST_FUNCT
 
     move.w 	   			#DMASET,d1
-
+    DEBUG 1111
     MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
+        move.w #$000F,$dff096
+
 
 	move.w				COLORS_FONTS_SMALL+2,COPCOLOR_WELCOME_1+2
 	move.w				COLORS_FONTS_SMALL+4,COPCOLOR_WELCOME_2+2

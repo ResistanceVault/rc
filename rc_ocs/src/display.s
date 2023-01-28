@@ -3,6 +3,7 @@
 ; Wheel positions must be already calculated
 DISPLAY:
 
+    IFND COLOR
     ; save a0 - point routine trashes it
     move.l a0,a2
 
@@ -30,6 +31,7 @@ DISPLAY:
     lsr.w #DECIMAL_SHIFT,d0
     asr.w #DECIMAL_SHIFT,d1
     jsr POINT
+    ENDC
 
     ; restore old a0
     move.l a2,a0
