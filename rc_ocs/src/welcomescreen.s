@@ -117,6 +117,7 @@ ENTRY_SIZE EQU 16
 INPUTLIST:
     dc.l READJOY1
     dc.l KEYBOARD_WASD
+    dc.l KEYBOARD_IJKL
     dc.l OFF
     dc.l 0
 INPUTLIST_END:
@@ -124,11 +125,13 @@ INPUTLIST_END:
 INPUTLIST_DESCRIPTION:
     dc.l TXT1
     dc.l TXT2
+    dc.l TXT3
     dc.l TXT_OFF
     dc.l 0
 
 INPUTLIST_ONOFF:
     dc.w 1
+    dc.l 1
     dc.l 1
     dc.l 0
     dc.l 0
@@ -175,7 +178,6 @@ welcomescreen:
     bsr.w               POINTINCOPPERLIST_FUNCT
 
     move.w 	   			#DMASET,d1
-    DEBUG 1111
     MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
         move.w #$000F,$dff096
 
@@ -330,6 +332,10 @@ TXT1:
 
 TXT2:
     dc.b                "KEY WASD  ",255
+    even
+
+TXT3:
+    dc.b                "KEY IJKL  ",255
     even
 
 TXT_OFF:

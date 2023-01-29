@@ -399,6 +399,7 @@ exit:
 	include "inputroutines/joysetpot.s"
 	include "inputroutines/keyboard.s"
 	include "inputroutines/keyboard_wasd.s"
+	include "inputroutines/keyboard_ijkl.s"
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"
