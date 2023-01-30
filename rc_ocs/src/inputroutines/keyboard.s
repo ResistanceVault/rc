@@ -164,6 +164,17 @@ KEYBOARD_KEYS:
 	KEY_ESC:			dc.b 0 		;0x45
 	KEY_DEL:			dc.b 0 		;0x46
 
+	KEY_UNKNOWN_7:		dc.b 0 		;0x47
+	KEY_UNKNOWN_8:		dc.b 0 		;0x48
+	KEY_UNKNOWN_9:		dc.b 0 		;0x49
+	KEY_UNKNOWN_10:		dc.b 0 		;0x4A
+	KEY_UNKNOWN_11:		dc.b 0 		;0x4B
+	KEY_ARROW_UP:		dc.b 0 		;0x4C
+	KEY_ARROW_DOWN:		dc.b 0 		;0x4D
+	KEY_ARROW_RIGHT:	dc.b 0 		;0x4E
+	KEY_ARROW_LEFT:		dc.b 0 		;0x4F
+	KEY_F1:				dc.b 0 		;0x50
+
 	dcb.b				73,0
 
 	EVEN

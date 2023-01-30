@@ -118,6 +118,7 @@ INPUTLIST:
     dc.l READJOY1
     dc.l KEYBOARD_WASD
     dc.l KEYBOARD_IJKL
+    dc.l KEYBOARD_ARROWS
     dc.l OFF
     dc.l 0
 INPUTLIST_END:
@@ -126,11 +127,13 @@ INPUTLIST_DESCRIPTION:
     dc.l TXT1
     dc.l TXT2
     dc.l TXT3
+    dc.l TXT4
     dc.l TXT_OFF
     dc.l 0
 
 INPUTLIST_ONOFF:
-    dc.w 1
+    dc.l 1
+    dc.l 1
     dc.l 1
     dc.l 1
     dc.l 0
@@ -179,7 +182,7 @@ welcomescreen:
 
     move.w 	   			#DMASET,d1
     MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
-        move.w #$000F,$dff096
+    move.w              #$000F,$dff096
 
 
 	move.w				COLORS_FONTS_SMALL+2,COPCOLOR_WELCOME_1+2
@@ -338,6 +341,10 @@ TXT3:
     dc.b                "KEY IJKL  ",255
     even
 
+TXT4:
+    dc.b                "KEY ARROWS",255
+    even
+
 TXT_OFF:
     dc.b                "OFF       ",255
     even
@@ -427,6 +434,7 @@ turn_sound_on:
     move.l              #TXTSOUND_SFX,(a0)
     rts
 
+; Handle controller rotation for a car
 ACTION_CAR:
 
     move.l              a5,-(sp)
@@ -460,7 +468,6 @@ inputloop:
     move.l              (sp)+,a5
     rts
 notendofinputlist:
-
     move.l              4(a6),(a0)
     move.l              4(a3),INPUT_ROUTINE_OFFSET(a1)
     bsr.w               disable_enable_car
@@ -476,6 +483,7 @@ nextinputroutine
     addq                #4,a5
     bra.s               inputloop
 
+    move.l              (sp)+,a5
     rts
 
 disable_enable_car_first:
@@ -483,7 +491,7 @@ disable_enable_car_first:
     moveq               #0,d6
     move.w              14(a0),d6
     lea                 INPUTLIST_ONOFF,a5
-    tst.w               (a5)
+    tst.l               (a5)
     beq.s               disablecar_first
     bset                d6,CARS_IN_PLAY+1
     move.l              (sp)+,d6
@@ -497,7 +505,7 @@ disable_enable_car:
     move.l              d6,-(sp)
     moveq               #0,d6
     move.w              14(a0),d6
-    tst.w               4(a5)
+    tst.l               4(a5)
     beq.s               disablecar
 
     bset                d6,CARS_IN_PLAY+1

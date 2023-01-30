@@ -400,6 +400,7 @@ exit:
 	include "inputroutines/keyboard.s"
 	include "inputroutines/keyboard_wasd.s"
 	include "inputroutines/keyboard_ijkl.s"
+	include "inputroutines/keyboard_arrows.s"
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"
