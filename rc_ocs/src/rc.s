@@ -82,7 +82,7 @@ DECIMAL_SHIFT						EQU 7
 SPRITES								EQU 1
 
 MAX_LAPS							EQU 10
-MAX_CARS							EQU 2
+MAX_CARS							EQU 3
 
 	include "macros.i"
 
@@ -152,7 +152,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/precalc/dec2txt.s"
 
 PLAY_SOUND: 	dc.w 1
-CARS_IN_PLAY: 	dc.w %0000000000000011
+CARS_IN_PLAY: 	dc.w %0000000000000111
 RACE_STATUS: 	dc.w 0
 
 START:
@@ -165,6 +165,7 @@ START:
 	; Cars init
 	jsr 				CAR1_INIT
 	jsr					CAR2_INIT
+	jsr					CAR3_INIT
 
 	; Open welcome screen
 welcomescreen_start:

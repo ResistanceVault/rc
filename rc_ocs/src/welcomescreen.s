@@ -67,18 +67,26 @@ ENTRY_1:
     dc.w 9
     dc.w 1
     dc.l ACTION_CAR
-    dc.w 0
-    dc.w 1
+    dc.w 0 ; car id
+    dc.w 2 ; car bit
 
 ENTRY_2:
     dc.l TXT2
     dc.w 9
     dc.w 3
     dc.l ACTION_CAR
+    dc.w 1 ; car id
     dc.w 1
-    dc.w 0
 
 ENTRY_3:
+    dc.l TXT3
+    dc.w 9
+    dc.w 5
+    dc.l ACTION_CAR
+    dc.w 2 ; car id
+    dc.w 0
+
+ENTRY_4:
     dc.l TXTSOUND_SFX
     dc.w 1
     dc.w 9
@@ -86,7 +94,7 @@ ENTRY_3:
     dc.w 0
     dc.w 0
 
-ENTRY_4:
+ENTRY_5:
     dc.l TXTSTART
     dc.w 1
     dc.w 11
@@ -94,7 +102,7 @@ ENTRY_4:
     dc.w 0
     dc.w 0
 
-ENTRY_5:
+ENTRY_6:
     dc.l TXT_RETURN_TO_OS
     dc.w 1
     dc.w 15
@@ -102,7 +110,7 @@ ENTRY_5:
     dc.w 0
     dc.w 0
 
-ENTRY_6:
+ENTRY_7:
     dc.l 0
     dc.w 0
     dc.w 0
@@ -156,6 +164,14 @@ welcomescreen:
     move.w #0,Sprite2pointers+6
     move.w #0,Sprite3pointers+2
     move.w #0,Sprite3pointers+6
+    move.w #0,Sprite4pointers+2
+    move.w #0,Sprite4pointers+6
+    move.w #0,Sprite5pointers+2
+    move.w #0,Sprite5pointers+6
+    move.w #0,Sprite6pointers+2
+    move.w #0,Sprite6pointers+6
+    move.w #0,Sprite7pointers+2
+    move.w #0,Sprite7pointers+6
 
     ; reset a5
     lea $dff000,a5
@@ -210,6 +226,11 @@ welcomescreen:
     lea                 CAR2_TXT,a1
     moveq               #1,d0
     moveq               #3,d1
+    bsr.w               printstring
+
+    lea                 CAR3_TXT,a1
+    moveq               #1,d0
+    moveq               #5,d1
     bsr.w               printstring
 
     move.l              #CURSOR,d0
@@ -327,6 +348,10 @@ CAR1_TXT:
 
 CAR2_TXT:
     dc.b                "CAR 2",255
+    even
+
+CAR3_TXT:
+    dc.b                "CAR 3",255
     even
 
 TXT1:
