@@ -1,15 +1,19 @@
 SPRITES_VSTART		   EQU  $2C
-CAR_SPRITE_DEGREES     EQU 45
+CAR_SPRITE_DEGREES     EQU 15
 
 ; Routine to point the correct sprite into copperlist
 ; Input: a0 base address of the car
 CREATE_CAR_SPRITE:
-    ;rts
     movem.l          a0/a1/d7,-(sp)
     movea.l          a0,a2
 
     ; Load the direction where the car is pointing (in degrees) into d7
     STORECARPROPERTY MOVER_STEER_DIRECTION_OFFSET,d7
+
+    tst.w d7
+    beq.s alessio
+    DEBUG 1234
+alessio:
 
     ; add CAR_SPRITE_DEGREES/2
     add.w            #CAR_SPRITE_DEGREES/2,d7
