@@ -68,7 +68,7 @@ ENTRY_1:
     dc.w 1
     dc.l ACTION_CAR
     dc.w 0 ; car id
-    dc.w 2 ; car bit
+    dc.w 3 ; car bit
 
 ENTRY_2:
     dc.l TXT2
@@ -76,7 +76,7 @@ ENTRY_2:
     dc.w 3
     dc.l ACTION_CAR
     dc.w 1 ; car id
-    dc.w 1
+    dc.w 2 ; car bit
 
 ENTRY_3:
     dc.l TXT3
@@ -84,9 +84,17 @@ ENTRY_3:
     dc.w 5
     dc.l ACTION_CAR
     dc.w 2 ; car id
-    dc.w 0
+    dc.w 1 ; car bit
 
 ENTRY_4:
+    dc.l TXT4
+    dc.w 9
+    dc.w 7
+    dc.l ACTION_CAR
+    dc.w 3 ; car id
+    dc.w 0 ; car bit
+
+ENTRY_5:
     dc.l TXTSOUND_SFX
     dc.w 1
     dc.w 9
@@ -94,7 +102,7 @@ ENTRY_4:
     dc.w 0
     dc.w 0
 
-ENTRY_5:
+ENTRY_6:
     dc.l TXTSTART
     dc.w 1
     dc.w 11
@@ -102,7 +110,7 @@ ENTRY_5:
     dc.w 0
     dc.w 0
 
-ENTRY_6:
+ENTRY_7:
     dc.l TXT_RETURN_TO_OS
     dc.w 1
     dc.w 15
@@ -110,7 +118,7 @@ ENTRY_6:
     dc.w 0
     dc.w 0
 
-ENTRY_7:
+ENTRY_8:
     dc.l 0
     dc.w 0
     dc.w 0
@@ -174,7 +182,7 @@ welcomescreen:
     move.w #0,Sprite7pointers+6
 
     ; reset a5
-    lea $dff000,a5
+    lea                 $dff000,a5
 
     ;reset race flag in case we are returning here after the race
     move.w              #0,START_RACE_FLAG
@@ -231,6 +239,11 @@ welcomescreen:
     lea                 CAR3_TXT,a1
     moveq               #1,d0
     moveq               #5,d1
+    bsr.w               printstring
+
+    lea                 CAR4_TXT,a1
+    moveq               #1,d0
+    moveq               #7,d1
     bsr.w               printstring
 
     move.l              #CURSOR,d0
@@ -352,6 +365,10 @@ CAR2_TXT:
 
 CAR3_TXT:
     dc.b                "CAR 3",255
+    even
+
+CAR4_TXT:
+    dc.b                "CAR 4",255
     even
 
 TXT1:
