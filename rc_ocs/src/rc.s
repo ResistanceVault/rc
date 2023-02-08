@@ -412,6 +412,7 @@ exit:
 	include "manage_input.s"
 	include "move.s"
 	include "check_collisions.s"
+	include "inputroutines/mouseinput.s"
 	include "inputroutines/joystickinput.s"
 	include "inputroutines/joystickinput_welcome.s"
 	include "inputroutines/joysetpot.s"

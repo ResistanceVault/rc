@@ -135,6 +135,7 @@ INPUTLIST:
     dc.l KEYBOARD_WASD
     dc.l KEYBOARD_IJKL
     dc.l KEYBOARD_ARROWS
+    dc.l READJOY0
     dc.l OFF
     dc.l 0
 INPUTLIST_END:
@@ -144,10 +145,12 @@ INPUTLIST_DESCRIPTION:
     dc.l TXT2
     dc.l TXT3
     dc.l TXT4
+    dc.l TXT5
     dc.l TXT_OFF
     dc.l 0
 
 INPUTLIST_ONOFF:
+    dc.l 1
     dc.l 1
     dc.l 1
     dc.l 1
@@ -385,6 +388,10 @@ TXT3:
 
 TXT4:
     dc.b                "KEY ARROWS",255
+    even
+
+TXT5:
+    dc.b                "JOY PORT 0",255
     even
 
 TXT_OFF:

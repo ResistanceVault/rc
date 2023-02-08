@@ -1,5 +1,5 @@
 SETPOT:
-    move.w #$C000,$dff034
+    move.w #$CC00,$dff034
     rts
     MOVE.L  #$DFF000,A5
   MOVE.W  #%1100000000000000,$34(A5) ;POTGO Set standard OS value
