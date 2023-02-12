@@ -39,3 +39,17 @@ RESTORE_TIMERS_BANNER:
     move.l              #$01800000,(a0)+
     ENDC
   rts
+
+CLEAN_DASHBOARD:
+  ;movem.l                 d7/a0/a1/a2/a3,-(sp)
+  lea                   DASHBOARD_DATA_1,a0
+  lea                   DASHBOARD_DATA_2,a1
+  lea                   DASHBOARD_DATA_3,a2
+  move.w                #(40*16/4)-1,d7
+startcleandashboard:
+  clr.l                 (a0)+
+  clr.l                 (a1)+
+  clr.l                 (a2)+
+  dbra                  d7,startcleandashboard
+  ;movem.l               (sp)+,d7/a0/a1/a2/a3
+  rts

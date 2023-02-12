@@ -9,7 +9,8 @@ RACE_WAIT_BETWEEN_STAGES EQU 50*2
 RACE_PAUSE:                dc.w 0 ; set to 1 to pause the game
 RACE_FORCED_PAUSE:      dc.w 0 ; set to 1 to indicate the game has been forcefully paused (waiting for the player to be ready at the start of the race)
 RACE_PROGRESS:          dc.w 0 ; set to one of the above directive to indicata which stage of the race we are
-RACE_MANAGER_TIMER      dc.w 0 ; timer to transition from one stage to another
+RACE_MANAGER_TIMER:     dc.w 0 ; timer to transition from one stage to another
+MOVE_CARS_ON_PAUSE:     dc.w 0
 
 RESET_RACE:
     move.w              #RACE_WAIT_TO_START,RACE_PROGRESS
@@ -23,8 +24,8 @@ RESET_RACE:
     rts
 
 MANAGE_PAUSE:
-    tst.w               RACE_FORCED_PAUSE
-    beq.w               race_no_forced_pause
+    tst.w                 RACE_FORCED_PAUSE
+    beq.w                 race_no_forced_pause
 
     ; here we are managing a forced pause caused by the race waiting to start
     ; check if we are on countdown
@@ -59,6 +60,9 @@ moversloop_pause:
     move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
 movers_no_disable_pause:
 
+    tst.w               MOVE_CARS_ON_PAUSE
+    bne.w               next_car_pause
+
     bsr.w				MOVE
 
     bsr.w				DISPLAY
@@ -66,9 +70,12 @@ movers_no_disable_pause:
 next_car_pause:
 	adda.l  			#MOVER_SIZE,a0
 	dbra 				d7,moversloop_pause
+    bra.w               Aspetta
 
 ; start managing pause requested by the user
 race_no_forced_pause:
+    jsr                 RESET_RACE
+    move.w              #1,MOVE_CARS_ON_PAUSE
     bra.w               Aspetta
 
 MANAGE_3_STATE:
@@ -118,9 +125,11 @@ DISPLAY_GO_BANNER:
     move.l              #START_RACE_BANNER_GO_1,d0
     jsr                 SET_BANNER
     subi.W              #1,RACE_MANAGER_TIMER
+    move.w              #0,MOVE_CARS_ON_PAUSE
     bne.s               no_set_timer_banner
     move.w              #0,RACE_PROGRESS
     jsr                 RESTORE_TIMERS_BANNER
+    jsr                 CLEAN_DASHBOARD
 no_set_timer_banner:
     ENDC
     bra.w               end_display_go_banner

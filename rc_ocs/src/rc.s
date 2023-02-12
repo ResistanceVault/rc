@@ -339,6 +339,12 @@ mouse:
 	beq.w				DISPLAY_GO_BANNER
 end_display_go_banner:
 
+	;if space is pressed pause the game
+	tst.w				KEY_SPACE
+	beq.s				nouserpause
+	move.w              #1,RACE_PAUSE
+nouserpause:
+
 	; if the game is on PAUSE manage it
 	IFD COLOR
 	tst.w				RACE_PAUSE

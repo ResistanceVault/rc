@@ -156,7 +156,7 @@ KEYBOARD_KEYS:
 	KEY_NUMPAD_7: 		dc.b 0 		;0x3D
 	KEY_NUMPAD_8: 		dc.b 0 		;0x3E
 	KEY_NUMPAD_9: 		dc.b 0 		;0x3F
-	KEY_UNKNOWN_6:		dc.b 0 		;0x40
+	KEY_SPACE:			dc.b 0 		;0x40
 	KEY_BACKSPACE:		dc.b 0 		;0x41
 	KEY_TAB:			dc.b 0 		;0x42
 	KEY_NUMPAD_ENTER:	dc.b 0 		;0x43
