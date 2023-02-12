@@ -1,0 +1,126 @@
+RACE_WAIT_TO_START EQU 4
+RACE_WAIT_3        EQU 3
+RACE_WAIT_2        EQU 2
+RACE_WAIT_1        EQU 1
+RACE_WAIT_GO       EQU 5
+
+RACE_WAIT_BETWEEN_STAGES EQU 50*2
+
+RACE_PAUSE:                dc.w 0 ; set to 1 to pause the game
+RACE_FORCED_PAUSE:      dc.w 0 ; set to 1 to indicate the game has been forcefully paused (waiting for the player to be ready at the start of the race)
+RACE_PROGRESS:          dc.w 0 ; set to one of the above directive to indicata which stage of the race we are
+RACE_MANAGER_TIMER      dc.w 0 ; timer to transition from one stage to another
+
+RESET_RACE:
+    move.w              #RACE_WAIT_TO_START,RACE_PROGRESS
+    move.w              #1,RACE_PAUSE
+    move.w              #1,RACE_FORCED_PAUSE
+    IFD COLOR
+    lea                 BPLPTR_HUD,a0
+    move.l              #START_RACE_BANNER_ACC_1,d0
+    jsr                 SET_BANNER
+    ENDC
+    rts
+
+MANAGE_PAUSE:
+    tst.w               RACE_FORCED_PAUSE
+    beq.w               race_no_forced_pause
+
+    ; here we are managing a forced pause caused by the race waiting to start
+    ; check if we are on countdown
+    cmpi.w               #RACE_WAIT_3,RACE_PROGRESS
+    beq.w                MANAGE_3_STATE
+
+    cmpi.w               #RACE_WAIT_2,RACE_PROGRESS
+    beq.w                MANAGE_2_STATE
+
+    cmpi.w               #RACE_WAIT_1,RACE_PROGRESS
+    beq.w                MANAGE_1_STATE
+
+    ; check if anyone is pressing accelerate button
+    ; for each car
+	lea 				MOVERS,a0
+	move.w 				#MAX_CARS-1,d7
+
+moversloop_pause:
+    ; if the car is not in play skip
+	btst.b 				d7,CARS_IN_PLAY+1
+	beq.w   			next_car_pause
+
+    ; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
+	move.l  			INPUT_ROUTINE_OFFSET(a0),a1
+	jsr					(a1)
+
+    ; check if accelerate was pressed
+    btst 				#2,d0
+    ; if yes transition to banner 3 stage
+    beq.s               movers_no_disable_pause
+    move.w              #RACE_WAIT_3,RACE_PROGRESS
+    move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
+movers_no_disable_pause:
+
+    bsr.w				MOVE
+
+    bsr.w				DISPLAY
+
+next_car_pause:
+	adda.l  			#MOVER_SIZE,a0
+	dbra 				d7,moversloop_pause
+
+; start managing pause requested by the user
+race_no_forced_pause:
+    bra.w               Aspetta
+
+MANAGE_3_STATE:
+    IFD COLOR
+    lea                 BPLPTR_HUD,a0
+    move.l              #START_RACE_BANNER_3_1,d0
+    jsr                 SET_BANNER
+    subi.W              #1,RACE_MANAGER_TIMER
+    bne.s               no2state
+    move.w              #RACE_WAIT_2,RACE_PROGRESS
+    move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
+no2state:
+    ENDC
+    bra.w               Aspetta
+
+MANAGE_2_STATE:
+    IFD COLOR
+    lea                 BPLPTR_HUD,a0
+    move.l              #START_RACE_BANNER_2_1,d0
+    jsr                 SET_BANNER
+    subi.W              #1,RACE_MANAGER_TIMER
+    bne.s               no1state
+    move.w              #RACE_WAIT_1,RACE_PROGRESS
+    move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
+no1state:
+    ENDC
+    bra.w               Aspetta
+
+MANAGE_1_STATE:
+    IFD COLOR
+    lea                 BPLPTR_HUD,a0
+    move.l              #START_RACE_BANNER_1_1,d0
+    jsr                 SET_BANNER
+    subi.W              #1,RACE_MANAGER_TIMER
+    bne.s               nogostate
+    move.w              #RACE_WAIT_GO,RACE_PROGRESS
+    move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
+    move.w              #0,RACE_PAUSE
+    move.w              #0,RACE_FORCED_PAUSE
+nogostate:
+    ENDC
+    bra.w               Aspetta
+
+DISPLAY_GO_BANNER:
+    IFD COLOR
+    lea                 BPLPTR_HUD,a0
+    move.l              #START_RACE_BANNER_GO_1,d0
+    jsr                 SET_BANNER
+    subi.W              #1,RACE_MANAGER_TIMER
+    bne.s               no_set_timer_banner
+    move.w              #0,RACE_PROGRESS
+    jsr                 RESTORE_TIMERS_BANNER
+no_set_timer_banner:
+    ENDC
+    bra.w               end_display_go_banner

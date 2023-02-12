@@ -15,6 +15,11 @@ COPSET2BPL MACRO
 	dc.w	%0010001000000000
 ENDM
 
+COPSET3BPL MACRO
+	dc.w	$100
+	dc.w	%0011001000000000
+ENDM
+
     SECTION	GRAPHIC,DATA_C
 
 COPPERLIST:
@@ -134,7 +139,22 @@ BPLPTR5:
 	dc.w    $1be,$f0f    ; color31
 	ELSE
 	dc.w $ffdf,$fffe ; wait 255
-	dc.w $1c07,$fffe
+	dc.w $1c07,$fffe ; wait for HUD
+	; set HUD BPL POINTERS
+	COPSET3BPL
+BPLPTR_HUD:
+BPLPTR1_HUD:
+  	dc.w       $0000,$0000,$0000,$0000                                       ;first	 bitplane - BPL0PT
+BPLPTR2_HUD:
+  	dc.w       $0000,$0000,$0000,$0000                                       ;second bitplane - BPL1PT
+BPLPTR3_HUD:
+  	dc.w       $0000,$0000,$0000,$0000                                       ;third	 bitplane - BPL2PT
+;BPLPTR4_HUD:
+;  	dc.w       $0000,$0000,$0000,$0000                                       ;fourth bitplane - BPL3PT
+;BPLPTR5_HUD:
+;  	dc.w       $0000,$0000,$0000,$0000                                       ;fifth	 bitplane - BPL4PT
+
+
 COPHUDCOLOR0:
   	dc.w	$0180,$0000
 COPHUDCOLOR1:

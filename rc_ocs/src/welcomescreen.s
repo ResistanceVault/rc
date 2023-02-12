@@ -331,7 +331,7 @@ nounder255start:
     add.w               #16,d1
     move.b              d1,CURSOR+2
 
-    btst				#7,$bfe001	; mouse premuto?
+    btst				#7,$bfe001	; joy fire pressed?
 	bne.w				noaction
     tst.w               JOY1FIREPRESSED
     bne.s               noaction
@@ -340,7 +340,7 @@ nounder255start:
     jsr                 (a1)
     move.w              #1,JOY1FIREPRESSED
 noaction:
-    btst				#7,$bfe001	; mouse premuto?
+    btst				#7,$bfe001	; joy fire pressed?
 	beq.w				joy1firenotpressed
     move.w              #0,JOY1FIREPRESSED
 joy1firenotpressed:
@@ -470,6 +470,17 @@ bigfontcycle:
 
 ACTION_START_RACE:
     move.w              #1,START_RACE_FLAG
+
+    ; Cars init
+    jsr 	SET_CAR1_START_STATUS
+    jsr 	SET_CAR2_START_STATUS
+    jsr 	SET_CAR3_START_STATUS
+    jsr 	SET_CAR4_START_STATUS
+
+    ; wait until fire is released
+waitstartrace:
+    btst				#7,$bfe001	; joy fire pressed?
+    beq.s               waitstartrace
     rts
 
 ACTION_SOUND:

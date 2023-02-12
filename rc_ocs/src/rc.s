@@ -190,6 +190,11 @@ welcomescreen_start:
 	tst.w               EXIT_TO_OS_FLAG
     bne.w               exit
 
+	IFD COLOR
+	; Reset race with banner
+	jsr					RESET_RACE
+	ENDC
+
 	; Print track image
 TRACK_DATA_HEIGHT	EQU 240
 
@@ -237,6 +242,9 @@ TRACK_DATA_HEIGHT	EQU 240
 looptrackcolors:
 	move.w				(a0)+,(a1)+
 	dbra				d7,looptrackcolors
+
+	; force back background
+	;move.w              #0,COPCOLOR0+2
 
 	ELSE
 
@@ -324,6 +332,17 @@ mouse:
 	move.w 				#0,d0
     move.w 				#HEIGHT-1,d1
     jsr 				POINT
+	ENDC
+
+	; if i have to display the go banner
+	cmp.w 				#RACE_WAIT_GO,RACE_PROGRESS
+	beq.w				DISPLAY_GO_BANNER
+end_display_go_banner:
+
+	; if the game is on PAUSE manage it
+	IFD COLOR
+	tst.w				RACE_PAUSE
+	bne.w				MANAGE_PAUSE
 	ENDC
 
 	; for each car
@@ -424,6 +443,9 @@ exit:
 	include "check_against_map.s"
 	include "hud.s"
 	include "welcomescreen.s"
+	include "banner_manager.s"
+	include "race_manager.s"
+	include "track_info_manager.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -532,3 +554,33 @@ TRACK_DATA_COLORS:
 	ENDC
 TRACK_METADATA:
 	incbin "assets/tracks/track1/rc045_320X240X8.data"
+START_RACE_BANNER_ACC_1:
+	incbin "assets/banners/acctostart.raw.0"
+START_RACE_BANNER_ACC_2:
+	incbin "assets/banners/acctostart.raw.1"
+START_RACE_BANNER_ACC_3:
+	incbin "assets/banners/acctostart.raw.2"
+START_RACE_BANNER_3_1:
+	incbin "assets/banners/3.raw.0"
+START_RACE_BANNER_3_2:
+	incbin "assets/banners/3.raw.1"
+START_RACE_BANNER_3_3:
+	incbin "assets/banners/3.raw.2"
+START_RACE_BANNER_2_1:
+	incbin "assets/banners/2.raw.0"
+START_RACE_BANNER_2_2:
+	incbin "assets/banners/2.raw.1"
+START_RACE_BANNER_2_3:
+	incbin "assets/banners/2.raw.2"
+START_RACE_BANNER_1_1:
+	incbin "assets/banners/1.raw.0"
+START_RACE_BANNER_1_2:
+	incbin "assets/banners/1.raw.1"
+START_RACE_BANNER_1_3:
+	incbin "assets/banners/1.raw.2"
+START_RACE_BANNER_GO_1:
+	incbin "assets/banners/go.raw.0"
+START_RACE_BANNER_GO_2:
+	incbin "assets/banners/go.raw.1"
+START_RACE_BANNER_GO_3:
+	incbin "assets/banners/go.raw.2"
