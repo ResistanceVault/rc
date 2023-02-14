@@ -3,6 +3,7 @@ RACE_WAIT_3        EQU 3
 RACE_WAIT_2        EQU 2
 RACE_WAIT_1        EQU 1
 RACE_WAIT_GO       EQU 5
+RACE_WAIT_END       EQU 6
 
 RACE_WAIT_BETWEEN_STAGES EQU 50*2
 
@@ -11,6 +12,7 @@ RACE_FORCED_PAUSE:      dc.w 0 ; set to 1 to indicate the game has been forceful
 RACE_PROGRESS:          dc.w 0 ; set to one of the above directive to indicata which stage of the race we are
 RACE_MANAGER_TIMER:     dc.w 0 ; timer to transition from one stage to another
 MOVE_CARS_ON_PAUSE:     dc.w 0
+SPACE_PRESSED:          dc.w 0
 
 RESET_RACE:
     move.w              #RACE_WAIT_TO_START,RACE_PROGRESS
@@ -21,6 +23,12 @@ RESET_RACE:
     move.l              #START_RACE_BANNER_ACC_1,d0
     jsr                 SET_BANNER
     ENDC
+    moveq               #MAX_CARS-1,d7
+    lea                 ARRIVAL_ORDER,a0
+reset_arrival:
+    clr.l               (a0)+
+    dbra                d7,reset_arrival
+    move.l              #ARRIVAL_ORDER,ARRIVAL_ORDER_PTR
     rts
 
 MANAGE_PAUSE:
@@ -37,6 +45,10 @@ MANAGE_PAUSE:
 
     cmpi.w               #RACE_WAIT_1,RACE_PROGRESS
     beq.w                MANAGE_1_STATE
+
+    ; check if we are at the end of the race
+    cmpi.w               #RACE_WAIT_END,RACE_PROGRESS
+    beq.w                MANAGE_END_STATE
 
     ; check if anyone is pressing accelerate button
     ; for each car
@@ -57,7 +69,7 @@ moversloop_pause:
     ; if yes transition to banner 3 stage
     beq.s               movers_no_disable_pause
     move.w              #RACE_WAIT_3,RACE_PROGRESS
-    move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
+    move.w              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
 movers_no_disable_pause:
 
     tst.w               MOVE_CARS_ON_PAUSE
@@ -76,6 +88,7 @@ next_car_pause:
 race_no_forced_pause:
     jsr                 RESET_RACE
     move.w              #1,MOVE_CARS_ON_PAUSE
+    move.w              #1,SPACE_PRESSED
     bra.w               Aspetta
 
 MANAGE_3_STATE:
@@ -128,8 +141,20 @@ DISPLAY_GO_BANNER:
     move.w              #0,MOVE_CARS_ON_PAUSE
     bne.s               no_set_timer_banner
     move.w              #0,RACE_PROGRESS
+    move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
     jsr                 RESTORE_TIMERS_BANNER
+    tst.w               SPACE_PRESSED
+    bne.s               no_set_timer_banner
     jsr                 CLEAN_DASHBOARD
 no_set_timer_banner:
     ENDC
+    move.w              #0,SPACE_PRESSED
     bra.w               end_display_go_banner
+
+MANAGE_END_STATE:
+    subi.w              #1,RACE_MANAGER_TIMER
+    bne.s               no_real_end_race
+    move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
+    bra.w               RACE_RESULTS_SCREEN
+no_real_end_race:
+    bra.w               before_moversloop

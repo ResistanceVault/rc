@@ -93,7 +93,7 @@ noupdatebesttime:
     jsr UPDATE_LAP_COUNTER_HUD
     cmp.w #MAX_LAPS,LAP_COUNTER_OFFSET(a2)
     bne.s lap_not_completed
-    move.w #1,RACE_STATUS
+    jsr MANAGE_END_OF_RACE
 lap_not_completed:
 
     ; if next zone is last zone reset to 1 to start another lap
@@ -191,4 +191,38 @@ set_terrain_flags_no_ice:
     move.w           #0,MOVER_IS_ON_ICE(a2)
     move.w           #0,MOVER_IS_ON_GRASS(a2)
     ;move.w #$0000,$dff180
+    rts
+
+; Routine to check and handle the end of the race, this is called every time a car finish a race
+MANAGE_END_OF_RACE:
+    movem.l             d7/a0/a1,-(sp)
+    move.w              #0,RACE_COMPLETED_OFFSET(a0) ; race is  completed for this car
+
+    ; update arrival order
+    move.l              ARRIVAL_ORDER_PTR,a1
+    move.l              a0,(a1)+
+    move.l              a1,ARRIVAL_ORDER_PTR
+
+    ; check if all other cars completed the race
+    ; for each car
+	lea 				MOVERS,a0
+	move.w 				#MAX_CARS-1,d7
+moversendraceloop;
+    ; if the car is not in play skip
+	btst.b 				d7,CARS_IN_PLAY+1
+	beq.w   			racenotcompleted
+
+    tst.w               RACE_COMPLETED_OFFSET(a0)
+    beq.s               racenotcompleted
+    movem.l             (sp)+,d7/a0/a1
+    rts
+racenotcompleted:
+
+	adda.l  			#MOVER_SIZE,a0
+	dbra 				d7,moversendraceloop
+
+    move.w              #1,RACE_PAUSE
+    move.w              #1,RACE_FORCED_PAUSE
+    move.w              #RACE_WAIT_END,RACE_PROGRESS
+    movem.l             (sp)+,d7/a0/a1
     rts

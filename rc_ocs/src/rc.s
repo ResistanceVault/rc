@@ -89,15 +89,16 @@ AUDIO_CHANNEL_ADDRESS_OFFSET		EQU 180
 AUDIO_CHANNEL_DMA_BIT				EQU 184
 
 CAR_ID_OFFSET 						EQU 188
+RACE_COMPLETED_OFFSET				EQU 190
 
-MOVER_SIZE					 		EQU 190
+MOVER_SIZE					 		EQU 192
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 10
+MAX_LAPS							EQU 2
 MAX_CARS							EQU 4
 
 	include "macros.i"
@@ -169,7 +170,9 @@ WaitDisk	EQU	30
 
 PLAY_SOUND: 	dc.w 1
 CARS_IN_PLAY: 	dc.w %0000000000001111
-RACE_STATUS: 	dc.w 0
+;RACE_STATUS: 	dc.w 0
+ARRIVAL_ORDER:	dcb.b MAX_CARS*4,$00
+ARRIVAL_ORDER_PTR: dc.l ARRIVAL_ORDER
 
 START:
 
@@ -351,6 +354,7 @@ nouserpause:
 	bne.w				MANAGE_PAUSE
 	ENDC
 
+before_moversloop:
 	; for each car
 	lea 				MOVERS,a0
 	move.w 				#MAX_CARS-1,d7
@@ -363,6 +367,9 @@ moversloop:
 	; this routine will read joystick movements and store result into d0 specifically for MANAGE_INPUT
 	move.l  			INPUT_ROUTINE_OFFSET(a0),a1
 	jsr					(a1)
+
+	; disable input IF the car has completed the race
+	and.w				RACE_COMPLETED_OFFSET(a0),d0
 
 	; Change the internal state of the mover object according to player input on data register d0
 	bsr.w   			MANAGE_INPUT
@@ -416,8 +423,8 @@ Aspetta:
 	tst.b 				KEY_ESC
 	bne.w 				welcomescreen_start
 
-	tst.w 				RACE_STATUS
-	bne.s 				exit
+	;tst.w 				RACE_STATUS
+	;bne.s 				exit
 
 	;btst				#6,$bfe001	; mouse premuto?
 	;bne.w				mouse
@@ -452,6 +459,7 @@ exit:
 	include "banner_manager.s"
 	include "race_manager.s"
 	include "track_info_manager.s"
+	include "race_results.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1

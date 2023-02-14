@@ -259,4 +259,5 @@ BPLPTR4_WELCOME:
 
   COPSET4BPL
 
-    dc.w	$FFFF,$FFFE	; Fine della copperlist
+    dc.w	$FFFF,$FFFE	;
+; END OF COPPERLIST_WELCOME

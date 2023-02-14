@@ -165,6 +165,12 @@ START_RACE_FLAG: dc.w 0
 EXIT_TO_OS_FLAG: dc.w 0
 
 welcomescreen:
+    ; clean bitplanes
+    jsr CLEAN_BITPLANES
+
+    ; fire must not be pressed to continue
+    btst				#7,$bfe001	; joy fire pressed?
+    beq.s               welcomescreen
 
     ; clear sprites pointers
     move.w #0,Sprite0pointers+2
@@ -345,7 +351,7 @@ noaction:
     move.w              #0,JOY1FIREPRESSED
 joy1firenotpressed:
 
-    waitwelcome:
+waitwelcome:
     cmpi.b  			#$ff,$dff006    ; linea 255?
     beq.s   			waitwelcome
 
@@ -584,4 +590,18 @@ ACTION_RETURN_TO_OS:
     rts
 
 OFF:
+    rts
+
+CLEAN_BITPLANES:
+    move.w #(40*256/4)-1,d7
+    lea SCREEN_0,a0
+    lea SCREEN_1,a1
+    lea SCREEN_00,a2
+    lea SCREEN_11,a3
+cleanitplanesloop:
+    clr.l (a0)+
+    clr.l (a1)+
+    clr.l (a2)+
+    clr.l (a3)+
+    dbra d7,cleanitplanesloop
     rts
