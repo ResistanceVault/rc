@@ -5,7 +5,7 @@ RACE_WAIT_1        EQU 1
 RACE_WAIT_GO       EQU 5
 RACE_WAIT_END       EQU 6
 
-RACE_WAIT_BETWEEN_STAGES EQU 50*2
+RACE_WAIT_BETWEEN_STAGES EQU 50*1
 
 RACE_PAUSE:                dc.w 0 ; set to 1 to pause the game
 RACE_FORCED_PAUSE:      dc.w 0 ; set to 1 to indicate the game has been forcefully paused (waiting for the player to be ready at the start of the race)
@@ -137,18 +137,18 @@ DISPLAY_GO_BANNER:
     lea                 BPLPTR_HUD,a0
     move.l              #START_RACE_BANNER_GO_1,d0
     jsr                 SET_BANNER
-    subi.W              #1,RACE_MANAGER_TIMER
     move.w              #0,MOVE_CARS_ON_PAUSE
+    subi.w              #1,RACE_MANAGER_TIMER
     bne.s               no_set_timer_banner
     move.w              #0,RACE_PROGRESS
     move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
     jsr                 RESTORE_TIMERS_BANNER
     tst.w               SPACE_PRESSED
-    bne.s               no_set_timer_banner
+    ;bne.s               no_set_timer_banner
+    bne.s               clear_space_pressed
     jsr                 CLEAN_DASHBOARD
-no_set_timer_banner:
     ENDC
-    move.w              #0,SPACE_PRESSED
+no_set_timer_banner:
     bra.w               end_display_go_banner
 
 MANAGE_END_STATE:
@@ -158,3 +158,7 @@ MANAGE_END_STATE:
     bra.w               RACE_RESULTS_SCREEN
 no_real_end_race:
     bra.w               before_moversloop
+
+clear_space_pressed:
+    move.w              #0,SPACE_PRESSED
+    bra.s               no_set_timer_banner
