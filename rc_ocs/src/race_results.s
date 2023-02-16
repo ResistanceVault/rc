@@ -6,6 +6,14 @@ RACE_RESULTS_SCREEN:
     move.w #0,Sprite0Welcomepointers+2
     move.w #0,Sprite0Welcomepointers+6
 
+    ; if fire is still pressed wait for release
+    btst				#7,$bfe001	; joy fire pressed?
+    bne.s               firenotpressed_ok
+firenotpressed_loop:
+    btst				#7,$bfe001	; joy fire pressed?
+    beq.s               firenotpressed_loop
+firenotpressed_ok:
+
     ; reset a5
     lea                 $dff000,a5
 

@@ -98,7 +98,7 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 2
+MAX_LAPS							EQU 1
 MAX_CARS							EQU 4
 
 	include "macros.i"

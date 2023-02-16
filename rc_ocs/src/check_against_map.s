@@ -31,6 +31,8 @@ CHECK_MAP:
     beq.s            end_check_track
     addq             #1,d7
 
+    IFD LOL
+
     ; back wheel
     STORECARPROPERTY MOVER_BACK_WHEEL_X_VECTOR_OFFSET,d0
     STORECARPROPERTY MOVER_BACK_WHEEL_Y_VECTOR_OFFSET,d1
@@ -41,9 +43,12 @@ CHECK_MAP:
     tst.w            d0
     beq.s            end_check_track
     addq             #1,d7
+    ENDC
+
 end_check_track:
 
-    cmpi.w           #3,d7
+    ;cmpi.w           #3,d7
+    cmpi.w #2,d7
     bne.w            dontresetcolliding
 
     ; if we are here it means the front wheel, the rear wheel and the back wheel position are on a walkable space
