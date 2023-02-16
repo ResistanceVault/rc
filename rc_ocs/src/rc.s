@@ -1,5 +1,4 @@
-
-; Rally Cross - A top down racing game for OCS/ECS Amigas
+; Racing cars - A top down racing game for OCS/ECS Amigas
 
 	Section	rc,CODE
 
@@ -98,7 +97,7 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 1
+MAX_LAPS							EQU 2
 MAX_CARS							EQU 4
 
 	include "macros.i"
@@ -157,20 +156,16 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/matrix/matrixcommon.s"
 	include "AProcessing/libs/matrix/matrix.s"
 	include "AProcessing/libs/matrix/matrixreg.s"
-	include "AProcessing/libs/matrix/scalereg.s"
 	include "AProcessing/libs/matrix/rotatereg.s"
 	include "AProcessing/libs/matrix/point.s"
 	include "AProcessing/libs/rasterizers/point.s"
-	include "AProcessing/libs/rasterizers/square.s"
 	include "AProcessing/libs/ammxmacros.i"
 	include "AProcessing/libs/vectors/operations.s"
 	include "AProcessing/libs/vectors/trigtables.i"
-	include "AProcessing/libs/precalc/map.s"
 	include "AProcessing/libs/precalc/dec2txt.s"
 
 PLAY_SOUND: 	dc.w 1
 CARS_IN_PLAY: 	dc.w %0000000000001111
-;RACE_STATUS: 	dc.w 0
 ARRIVAL_ORDER:	dcb.b MAX_CARS*4,$00
 ARRIVAL_ORDER_PTR: dc.l ARRIVAL_ORDER
 
@@ -246,7 +241,7 @@ looptrackcolors:
 	move.w				(a0)+,(a1)+
 	dbra				d7,looptrackcolors
 
-	; force back background
+	; force black background
 	;move.w              #0,COPCOLOR0+2
 
 	ELSE
@@ -422,9 +417,6 @@ Aspetta:
 	; go to option screen if esc is pressed
 	tst.b 				KEY_ESC
 	bne.w 				welcomescreen_start
-
-	;tst.w 				RACE_STATUS
-	;bne.s 				exit
 
 	;btst				#6,$bfe001	; mouse premuto?
 	;bne.w				mouse
