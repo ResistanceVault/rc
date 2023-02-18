@@ -169,8 +169,12 @@ CARS_IN_PLAY: 	dc.w %0000000000001111
 ARRIVAL_ORDER:	dcb.b MAX_CARS*4,$00
 ARRIVAL_ORDER_PTR: dc.l ARRIVAL_ORDER
 
+JOY2_FIRE0_BIT    equ    2
+CIAA EQU $bfe001
+CIAB EQU $bff000
+ciapra EQU $0000
+ciaprb equ $0100
 START:
-
 	jsr SETPOT
 
 	move.l				BaseVBR,a0
@@ -444,6 +448,8 @@ exit:
 	include "inputroutines/keyboard_wasd.s"
 	include "inputroutines/keyboard_ijkl.s"
 	include "inputroutines/keyboard_arrows.s"
+	include "inputroutines/joystick2.s"
+	include "inputroutines/joystick3.s"
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"

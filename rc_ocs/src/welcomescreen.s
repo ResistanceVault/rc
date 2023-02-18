@@ -136,6 +136,8 @@ INPUTLIST:
     dc.l KEYBOARD_IJKL
     dc.l KEYBOARD_ARROWS
     dc.l READJOY0
+    dc.l READJOY2
+    dc.l READJOY3
     dc.l OFF
     dc.l 0
 INPUTLIST_END:
@@ -146,6 +148,8 @@ INPUTLIST_DESCRIPTION:
     dc.l TXT3
     dc.l TXT4
     dc.l TXT5
+    dc.l TXT6
+    dc.l TXT7
     dc.l TXT_OFF
     dc.l 0
 
@@ -155,12 +159,25 @@ INPUTLIST_ONOFF:
     dc.l 1
     dc.l 1
     dc.l 1
+    dc.l 1
+    dc.l 1
     dc.l 0
     dc.l 0
 
+;KEYBOARD_OPTION_DOWN EQU KEY_NUMPAD_2
+;KEYBOARD_OPTION_UP EQU KEY_NUMPAD_8
+;KEYBOARD_OPTION_FIRE EQU KEY_NUMPAD_5
+
+KEYBOARD_OPTION_UP EQU KEY_I
+KEYBOARD_OPTION_DOWN EQU KEY_M
+KEYBOARD_OPTION_FIRE EQU KEY_K
+
 JOY1FIREPRESSED: dc.w 0
+KEYBOARDFIREPRESSED: dc.w 0
 JOY1DOWNPRESSED: dc.w 0
+KEYDOWNPRESSED: dc.w 0
 JOY1UPPRESSED: dc.w 0
+KEYUPPRESSED: dc.w 0
 START_RACE_FLAG: dc.w 0
 EXIT_TO_OS_FLAG: dc.w 0
 
@@ -280,11 +297,31 @@ endentries:
 
     jsr                 READJOY1_WELCOME
 
-    ;manage joy down
+    ;manage keyboard down with numpad 2
+    tst.b	            KEYBOARD_OPTION_DOWN
+    beq.s               endtestkeydown
+    tst.w               KEYDOWNPRESSED
+    bne.s               endtestkeydown
+    move.l              ENTRIES_PTR,a0
+    adda.l              #ENTRY_SIZE,a0
+    tst.l               (a0)
+    bne.s               keydownpressed_no_reset
+    lea                 ENTRY_END-ENTRY_SIZE-ENTRY_SIZE,a0
+keydownpressed_no_reset:
+    move.l              a0,ENTRIES_PTR
+    move.w              #1,KEYDOWNPRESSED
+ endtestkeydown:
+    tst.b	            KEYBOARD_OPTION_DOWN
+    bne.s               keydownpressed_no_release
+    move.w              #0,KEYDOWNPRESSED
+keydownpressed_no_release:
+
+testjoydown:
     btst	            #3,d0
     beq.s               welcome_no_down
     tst.w               JOY1DOWNPRESSED
     bne.s               welcome_no_down
+manageoptiondown:
     move.l              ENTRIES_PTR,a0
     adda.l              #ENTRY_SIZE,a0
     tst.l               (a0)
@@ -299,6 +336,25 @@ welcome_no_down:
     bne.s               joy1downpressed_no_release
     move.w              #0,JOY1DOWNPRESSED
 joy1downpressed_no_release:
+
+    ;manage keyboard up with numpad 8
+    tst.b	            KEYBOARD_OPTION_UP
+    beq.s               endtestkeyup
+    tst.w               KEYUPPRESSED
+    bne.s               endtestkeyup
+    move.l              ENTRIES_PTR,a0
+    suba.l              #ENTRY_SIZE,a0
+    cmp.l               #ENTRIES,a0
+    bhi.s               keyuppressed_no_reset
+    lea                 ENTRIES,a0
+keyuppressed_no_reset:
+    move.l              a0,ENTRIES_PTR
+    move.w              #1,KEYUPPRESSED
+endtestkeyup:
+    tst.b	            KEYBOARD_OPTION_UP
+    bne.s               keyuppressed_no_release
+    move.w              #0,KEYUPPRESSED
+keyuppressed_no_release:
 
     ;manage joy up
     btst	            #2,d0
@@ -336,6 +392,21 @@ nounder255start:
     move.b              d1,CURSOR
     add.w               #16,d1
     move.b              d1,CURSOR+2
+
+    ;keyboard fire pressed ?
+    tst.b	            KEYBOARD_OPTION_FIRE
+    beq.s               nokeyboardaction
+    tst.w               KEYBOARDFIREPRESSED
+    bne.s               nokeyboardaction
+    move.l              ENTRIES_PTR,a0
+    move.l              8(a0),a1
+    jsr                 (a1)
+    move.w              #1,KEYBOARDFIREPRESSED
+nokeyboardaction:
+    tst.b	            KEYBOARD_OPTION_FIRE
+    bne.s               keyboardaction_noreset
+    move.w              #0,KEYBOARDFIREPRESSED
+keyboardaction_noreset:
 
     btst				#7,$bfe001	; joy fire pressed?
 	bne.w				noaction
@@ -398,6 +469,14 @@ TXT4:
 
 TXT5:
     dc.b                "JOY PORT 0",255
+    even
+
+TXT6:
+    dc.b                "JOY PORT 2",255
+    even
+
+TXT7:
+    dc.b                "JOY PORT 3",255
     even
 
 TXT_OFF:
