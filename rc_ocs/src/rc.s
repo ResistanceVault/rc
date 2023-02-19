@@ -249,7 +249,7 @@ looptrackcolors:
 	dbra				d7,looptrackcolors
 
 	; force black background
-	;move.w              #0,COPCOLOR0+2
+	move.w              #0,COPCOLOR0+2
 
 	ELSE
 
