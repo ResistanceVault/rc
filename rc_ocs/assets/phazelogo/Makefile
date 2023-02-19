@@ -14,6 +14,8 @@ all:
 	ilbm2raw  ./off.iff ./off.raw -p ../../src/assets/phazelogo/colors.plt
 	$(call strip_odd_bytes,./off.raw,../../src/assets/phazelogo/off.raw)
 
-		rm -f ./on.raw ../../src/assets/phazelogo/colors.plt
-		ilbm2raw  ./on.iff ./on.raw
-		$(call strip_odd_bytes,./on.raw,../../src/assets/phazelogo/on.raw)
+	rm -f ./on.raw ../../src/assets/phazelogo/colors.plt
+	ilbm2raw  ./on.iff ./on.raw
+	$(call strip_odd_bytes,./on.raw,../../src/assets/phazelogo/on.raw)
+
+	ilbm2raw -f phaze.iff ../../src/assets/phazelogo/phazelogo.raw -p ../../src/assets/phazelogo/phazelogo.plt

@@ -175,6 +175,9 @@ CIAB EQU $bff000
 ciapra EQU $0000
 ciaprb equ $0100
 START:
+	IFD INTRO
+	jsr INTROSCREEN
+	ENDC
 	jsr SETPOT
 
 	move.l				BaseVBR,a0
@@ -458,6 +461,7 @@ exit:
 	include "race_manager.s"
 	include "track_info_manager.s"
 	include "race_results.s"
+	include "introscreen.s"
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -596,3 +600,8 @@ START_RACE_BANNER_GO_2:
 	incbin "assets/banners/go.raw.1"
 START_RACE_BANNER_GO_3:
 	incbin "assets/banners/go.raw.2"
+
+PHAZELOGO:
+	incbin "assets/phazelogo/phazelogo.raw"
+PHAZELOGO_PALETTE:
+	incbin "assets/phazelogo/phazelogo.plt"

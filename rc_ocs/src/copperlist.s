@@ -261,3 +261,71 @@ BPLPTR4_WELCOME:
 
     dc.w	$FFFF,$FFFE	;
 ; END OF COPPERLIST_WELCOME
+
+; ************ COPPERLIST WELCOME SCREEN START *******************
+
+
+COPPERLIST_INTRO:
+
+Sprite0Intropointers:
+  dc.w       $120,$0000,$122,$0000
+
+;Sprite1pointers:
+  dc.w       $124,$0000,$126,$0000
+
+;Sprite2pointers:
+  dc.w       $128,$0000,$12a,$0000
+
+;Sprite3pointers:
+  dc.w       $12c,$0000,$12e,$0000
+
+;Sprite4pointers:
+  dc.w       $130,$0000,$132,$0000
+
+;Sprite5pointers:
+  dc.w       $134,$0000,$136,$0000
+
+;Sprite6pointers;
+  dc.w       $138,$0000,$13a,$0000
+
+;Sprite7pointers:
+  dc.w       $13c,$0000,$13e,$0000
+
+	dc.w	$8E,$2c81	; DiwStrt
+	dc.w	$90,$2cc1	; DiwStop
+	dc.w	$92,$0038	; DdfStart
+	dc.w	$94,$00d0	; DdfStop
+	dc.w	$102,0		; BplCon1
+	dc.w	$104,$24	; BplCon2
+	dc.w	$108,0		; Bpl1Mod
+	dc.w	$10a,0		; Bpl2Mod
+
+COPCOLOR_INTRO_0:
+	dc.w	$0180,$000	; color0
+COPCOLOR_INTRO_1:
+	dc.w	$0182,$000	; color1
+COPCOLOR_INTRO_2:
+	dc.w	$0184,$000	; color2
+COPCOLOR_INTRO_3:
+	dc.w	$0186,$000	; color3
+COPCOLOR_INTRO_4:
+	dc.w	$0188,$000	; color4
+COPCOLOR_INTRO_5:
+	dc.w	$018A,$000	; color5
+COPCOLOR_INTRO_6:
+	dc.w	$018C,$000	; color6
+COPCOLOR_INTRO_7:
+	dc.w	$018E,$000	; color7
+
+	; Bitplanes Pointers
+BPLPTR1_INTRO:
+  dc.w       $e0,$0000,$e2,$0000                                       ;first	 bitplane - BPL0PT
+BPLPTR2_INTRO:
+  dc.w       $e4,$0000,$e6,$0000                                       ;second bitplane - BPL1PT
+BPLPTR3_INTRO:
+  dc.w       $e8,$0000,$ea,$0000                                       ;third	 bitplane - BPL2PT
+
+  COPSET3BPL
+
+    dc.w	$FFFF,$FFFE	;
+; END OF COPPERLIST_WELCOME
