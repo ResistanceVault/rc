@@ -40,4 +40,6 @@ CALCULATE_WHEEL_POSITIONS:
     ADD2DVECTORSTATIC   WHEEL_VECTOR_1
     move.l              WHEEL_VECTOR_1,(a0)
 
+    movea.l              a2,a0
+
     rts

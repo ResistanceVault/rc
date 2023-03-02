@@ -64,22 +64,11 @@ manage_input_direction_positive:
     subi.w #360,MOVER_STEER_DIRECTION_OFFSET(a0)
 manage_input_direction_ok:
 
-    ; Update direction vector
-    move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
-	SETCARPROPERTYADDR MOVER_FORWARD_VECTOR_OFFSET,a0
-	CREATE2DVECTORFROMANGLE
-    move.w (a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,(a0)
-	move.w 2(a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,2(a0)
+    jsr     INIT_FORWARD_VECTORS
 
     ;IFD DEBUG
     ;DV #80,#20,(a0),#1
     ;ENDC
-
-    suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
 
     movem.l (sp)+,a0/d7
     rts

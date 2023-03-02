@@ -5,7 +5,7 @@ DISPLAY:
 
     IFND COLOR
     ; save a0 - point routine trashes it
-    move.l a0,a2
+    movea.l a0,a2
 
     ; Front wheel
     STROKE #1
@@ -14,7 +14,7 @@ DISPLAY:
 
     lsr.w #DECIMAL_SHIFT,d0
     asr.w #DECIMAL_SHIFT,d1
-    jsr POINT
+    ;jsr POINT
 
     ; Back wheel
     STROKE #2
@@ -22,7 +22,7 @@ DISPLAY:
     move.w MOVER_BACK_WHEEL_Y_VECTOR_OFFSET(a2),d1
     lsr.w #DECIMAL_SHIFT,d0
     asr.w #DECIMAL_SHIFT,d1
-    jsr POINT
+    ;jsr POINT
 
     ; Car position
     STROKE #3
@@ -31,6 +31,25 @@ DISPLAY:
     lsr.w #DECIMAL_SHIFT,d0
     asr.w #DECIMAL_SHIFT,d1
     jsr POINT
+
+    ; front right corner
+    STROKE #2
+    move.w MOVER_FRONT_RIGHT_CORNER_OFFSET(a2),d0
+    move.w MOVER_FRONT_RIGHT_CORNER_OFFSET+2(a2),d1
+    lsr.w #DECIMAL_SHIFT,d0
+    asr.w #DECIMAL_SHIFT,d1
+    jsr POINT
+
+    ; back right corner
+    STROKE #2
+    move.w MOVER_BACK_RIGHT_CORNER_OFFSET(a2),d0
+    move.w MOVER_BACK_RIGHT_CORNER_OFFSET+2(a2),d1
+    SETCARPROPERTYADDR  MOVER_FRONT_RIGHT_CORNER_OFFSET,a3
+    SETCARPROPERTYADDR  MOVER_BACK_RIGHT_CORNER_OFFSET,a4
+    lsr.w #DECIMAL_SHIFT,d0
+    asr.w #DECIMAL_SHIFT,d1
+    jsr POINT
+
     ENDC
 
     ; restore old a0

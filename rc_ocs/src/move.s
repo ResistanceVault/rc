@@ -45,6 +45,7 @@ nosound2:
     ; Calculate new wheel position according to new position
     move.l              a2,a0
     bsr.w               CALCULATE_WHEEL_POSITIONS
+    jsr                 CALCULATE_CAR_CORNERS
 
     movem.l             (sp)+,d0/d1/d7/a0
     rts

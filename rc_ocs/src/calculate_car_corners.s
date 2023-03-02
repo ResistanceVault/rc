@@ -1,0 +1,27 @@
+CALCULATE_CAR_CORNERS:
+    ; save car address into a2
+    movea.l              a0,a2
+
+    ; tangent forward vector copy in a1
+    SETCARPROPERTYADDR  MOVER_HALF_WIDTH_DISTANCE_OFFSET,a0
+    move.l              MOVER_TANGENT_FORWARD_VECTOR_OFFSET(a2),MOVER_FRONT_RIGHT_CORNER_OFFSET(a2)
+    SETCARPROPERTYADDR  MOVER_FRONT_RIGHT_CORNER_OFFSET,a1
+    MUL2DVECTOR1X2
+
+    ; add it to position
+    SETCARPROPERTYADDR  MOVER_POSITION_OFFSET,a0
+    ADD2DVECTOR
+    move.l              MOVER_FRONT_RIGHT_CORNER_OFFSET(a2),MOVER_BACK_RIGHT_CORNER_OFFSET(a2)
+
+    ; add front wheel vector
+    lea                 WHEEL_VECTOR_2(PC),a0
+    SETCARPROPERTYADDR  MOVER_FRONT_RIGHT_CORNER_OFFSET,a1
+    ADD2DVECTOR
+
+    ; set back right corner
+    SETCARPROPERTYADDR MOVER_BACK_RIGHT_CORNER_OFFSET,a0
+    lea                 WHEEL_VECTOR_2(PC),a1
+    SUB2DVECTORSTATIC   MOVER_BACK_RIGHT_CORNER_OFFSET(a2)
+
+    movea.l              a2,a0
+    rts

@@ -7,6 +7,7 @@ CAR_BRAKE			EQU %100000000
 CAR1_WHEEL_BASE_LENGTH EQU 6
 CAR_BOUNCE_WALL_FORCE EQU %0000101000000000
 CAR_STEERING_ANGLE	EQU 2
+CAR1_WIDTH			EQU 5
 
 TRACK_START_PIXEL_DATA:
 	dc.w %10110000
@@ -19,18 +20,9 @@ CAR1_INIT:
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WIDTH/2,MOVER_HALF_WIDTH_DISTANCE_OFFSET(a0)
 
-	; calculate forward vector
-	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
-	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
-	CREATE2DVECTORFROMANGLE					 	     	; forward vector, normalized vector form of heading (forward_vector) (private)
-	move.w (a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,(a0)
-	move.w 2(a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,2(a0)
-	suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+	jsr     INIT_FORWARD_VECTORS
 
 	move.w  #CAR1_ENGINE_POWER,MOVER_ENGINE_POWER_OFFSET(a0) 	  	 	; engine power , high number means the car will reach max speed faster (engine_power)
 	move.w 	#CAR1_MAX_SPEED,MOVER_MAX_SPEED_OFFSET(a0) 	  		 	; max speed of the car, limit maximum amount of movement pixel for each frame (max_speed)
@@ -88,6 +80,7 @@ CAR1_INIT:
 	ENDC
 
 	jsr		CALCULATE_WHEEL_POSITIONS
+	jsr		CALCULATE_CAR_CORNERS
 
 	rts
 
@@ -99,21 +92,13 @@ CAR2_INIT:
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WIDTH/2,MOVER_HALF_WIDTH_DISTANCE_OFFSET(a0)
+
 	move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
 
 	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
-	; calculate forward vector
-	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
-	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
-	CREATE2DVECTORFROMANGLE					 	     	; forward vector, normalized vector form of heading (forward_vector) (private)
-	move.w (a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,(a0)
-	move.w 2(a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,2(a0)
-	suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+	jsr     INIT_FORWARD_VECTORS
 
 	move.w  #CAR1_ENGINE_POWER,MOVER_ENGINE_POWER_OFFSET(a0) 	  	 	; engine power , high number means the car will reach max speed faster (engine_power)
 	move.w 	#CAR1_MAX_SPEED,MOVER_MAX_SPEED_OFFSET(a0) 	  		 	; max speed of the car, limit maximum amount of movement pixel for each frame (max_speed)
@@ -169,6 +154,7 @@ CAR2_INIT:
 	ENDC
 
 	jsr		CALCULATE_WHEEL_POSITIONS
+	jsr		CALCULATE_CAR_CORNERS
 
 	rts
 
@@ -179,19 +165,10 @@ CAR3_INIT:
 	move.w 	#2,CAR_ID_OFFSET(a0)										; Car unique identifier
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WIDTH/2,MOVER_HALF_WIDTH_DISTANCE_OFFSET(a0)
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
-	
-	; calculate forward vector
-	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
-	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
-	CREATE2DVECTORFROMANGLE					 	     	; forward vector, normalized vector form of heading (forward_vector) (private)
-	move.w (a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,(a0)
-	move.w 2(a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,2(a0)
-	suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+
+	jsr     INIT_FORWARD_VECTORS
 
 	move.w  #CAR1_ENGINE_POWER,MOVER_ENGINE_POWER_OFFSET(a0) 	  	 	; engine power , high number means the car will reach max speed faster (engine_power)
 	move.w 	#CAR1_MAX_SPEED,MOVER_MAX_SPEED_OFFSET(a0) 	  		 	; max speed of the car, limit maximum amount of movement pixel for each frame (max_speed)
@@ -247,6 +224,7 @@ CAR3_INIT:
 	ENDC
 
 	jsr		CALCULATE_WHEEL_POSITIONS
+	jsr		CALCULATE_CAR_CORNERS
 
 	rts
 
@@ -257,19 +235,10 @@ CAR4_INIT:
 	move.w 	#3,CAR_ID_OFFSET(a0)										; Car unique identifier
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WIDTH/2,MOVER_HALF_WIDTH_DISTANCE_OFFSET(a0)
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
-	
-	; calculate forward vector
-	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
-	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
-	CREATE2DVECTORFROMANGLE					 	     	; forward vector, normalized vector form of heading (forward_vector) (private)
-	move.w (a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,(a0)
-	move.w 2(a0),d7
-	asr.w #11-DECIMAL_SHIFT,d7
-	move.w d7,2(a0)
-	suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+
+	jsr     INIT_FORWARD_VECTORS
 
 	move.w  #CAR1_ENGINE_POWER,MOVER_ENGINE_POWER_OFFSET(a0) 	  	 	; engine power , high number means the car will reach max speed faster (engine_power)
 	move.w 	#CAR1_MAX_SPEED,MOVER_MAX_SPEED_OFFSET(a0) 	  		 	; max speed of the car, limit maximum amount of movement pixel for each frame (max_speed)
@@ -325,5 +294,39 @@ CAR4_INIT:
 	ENDC
 
 	jsr		CALCULATE_WHEEL_POSITIONS
+	jsr		CALCULATE_CAR_CORNERS
 
+	rts
+
+INIT_FORWARD_VECTORS:
+; Update direction vector
+	movea.l	a0,a2
+    move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
+	SETCARPROPERTYADDR MOVER_FORWARD_VECTOR_OFFSET,a0
+	CREATE2DVECTORFROMANGLE
+    move.w (a0),d7
+	asr.w #11-DECIMAL_SHIFT,d7
+	move.w d7,(a0)
+	move.w 2(a0),d7
+	asr.w #11-DECIMAL_SHIFT,d7
+	move.w d7,2(a0)
+	;movea.l	a2,a0
+
+    ; calculate tangent forward vector
+	move.w  MOVER_STEER_DIRECTION_OFFSET(a2),d7
+	addi.w  #90,d7
+    cmpi.w   #360,d7
+    blt.s   .nooverflow
+    subi.w  #360,d7
+.nooverflow
+	;adda.w  #MOVER_TANGENT_FORWARD_VECTOR_OFFSET,a0
+	SETCARPROPERTYADDR MOVER_TANGENT_FORWARD_VECTOR_OFFSET,a0
+	CREATE2DVECTORFROMANGLE					 	     	; tangent forward vector, normalized vector form (private)
+	move.w (a0),d7
+	asr.w #11-DECIMAL_SHIFT,d7
+	move.w d7,(a0)
+	move.w 2(a0),d7
+	asr.w #11-DECIMAL_SHIFT,d7
+	move.w d7,2(a0)
+	movea.l	a2,a0
 	rts
