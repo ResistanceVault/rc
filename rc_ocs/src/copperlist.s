@@ -1,25 +1,5 @@
     include "AProcessing/libs/copperlistmacros.i"
 
-COPSET4BPL MACRO
-	dc.w	$100
-	dc.w	%0100001000000000
-ENDM
-
-COPSET5BPL MACRO
-  dc.w       $100
-  dc.w       %0101001000000000
-  ENDM
-
-COPSET2BPL MACRO
-	dc.w	$100
-	dc.w	%0010001000000000
-ENDM
-
-COPSET3BPL MACRO
-	dc.w	$100
-	dc.w	%0011001000000000
-ENDM
-
     SECTION	GRAPHIC,DATA_C
 
 COPPERLIST:

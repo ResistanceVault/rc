@@ -90,7 +90,20 @@ AUDIO_CHANNEL_DMA_BIT				EQU 184
 CAR_ID_OFFSET 						EQU 188
 RACE_COMPLETED_OFFSET				EQU 190
 
-MOVER_SIZE					 		EQU 192
+MOVER_TANGENT_FORWARD_VECTOR_OFFSET EQU 192
+MOVER_FRONT_RIGHT_CORNER_OFFSET 	EQU 196
+MOVER_BACK_RIGHT_CORNER_OFFSET 		EQU 200
+MOVER_FRONT_LEFT_CORNER_OFFSET 		EQU 204
+MOVER_BACK_LEFT_CORNER_OFFSET 		EQU 208
+
+MOVER_HALF_WIDTH_DISTANCE_OFFSET	EQU 212
+
+MOVER_RIGHT_SIDE_OFFSET				EQU 214
+MOVER_LEFT_SIDE_OFFSET				EQU 218
+MOVER_WHEEL_BASE_DIV_2_OFFSET		EQU 222
+MOVER_WIDTH_DIV_2_OFFSET			EQU 224
+
+MOVER_SIZE					 		EQU 226
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -163,6 +176,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/vectors/operations.s"
 	include "AProcessing/libs/vectors/trigtables.i"
 	include "AProcessing/libs/precalc/dec2txt.s"
+	include "AProcessing/libs/math/operations.s"
 
 PLAY_SOUND: 	dc.w 1
 CARS_IN_PLAY: 	dc.w %0000000000001111
@@ -396,6 +410,23 @@ moversloop:
     ; check collisions
     ;bsr.w 	CHECK_COLLISIONS
 
+	; check collisions with other cars
+	lea					MOVERS,a1
+	move.w 				#MAX_CARS-1,d6
+check_collisions_with_other_cars_loop:
+	; skip check collisions with itself
+	cmp.l a0,a1
+	beq.s skip_check_collisions_with_other_cars
+
+	; skip check collisions with cars not in play
+	btst.b 				d6,CARS_IN_PLAY+1
+	beq.s   			skip_check_collisions_with_other_cars
+
+	bsr.w 				CHECK_COLLISIONS_WITH_OTHER_CAR
+skip_check_collisions_with_other_cars:
+	adda.l  			#MOVER_SIZE,a1
+	dbra 				d6,check_collisions_with_other_cars_loop
+
 	; show the mover object on the screen
 	bsr.w				DISPLAY
 
@@ -442,6 +473,7 @@ exit:
 	include "friction.s"
 	include "manage_input.s"
 	include "move.s"
+	include "check_collisions_with_other_cars.s"
 	include "check_collisions.s"
 	include "inputroutines/mouseinput.s"
 	include "inputroutines/joystickinput.s"

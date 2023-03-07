@@ -7,6 +7,7 @@ CAR_BRAKE			EQU %100000000
 CAR1_WHEEL_BASE_LENGTH EQU 6
 CAR_BOUNCE_WALL_FORCE EQU %0000101000000000
 CAR_STEERING_ANGLE	EQU 2
+CAR_HALF_WIDTH		EQU 6
 
 TRACK_START_PIXEL_DATA:
 	dc.w %10110000
@@ -19,6 +20,8 @@ CAR1_INIT:
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WHEEL_BASE_LENGTH/2,MOVER_WHEEL_BASE_DIV_2_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base) divided by 2
+	move.w  #CAR_HALF_WIDTH,MOVER_WIDTH_DIV_2_OFFSET(a0)
 
 	; calculate forward vector
 	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
@@ -99,6 +102,8 @@ CAR2_INIT:
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WHEEL_BASE_LENGTH/2,MOVER_WHEEL_BASE_DIV_2_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base) divided by 2
+	move.w  #CAR_HALF_WIDTH,MOVER_WIDTH_DIV_2_OFFSET(a0)
 	move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
 
 	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
@@ -179,8 +184,10 @@ CAR3_INIT:
 	move.w 	#2,CAR_ID_OFFSET(a0)										; Car unique identifier
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WHEEL_BASE_LENGTH/2,MOVER_WHEEL_BASE_DIV_2_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base) divided by 2
+	move.w  #CAR_HALF_WIDTH,MOVER_WIDTH_DIV_2_OFFSET(a0)
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
-	
+
 	; calculate forward vector
 	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
 	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
@@ -257,8 +264,11 @@ CAR4_INIT:
 	move.w 	#3,CAR_ID_OFFSET(a0)										; Car unique identifier
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WHEEL_BASE_LENGTH/2,MOVER_WHEEL_BASE_DIV_2_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base) divided by 2
+	move.w  #CAR_HALF_WIDTH,MOVER_WIDTH_DIV_2_OFFSET(a0)
+
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
-	
+
 	; calculate forward vector
 	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
 	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
