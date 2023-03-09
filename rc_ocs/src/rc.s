@@ -415,8 +415,8 @@ moversloop:
 	move.w 				#MAX_CARS-1,d6
 check_collisions_with_other_cars_loop:
 	; skip check collisions with itself
-	cmp.l a0,a1
-	beq.s skip_check_collisions_with_other_cars
+	cmp.l 				a0,a1
+	beq.s 				skip_check_collisions_with_other_cars
 
 	; skip check collisions with cars not in play
 	btst.b 				d6,CARS_IN_PLAY+1
