@@ -12,3 +12,9 @@ all:
 	cp ./images/rc045_320X240X32.raw.aa ./images/rc045_320X240X32.raw.ab ./images/rc045_320X240X32.raw.ac ./images/rc045_320X240X32.raw.ad ./images/rc045_320X240X32.raw.ae ./images/rc045_320X240X32.pal ../../../src/assets/tracks/track1/
 
 	cp ./metadata/rc045_320X240X8.data ../../../src/assets/tracks/track1/rc045_320X240X8.data
+	cp ./images/rc045_320X240X32.raw ../../../buildadf/tracks/track1.trk
+	cat ./images/rc045_320X240X32.pal >> ../../../buildadf/tracks/track1.trk
+	cat ./metadata/rc045_320X240X8.data >> ../../../buildadf/tracks/track1.trk
+
+	cp ../../../buildadf/tracks/track1.trk ../../../bin/tracks/track1.trk
+	chmod -R 777  ../../../bin/tracks

@@ -494,6 +494,9 @@ exit:
 	include "track_info_manager.s"
 	include "race_results.s"
 	include "introscreen.s"
+	IFD COLOR
+	include "load_track.s"
+	ENDC
 
 MOVERS:
 	MOVER_INIT_MEM 1
@@ -546,23 +549,28 @@ CURSOR:
 
 	IFD COLOR
 TRACK_DATA_1:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.aa"
+	;incbin  "assets/tracks/track1/rc045_320X240X32.raw.aa"
+	dcb.b   40*240,0
 DASHBOARD_DATA_1:
 	dcb.b   40*16,0
 TRACK_DATA_2:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ab"
+	;incbin  "assets/tracks/track1/rc045_320X240X32.raw.ab"
+	dcb.b   40*240,0
 DASHBOARD_DATA_2:
 	dcb.b   40*16,0
 TRACK_DATA_3:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ac"
+	;incbin  "assets/tracks/track1/rc045_320X240X32.raw.ac"
+	dcb.b   40*240,0
 DASHBOARD_DATA_3:
 	dcb.b   40*16,0
 TRACK_DATA_4:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ad"
+	;incbin  "assets/tracks/track1/rc045_320X240X32.raw.ad"
+	dcb.b   40*240,0
 DASHBOARD_DATA_4:
 	dcb.b   40*16,0
 TRACK_DATA_5:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ae"
+	;incbin  "assets/tracks/track1/rc045_320X240X32.raw.ae"
+	dcb.b   40*240,0
 DASHBOARD_DATA_5:
 	dcb.b   40*16,0
 	ELSE
@@ -596,12 +604,14 @@ DASHBOARD_DATA_3:
 	ENDC
 TRACK_DATA_COLORS:
 	IFD COLOR
-	incbin "assets/tracks/track1/rc045_320X240X32.pal"
+	;incbin "assets/tracks/track1/rc045_320X240X32.pal"
+	dcb.b 64,0
 	ELSE
 	incbin "assets/tracks/track1/rc045_320X240X8.pal"
 	ENDC
 TRACK_METADATA:
-	incbin "assets/tracks/track1/rc045_320X240X8.data"
+	;incbin "assets/tracks/track1/rc045_320X240X8.data"
+	dcb.b 76800,0
 START_RACE_BANNER_ACC_1:
 	incbin "assets/banners/acctostart.raw.0"
 START_RACE_BANNER_ACC_2:

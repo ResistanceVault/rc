@@ -11,7 +11,7 @@ all:
 	chmod 777 ./bin/rc32
 
 	vasmm68k_mot -devpac -nocase -Fhunk -DINTRO -DCOLOR -DSOUND -DQ4_12_TABLE_LOOKUP -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  -o ./src/rc32phaze.o ./src/rc.s
-	vlink -bamigahunk -o ./bin/rc32phaze -s -DCOLOR -DSOUND -DQ4_12_TABLE_LOOKUP -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  ./src/rc32phaze.o
+	vlink -o ./bin/rc32phaze -s -DCOLOR -DSOUND -DQ4_12_TABLE_LOOKUP -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  ./src/rc32phaze.o
 	chmod 777 ./bin/rc32phaze
 
 	vasmm68k_mot -devpac -nocase -Fhunk -DQ4_12_TABLE_LOOKUP -DDEBUG -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  -o ./src/rc_debug.o ./src/rc.s
@@ -21,4 +21,5 @@ all:
 adf:
 	make all
 	$(eval $@_TMP := $(shell date +'%F_%T'))
-	exe2adf-linux64bit -i bin/rc32 -l rc_$($@_TMP) -a ./adf/rc_$($@_TMP).adf
+	cp bin/rc32 buildadf
+	exe2adf-linux64bit -d buildadf  -l rc_$($@_TMP) -a ./adf/rc_$($@_TMP).adf

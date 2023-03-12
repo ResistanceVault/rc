@@ -103,14 +103,22 @@ ENTRY_5:
     dc.w 0
 
 ENTRY_6:
-    dc.l TXTSTART
+    dc.l TXT_TRACK
     dc.w 1
     dc.w 11
-    dc.l ACTION_START_RACE
+    dc.l ACTION_SELECT_TRACK
     dc.w 0
     dc.w 0
 
 ENTRY_7:
+    dc.l TXTSTART
+    dc.w 1
+    dc.w 13
+    dc.l ACTION_START_RACE
+    dc.w 0
+    dc.w 0
+
+ENTRY_8:
     dc.l TXT_RETURN_TO_OS
     dc.w 1
     dc.w 15
@@ -118,7 +126,7 @@ ENTRY_7:
     dc.w 0
     dc.w 0
 
-ENTRY_8:
+ENTRY_9:
     dc.l 0
     dc.w 0
     dc.w 0
@@ -499,6 +507,10 @@ TXT_RETURN_TO_OS:
     dc.b                "EXIT TO OS",255
     even
 
+TXT_TRACK:
+    dc.b                "TRACK SELECTOR",255
+    even
+
 printstring:
     moveq               #0,d6
     move.b              (a1)+,d6
@@ -669,6 +681,12 @@ ACTION_RETURN_TO_OS:
     rts
 
 OFF:
+    rts
+
+ACTION_SELECT_TRACK:
+    IFD COLOR
+    jsr LOAD_TRACK
+    ENDC
     rts
 
 CLEAN_BITPLANES:
