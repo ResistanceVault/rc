@@ -158,6 +158,7 @@ SWAP_BPL MACRO
 DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 WaitDisk	EQU	30
 
+	include "AProcessing/libs/precalc/half_word.s"
 	include "AProcessing/libs/vectors/sqrt_q4_12_lookup_table.i"
 	include "AProcessing/libs/rasterizers/globaloptions.s"
 	include "AProcessing/libs/trigtables.i"
@@ -168,8 +169,6 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/rasterizers/processingclearfunctions.s"
 	include "AProcessing/libs/matrix/matrixcommon.s"
 	include "AProcessing/libs/matrix/matrix.s"
-	include "AProcessing/libs/matrix/matrixreg.s"
-	include "AProcessing/libs/matrix/rotatereg.s"
 	include "AProcessing/libs/matrix/point.s"
 	include "AProcessing/libs/rasterizers/point.s"
 	include "AProcessing/libs/ammxmacros.i"
@@ -192,6 +191,13 @@ START:
 	IFD INTRO
 	jsr INTROSCREEN
 	ENDC
+	; clear introscreen
+	move.w #40*256*3/4-1,d7
+	lea PHAZELOGO,a0
+clearintroscreen:
+	clr.l (a0)+
+	dbra d7,clearintroscreen
+
 	jsr SETPOT
 
 	move.l				BaseVBR,a0
@@ -645,5 +651,9 @@ START_RACE_BANNER_GO_3:
 
 PHAZELOGO:
 	incbin "assets/phazelogo/phazelogo.raw"
+PHAZELOGO_4:
+	dcb.b 10240,0
+PHAZELOGO_5:
+	dcb.b 10240,0
 PHAZELOGO_PALETTE:
 	incbin "assets/phazelogo/phazelogo.plt"
