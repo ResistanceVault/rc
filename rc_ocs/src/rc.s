@@ -502,6 +502,7 @@ exit:
 	include "introscreen.s"
 	IFD COLOR
 	include "load_track.s"
+	include "trackselectscreen.s"
 	ENDC
 
 MOVERS:
