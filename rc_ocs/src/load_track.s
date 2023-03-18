@@ -1,4 +1,7 @@
 ; How a .trk file works
+; - FILE must be inside track subfolder
+; - FILE name must be uppercase
+; - FILE MUST HAVE .TRK extension
 ; byte from to 9599         -> raw planar image first bitplane (320X240)
 ; byte from 9600 to 19199   -> raw planar image second bitplane (320X240)
 ; byte from 19200 to 28799  -> raw planar image third bitplane (320X240)

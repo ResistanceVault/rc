@@ -139,6 +139,14 @@ SCREEN_TRACK_SELECT:
     addq                #4,a1
     dbra d7,.colortrackthumb
 
+    ; print filename
+    move.l              fib,a3
+    lea     fib_EntryType(a3),a1
+    lea buffer+7,a1
+    moveq               #1,d0
+    moveq               #1,d1
+    bsr.w               printstringtrack
+
 trackselectscreen_start:
 
 fireloadtrack:
@@ -153,4 +161,58 @@ fireloadtrack_end:
 	bne.w 				trackselectscreen_end
     bra.s               trackselectscreen_start
 trackselectscreen_end:
+    rts
+
+printstringtrack:
+    moveq               #0,d6
+    move.b              (a1)+,d6
+    cmp.w               #46,d6
+    beq.s               printstringtrackend
+    sub.w               #32,d6
+    muls.w              #2*16*3,d6
+
+    lea                 BIGFONTS,a0
+    adda.l              d6,a0
+    bsr.s               printbigfonttrack
+    addq                #1,d0
+    bra.s               printstringtrack
+
+printstringtrackend:
+    rts
+
+printbigfonttrack:
+    movem.l             a0/a1/a2/a3/d0/d1,-(sp)
+    lea                 PHAZELOGO+256*40*0,a1
+    lea                 PHAZELOGO+256*40*1,a2
+    lea                 PHAZELOGO+256*40*2,a3
+
+    lsl.w               #1,d0
+    adda.w              d0,a1
+    adda.w              d0,a2
+    adda.w              d0,a3
+
+    mulu.w              #40*16,d1
+    adda.w              d1,a1
+    adda.w              d1,a2
+    adda.w              d1,a3
+
+
+    moveq               #16-1,d7
+bigfontcycletrack:
+    move.b              (a0),(a1)
+    move.b              1(a0),1(a1)
+
+    move.b              2*16*1(a0),(a2)
+    move.b              1+2*16*1(a0),1(a2)
+
+    move.b              2*16*2(a0),(a3)
+    move.b              1+2*16*2(a0),1(a3)
+
+    addq                #2,a0
+    adda.l              #40,a1
+    adda.l              #40,a2
+    adda.l              #40,a3
+
+    dbra                d7,bigfontcycletrack
+    movem.l             (sp)+,a0/a1/a2/a3/d0/d1
     rts
