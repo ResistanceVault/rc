@@ -1,5 +1,8 @@
 LOAD_TRACK_THUMBNAIL_HEIGHT EQU 64
 
+TRACK_NUMBER:           dc.w 0
+TRACK_INCREMENT:        dc.w 1
+
 SCREEN_TRACK_SELECT:
 
    ; Init tiles bitplanes
@@ -26,7 +29,10 @@ SCREEN_TRACK_SELECT:
     move.l				#COPPERLIST_TRACK,$dff080	; Copperlist point
 	move.w				d0,$dff088			; Copperlist start
 
-    jsr LOAD_TRACK
+load_next_track:
+    move.w              TRACK_INCREMENT,d0
+    add.w               d0,TRACK_NUMBER     ; next track please!
+    jsr                 LOAD_TRACK
 
     ; clean banner on top (LOAD_TRACK_THUMBNAIL_HEIGHT lines)
     move.w #(LOAD_TRACK_THUMBNAIL_HEIGHT*40/4)-1,d7
@@ -148,6 +154,21 @@ SCREEN_TRACK_SELECT:
     bsr.w               printstringtrack
 
 trackselectscreen_start:
+
+    ;joy1_right_pressed ?
+    jsr                 READJOY1
+    btst                #0,d0
+    beq.s               trackselectscreen_check_joy1_left
+    move.w              #1,TRACK_INCREMENT
+    bne.w               load_next_track
+
+;joy1_right_pressed ?
+trackselectscreen_check_joy1_left:
+    jsr                 READJOY1
+    btst                #1,d0
+    beq.s               fireloadtrack
+    move.w              #-1,TRACK_INCREMENT
+    bne.w               load_next_track
 
 fireloadtrack:
     btst				#7,$bfe001	; joy 1 fire pressed?

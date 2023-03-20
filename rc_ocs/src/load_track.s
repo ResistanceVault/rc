@@ -1,6 +1,6 @@
 ; How a .trk file works
 ; - FILE must be inside track subfolder
-; - FILE name must be uppercase
+; - FILE name must be uppercase and letter + space character only
 ; - FILE MUST HAVE .TRK extension
 ; byte from to 9599         -> raw planar image first bitplane (320X240)
 ; byte from 9600 to 19199   -> raw planar image second bitplane (320X240)
@@ -57,6 +57,9 @@ buffer:
     dcb.b 108+1,0
     even
 
+TRACK_COUNTER:
+    dc.w    0
+
 LOAD_TRACK:
     move.l  execBase,a6
 
@@ -92,8 +95,13 @@ LOAD_TRACK:
     tst.w   d0
     beq     .exit
 
+    ; reset track counter to 1
+    move.w  #0,TRACK_COUNTER
+
     ; for each element inside the tracks directory
 .loop:
+
+    
 
     move.l  fib,a3
 
@@ -102,6 +110,11 @@ LOAD_TRACK:
 
     cmpi.l #$2,(a4)
     beq.w .next
+
+    addi.w #1,TRACK_COUNTER
+    move.w TRACK_COUNTER,d0
+    cmp.w  TRACK_NUMBER,d0
+    bne.w  .next
 
     ; copy full path
     lea buffer+7,a0
@@ -116,19 +129,20 @@ LOAD_TRACK:
 
 
     ;Alessio start test
-    moveq #3,d7
-.ciao
-    move.l  #MODE_OLDFILE,d2
-    move.l	#buffer,d1
-    jsr     _LVOOpen(a6)
-    tst.l	d0
-    move.l	d0,fd
+    ;moveq #3,d7
+;.ciao
+ ;   move.l  #MODE_OLDFILE,d2
+  ;  move.l	#buffer,d1
+   ; jsr     _LVOOpen(a6)
+    ;tst.l	d0
+    ;move.l	d0,fd
 
     ; close the file
-	move.l	fd,d1				; result = LVOClose(handle[d1])      
-    jsr     _LVOClose(a6)
+	;move.l	fd,d1				; result = LVOClose(handle[d1])      
+    ;jsr     _LVOClose(a6)
 
-    dbra d7,.ciao
+    ;dbra d7,.ciao
+    DEBUG 4444
     move.l  #MODE_OLDFILE,d2
     move.l	#buffer,d1
     jsr     _LVOOpen(a6)
@@ -185,6 +199,8 @@ LOAD_TRACK:
     ; close the file
 	move.l	fd,d1				; result = LVOClose(handle[d1])      
     jsr     _LVOClose(a6)
+
+    bra.s .exit
 
     
 
