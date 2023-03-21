@@ -52,7 +52,7 @@ pathString
     dc.b    "tracks/",0
     even
 
-buffer: 
+TRACK_FILENAME: 
     dc.b "tracks/"
     dcb.b 108+1,0
     even
@@ -117,7 +117,7 @@ LOAD_TRACK:
     bne.w  .next
 
     ; copy full path
-    lea buffer+7,a0
+    lea TRACK_FILENAME+7,a0
     move.l a3,a4
 .startcopy:
     move.b (a4)+,(a0)+
@@ -127,24 +127,8 @@ LOAD_TRACK:
     bra.s .startcopy
 .endcopy:
 
-
-    ;Alessio start test
-    ;moveq #3,d7
-;.ciao
- ;   move.l  #MODE_OLDFILE,d2
-  ;  move.l	#buffer,d1
-   ; jsr     _LVOOpen(a6)
-    ;tst.l	d0
-    ;move.l	d0,fd
-
-    ; close the file
-	;move.l	fd,d1				; result = LVOClose(handle[d1])      
-    ;jsr     _LVOClose(a6)
-
-    ;dbra d7,.ciao
-    DEBUG 4444
     move.l  #MODE_OLDFILE,d2
-    move.l	#buffer,d1
+    move.l	#TRACK_FILENAME,d1
     jsr     _LVOOpen(a6)
     tst.l	d0
     move.l	d0,fd
@@ -210,7 +194,7 @@ LOAD_TRACK:
     move.l  fib,d2
     jsr     _LVOExNext(a6)
     tst.w   d0
-    beq     .exit
+    beq     .endoflist
 
     ;move.l  a3,(a2)
     ;move.l  #formatString,d1
@@ -243,6 +227,10 @@ LOAD_TRACK:
     move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
 
     rts
+
+.endoflist
+    move.w TRACK_COUNTER,TRACK_NUMBER
+    bra.s .exit
 
 ;
 ; variables

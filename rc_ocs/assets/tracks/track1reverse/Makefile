@@ -19,3 +19,6 @@ all:
 
 	cp ../../../buildadf/tracks/$(TRACKNAME).TRK ../../../bin/tracks/$(TRACKNAME).TRK
 	chmod 777 ../../../bin/tracks/$(TRACKNAME).TRK
+
+	printf '\x0A\x14' | dd of=output.bin bs=1 seek=0 conv=notrunc
+

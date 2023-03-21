@@ -348,6 +348,38 @@ Sprite0Trackpointers:
   dc.w		 $108,0		; Bpl1Mod
   dc.w		 $10a,0		; Bpl2Mod
 
+	; Bitplanes Pointers
+BPLPTR1_TRACK:
+  dc.w       $e0,$0000,$e2,$0000                                       ;first	 bitplane - BPL0PT
+BPLPTR2_TRACK:
+  dc.w       $e4,$0000,$e6,$0000                                       ;second bitplane - BPL1PT
+BPLPTR3_TRACK:
+  dc.w       $e8,$0000,$ea,$0000                                       ;third	 bitplane - BPL2PT
+BPLPTR4_TRACK:
+  dc.w       $ec,$0000,$ee,$0000                                       ;fourth bitplane - BPL3PT
+BPLPTR5_TRACK:
+  dc.w       $f0,$0000,$f2,$0000
+  COPSET5BPL
+
+COPCOLOR_TRACK_BANNER_0:
+	dc.w	$0180,$000	; color0
+COPCOLOR_TRACK_BANNER_1:
+	dc.w	$0182,$FFF	; color1
+COPCOLOR_TRACK_BANNER_2:
+	dc.w	$0184,$FFF	; color2
+COPCOLOR_TRACK_BANNER_3:
+	dc.w	$0186,$FFF	; color3
+COPCOLOR_TRACK_BANNER_4:
+	dc.w	$0188,$FFF	; color4
+COPCOLOR_TRACK_BANNER_5:
+	dc.w	$018A,$FFF	; color5
+COPCOLOR_TRACK_BANNER_6:
+	dc.w	$018C,$FFF	; color6
+COPCOLOR_TRACK_BANNER_7:
+	dc.w	$018E,$FFF	; color7
+
+	dc.w    $6B01,$FFFE;  wait last line of banner top
+
 COPCOLOR_TRACK_0:
 	dc.w	$0180,$000	; color0
 COPCOLOR_TRACK_1:
@@ -413,18 +445,23 @@ COPCOLOR_TRACK_30:
 COPCOLOR_TRACK_31:
 	dc.w	$1be,$000	; color31
 
-	; Bitplanes Pointers
-BPLPTR1_TRACK:
-  dc.w       $e0,$0000,$e2,$0000                                       ;first	 bitplane - BPL0PT
-BPLPTR2_TRACK:
-  dc.w       $e4,$0000,$e6,$0000                                       ;second bitplane - BPL1PT
-BPLPTR3_TRACK:
-  dc.w       $e8,$0000,$ea,$0000                                       ;third	 bitplane - BPL2PT
-BPLPTR4_TRACK:
-  dc.w       $ec,$0000,$ee,$0000                                       ;fourth bitplane - BPL3PT
-BPLPTR5_TRACK:
-  dc.w       $f0,$0000,$f2,$0000
-  COPSET5BPL
+	dc.w    $E401,$FFFE;  wait last line of thumbnail
+COPCOLOR_TRACK_BANNER2_0:
+	dc.w	$0180,$000	; color0
+COPCOLOR_TRACK_BANNER2_1:
+	dc.w	$0182,$FFF	; color1
+COPCOLOR_TRACK_BANNER2_2:
+	dc.w	$0184,$FFF	; color2
+COPCOLOR_TRACK_BANNER2_3:
+	dc.w	$0186,$FFF	; color3
+COPCOLOR_TRACK_BANNER2_4:
+	dc.w	$0188,$FFF	; color4
+COPCOLOR_TRACK_BANNER2_5:
+	dc.w	$018A,$FFF	; color5
+COPCOLOR_TRACK_BANNER2_6:
+	dc.w	$018C,$FFF	; color6
+COPCOLOR_TRACK_BANNER2_7:
+	dc.w	$018E,$FFF	; color7
 
   dc.w	$FFFF,$FFFE	;
 ; END OF COPPERLIST_TRACK_SELECTION

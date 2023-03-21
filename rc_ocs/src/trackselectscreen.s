@@ -2,9 +2,26 @@ LOAD_TRACK_THUMBNAIL_HEIGHT EQU 64
 
 TRACK_NUMBER:           dc.w 0
 TRACK_INCREMENT:        dc.w 1
+BANNERTXT:              dc.b "JOY1 L R TO SELECT."
+BANNERTXT2:             dc.b "JOY1 FIRE TO CONFIRM."
+    even
 
 SCREEN_TRACK_SELECT:
 
+    move.w				COLORS_FONTS_SMALL+2,COPCOLOR_TRACK_BANNER_1+2
+	move.w				COLORS_FONTS_SMALL+4,COPCOLOR_TRACK_BANNER_2+2
+	move.w				COLORS_FONTS_SMALL+6,COPCOLOR_TRACK_BANNER_3+2
+	move.w				COLORS_FONTS_SMALL+8,COPCOLOR_TRACK_BANNER_4+2
+	move.w				COLORS_FONTS_SMALL+10,COPCOLOR_TRACK_BANNER_5+2
+	move.w				COLORS_FONTS_SMALL+12,COPCOLOR_TRACK_BANNER_6+2
+	move.w				COLORS_FONTS_SMALL+14,COPCOLOR_TRACK_BANNER_7+2
+    move.w				COLORS_FONTS_SMALL+2,COPCOLOR_TRACK_BANNER2_1+2
+	move.w				COLORS_FONTS_SMALL+4,COPCOLOR_TRACK_BANNER2_2+2
+	move.w				COLORS_FONTS_SMALL+6,COPCOLOR_TRACK_BANNER2_3+2
+	move.w				COLORS_FONTS_SMALL+8,COPCOLOR_TRACK_BANNER2_4+2
+	move.w				COLORS_FONTS_SMALL+10,COPCOLOR_TRACK_BANNER2_5+2
+	move.w				COLORS_FONTS_SMALL+12,COPCOLOR_TRACK_BANNER2_6+2
+	move.w				COLORS_FONTS_SMALL+14,COPCOLOR_TRACK_BANNER2_7+2
    ; Init tiles bitplanes
     move.l              #PHAZELOGO,d0
     lea                 BPLPTR1_TRACK,a1
@@ -29,10 +46,17 @@ SCREEN_TRACK_SELECT:
     move.l				#COPPERLIST_TRACK,$dff080	; Copperlist point
 	move.w				d0,$dff088			; Copperlist start
 
+    clr.w               TRACK_INCREMENT
+
 load_next_track:
     move.w              TRACK_INCREMENT,d0
     add.w               d0,TRACK_NUMBER     ; next track please!
+    ; if zero we are out of bounds, force to 1
+    bne.w               next_track_not_zero
+    move.w              #1,TRACK_NUMBER
+next_track_not_zero:
     jsr                 LOAD_TRACK
+    jsr                 PRINT_TRACK_NAME
 
     ; clean banner on top (LOAD_TRACK_THUMBNAIL_HEIGHT lines)
     move.w #(LOAD_TRACK_THUMBNAIL_HEIGHT*40/4)-1,d7
@@ -137,9 +161,9 @@ load_next_track:
     dbra d7,.downbanner
 
     ; copy colors
-    moveq #32-1,d7
-    lea 				TRACK_DATA_COLORS,a0
-    lea                 COPCOLOR_TRACK_0+2,a1
+    moveq #31-1,d7
+    lea 				TRACK_DATA_COLORS+2,a0
+    lea                 COPCOLOR_TRACK_1+2,a1
 .colortrackthumb
     move.w              (a0)+,(a1)
     addq                #4,a1
@@ -147,10 +171,20 @@ load_next_track:
 
     ; print filename
     move.l              fib,a3
-    lea     fib_EntryType(a3),a1
-    lea buffer+7,a1
-    moveq               #1,d0
-    moveq               #1,d1
+    lea                 fib_EntryType(a3),a1
+    lea                 TRACK_FILENAME+7,a1
+    moveq               #0,d0
+    moveq               #0,d1
+    bsr.w               printstringtrack
+
+    lea                 BANNERTXT,a1
+    moveq               #0,d0
+    moveq               #13,d1
+    bsr.w               printstringtrack
+
+    lea                 BANNERTXT2,a1
+    moveq               #0,d0
+    moveq               #15,d1
     bsr.w               printstringtrack
 
 trackselectscreen_start:

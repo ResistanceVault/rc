@@ -242,6 +242,11 @@ welcomescreen:
     MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
     move.w              #$000F,$dff096
 
+    IFD                 COLOR
+    addi.w              #1,TRACK_NUMBER
+    jsr                 LOAD_TRACK
+    bsr.w               PRINT_TRACK_NAME
+    ENDC
 
 	move.w				COLORS_FONTS_SMALL+2,COPCOLOR_WELCOME_1+2
 	move.w				COLORS_FONTS_SMALL+4,COPCOLOR_WELCOME_2+2
@@ -508,7 +513,7 @@ TXT_RETURN_TO_OS:
     even
 
 TXT_TRACK:
-    dc.b                "TRACK SELECTOR",255
+    dc.b                "NEXT               ",255
     even
 
 printstring:
@@ -704,3 +709,48 @@ cleanitplanesloop:
     clr.l (a3)+
     dbra d7,cleanitplanesloop
     rts
+
+    IFD                 COLOR
+;PRINT_TRACK_NAME2:
+;    moveq               #20-1,d7
+;    lea                 TRACK_FILENAME+7,a0
+;    lea                 TXT_TRACK+6,a1
+;startprinttrackloop2:
+;    cmp.b               #46,(a0)
+;    beq.s               endprinttrack
+;    move.b              (a0)+,(a1)+
+;    bra.s               startprinttrackloop
+;endprinttrack2:
+;    move.b              #255,(a1)
+;    rts
+
+
+
+PRINT_TRACK_NAME:
+    moveq               #20-7-1,d7
+    moveq               #0,d6
+    lea                 TRACK_FILENAME+7,a0
+    lea                 TXT_TRACK+6,a1
+startprinttrackloop:
+
+    tst.b               (a0)
+    bne.s               noprintendtrackloop2
+    moveq               #1,d6
+noprintendtrackloop2:
+
+    cmp.b               #46,(a0)
+    bne.s               noprintendtrackloop
+    moveq               #1,d6
+noprintendtrackloop:
+
+    tst.w               d6
+    beq.s               printtrackcopychar
+    move.b              #32,(a1)+
+    bra.s               printtracknextiteration
+printtrackcopychar:
+    move.b              (a0)+,(a1)+
+printtracknextiteration:
+    dbra                d7,startprinttrackloop
+    move.b              #255,(a1)
+    rts
+    ENDC
