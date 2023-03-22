@@ -9,6 +9,14 @@
 ; byte from 38400 to 47999  -> raw planar image fifth bitplane (320X240)
 ; byte from 48000 to 48063  -> color palette (32 colors)
 ; byte from 48064 to 124863 -> track metadata (raw indexed image 1 byte each pixel)
+; byte from 124864 to 124869 -> car 1 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124870 to 124875 -> car 2 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124876 to 124881 -> car 3 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124882 to 124887 -> car 4 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124888 to 124893 -> car 5 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124894 to 124899 -> car 6 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124906 to 124911 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
 
 execBase equ 4
 ACCESS_READ equ -2
@@ -112,7 +120,7 @@ LOAD_TRACK:
     beq.w .next
 
     addi.w #1,TRACK_COUNTER
-    move.w TRACK_COUNTER,d0
+    move.w TRACK_COUNTER(PC),d0
     cmp.w  TRACK_NUMBER,d0
     bne.w  .next
 
@@ -130,7 +138,7 @@ LOAD_TRACK:
     move.l  #MODE_OLDFILE,d2
     move.l	#TRACK_FILENAME,d1
     jsr     _LVOOpen(a6)
-    tst.l	d0
+    ;tst.l	d0
     move.l	d0,fd
 
     ;file = Open( name, accessMode )
@@ -180,13 +188,59 @@ LOAD_TRACK:
     move.l #76800,d3
     jsr     _LVORead(a6)
 
+    ; car 1 position
+    move.l fd,d1
+    move.l #CAR1_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
+
+    ; car 2 position
+    move.l fd,d1
+    move.l #CAR2_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
+
+    ; car 3 position
+    move.l fd,d1
+    move.l #CAR3_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
+
+    ; car 4 position
+    move.l fd,d1
+    move.l #CAR4_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
+
+    ; car 5 position
+    ;move.l fd,d1
+    ;move.l #CAR5_INFO_DATA,d2
+    ;move.l #6,d3
+    ;jsr     _LVORead(a6)
+
+    ; car 6 position
+    ;move.l fd,d1
+    ;move.l #CAR6_INFO_DATA,d2
+    ;move.l #6,d3
+    ;jsr     _LVORead(a6)
+
+    ; car 7 position
+    ;move.l fd,d1
+    ;move.l #CAR7_INFO_DATA,d2
+    ;move.l #6,d3
+    ;jsr     _LVORead(a6)
+
+    ; car 8 position
+    ;move.l fd,d1
+    ;move.l #CAR8_INFO_DATA,d2
+    ;move.l #6,d3
+    ;jsr     _LVORead(a6)
+
     ; close the file
 	move.l	fd,d1				; result = LVOClose(handle[d1])      
     jsr     _LVOClose(a6)
 
     bra.s .exit
-
-    
 
 ; get next directory entry
 .next:
@@ -225,11 +279,11 @@ LOAD_TRACK:
     move.l				BaseVBR,a0
 	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
     move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
-
+    clr.b               KEY_ESC
     rts
 
 .endoflist
-    move.w TRACK_COUNTER,TRACK_NUMBER
+    move.w TRACK_COUNTER(PC),TRACK_NUMBER
     bra.s .exit
 
 ;

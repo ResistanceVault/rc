@@ -61,8 +61,6 @@ GetParallelPort:
 ;so we'll take it anyway.
 
 .grab2	
-	DEBUG 1111
-
 	lea	Name,a1			; The name of our app
 	moveq	#MR_PARALLELBITS,d0	; what we want
 	jsr	_LVOAllocMiscResource(a6)

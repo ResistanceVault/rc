@@ -106,8 +106,6 @@ CAR2_INIT:
 	move.w  #CAR_HALF_WIDTH,MOVER_WIDTH_DIV_2_OFFSET(a0)
 	move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
 
-	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
-
 	; calculate forward vector
 	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
 	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0

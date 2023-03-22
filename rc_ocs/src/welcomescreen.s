@@ -690,6 +690,7 @@ OFF:
 
 ACTION_SELECT_TRACK:
     IFD COLOR
+    move.w #1,SET_TRACK_SELECT_BITPLANE
     jsr SCREEN_TRACK_SELECT
     move.l				#COPPERLIST_WELCOME,$dff080	; Copperlist point
 	move.w				d0,$dff088			; Copperlist start

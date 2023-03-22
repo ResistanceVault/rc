@@ -16,5 +16,29 @@ all:
 	cat ./images/rc045_320X240X32.pal >> ../../../buildadf/tracks/TRACK1.TRK
 	cat ./metadata/rc045_320X240X8.data >> ../../../buildadf/tracks/TRACK1.TRK
 
+	# car 1 position
+	echo 00 64 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
+	# car 2 position
+	echo 00 78 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
+	# car 3 position
+	echo 00 50 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
+	# car 4 position
+	echo 00 3c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
+	# car 5 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
+	# car 6 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
+	# car 7 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
+	# car 8 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+
 	cp ../../../buildadf/tracks/TRACK1.TRK ../../../bin/tracks/TRACK1.TRK
 	chmod -R 777  ../../../bin/tracks

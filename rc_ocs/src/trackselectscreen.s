@@ -5,6 +5,7 @@ TRACK_INCREMENT:        dc.w 1
 BANNERTXT:              dc.b "JOY1 L R TO SELECT."
 BANNERTXT2:             dc.b "JOY1 FIRE TO CONFIRM."
     even
+SET_TRACK_SELECT_BITPLANE: dc.w 1
 
 SCREEN_TRACK_SELECT:
 
@@ -22,30 +23,7 @@ SCREEN_TRACK_SELECT:
 	move.w				COLORS_FONTS_SMALL+10,COPCOLOR_TRACK_BANNER2_5+2
 	move.w				COLORS_FONTS_SMALL+12,COPCOLOR_TRACK_BANNER2_6+2
 	move.w				COLORS_FONTS_SMALL+14,COPCOLOR_TRACK_BANNER2_7+2
-   ; Init tiles bitplanes
-    move.l              #PHAZELOGO,d0
-    lea                 BPLPTR1_TRACK,a1
-    bsr.w               POINTINCOPPERLIST_FUNCT
-
-    move.l              #PHAZELOGO+256*40*1,d0
-    lea                 BPLPTR2_TRACK,a1
-    bsr.w               POINTINCOPPERLIST_FUNCT
-
-    move.l              #PHAZELOGO+256*40*2,d0
-    lea                 BPLPTR3_TRACK,a1
-    bsr.w               POINTINCOPPERLIST_FUNCT
-
-    move.l              #PHAZELOGO_4,d0
-    lea                 BPLPTR4_TRACK,a1
-    bsr.w               POINTINCOPPERLIST_FUNCT
-
-    move.l              #PHAZELOGO_5,d0
-    lea                 BPLPTR5_TRACK,a1
-    bsr.w               POINTINCOPPERLIST_FUNCT
-
-    move.l				#COPPERLIST_TRACK,$dff080	; Copperlist point
-	move.w				d0,$dff088			; Copperlist start
-
+   
     clr.w               TRACK_INCREMENT
 
 load_next_track:
@@ -143,23 +121,6 @@ next_track_not_zero:
 
     dbra d7,.drawthumbnailstart_y
 
-    ; clean banner on bottom (remaining lines)
-    move.w #((256-120-LOAD_TRACK_THUMBNAIL_HEIGHT)*40/4)-1,d7
-    clr.l d6
-.downbanner:
-    lea PHAZELOGO+256*40*0+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
-    clr.l 0(a0,d6.w)
-    lea PHAZELOGO+256*40*1+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
-    clr.l 0(a0,d6.w)
-    lea PHAZELOGO+256*40*2+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
-    clr.l 0(a0,d6.w)
-    lea PHAZELOGO_4+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
-    clr.l 0(a0,d6.w)
-    lea PHAZELOGO_5+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
-    clr.l 0(a0,d6.w)
-    addq #4,d6
-    dbra d7,.downbanner
-
     ; copy colors
     moveq #31-1,d7
     lea 				TRACK_DATA_COLORS+2,a0
@@ -177,6 +138,28 @@ next_track_not_zero:
     moveq               #0,d1
     bsr.w               printstringtrack
 
+    ; do this only first time
+    tst.w               SET_TRACK_SELECT_BITPLANE
+    beq.w               nosettrackselectbitplane
+    clr.w               SET_TRACK_SELECT_BITPLANE
+
+    ; clean banner on bottom (remaining lines)
+    move.w #((256-120-LOAD_TRACK_THUMBNAIL_HEIGHT)*40/4)-1,d7
+    clr.l d6
+.downbanner:
+    lea PHAZELOGO+256*40*0+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
+    clr.l 0(a0,d6.w)
+    lea PHAZELOGO+256*40*1+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
+    clr.l 0(a0,d6.w)
+    lea PHAZELOGO+256*40*2+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
+    clr.l 0(a0,d6.w)
+    lea PHAZELOGO_4+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
+    clr.l 0(a0,d6.w)
+    lea PHAZELOGO_5+120*40+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a0
+    clr.l 0(a0,d6.w)
+    addq #4,d6
+    dbra d7,.downbanner
+
     lea                 BANNERTXT,a1
     moveq               #0,d0
     moveq               #13,d1
@@ -186,6 +169,32 @@ next_track_not_zero:
     moveq               #0,d0
     moveq               #15,d1
     bsr.w               printstringtrack
+
+    ; Init tiles bitplanes
+    move.l              #PHAZELOGO,d0
+    lea                 BPLPTR1_TRACK,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #PHAZELOGO+256*40*1,d0
+    lea                 BPLPTR2_TRACK,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #PHAZELOGO+256*40*2,d0
+    lea                 BPLPTR3_TRACK,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #PHAZELOGO_4,d0
+    lea                 BPLPTR4_TRACK,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #PHAZELOGO_5,d0
+    lea                 BPLPTR5_TRACK,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l				#COPPERLIST_TRACK,$dff080	; Copperlist point
+	move.w				d0,$dff088			; Copperlist start
+nosettrackselectbitplane:
+
 
 trackselectscreen_start:
 

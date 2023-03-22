@@ -462,8 +462,6 @@ Aspetta:
 	tst.b 				KEY_ESC
 	bne.w 				welcomescreen_start
 
-	;btst				#6,$bfe001	; mouse premuto?
-	;bne.w				mouse
 	bra.w 				mouse
 exit:
 	rts			; esci

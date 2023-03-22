@@ -1,14 +1,42 @@
+CAR1_INFO_DATA:
 CAR1_START_X_POSITION: dc.w 100
 CAR1_START_Y_POSITION: dc.w 200
+CAR1_START_DEGREES: dc.w 0
 
+CAR2_INFO_DATA:
 CAR2_START_X_POSITION: dc.w 120
 CAR2_START_Y_POSITION: dc.w 200
+CAR2_START_DEGREES: dc.w 0
 
+CAR3_INFO_DATA:
 CAR3_START_X_POSITION: dc.w 80
 CAR3_START_Y_POSITION: dc.w 200
+CAR3_START_DEGREES: dc.w 0
 
+CAR4_INFO_DATA:
 CAR4_START_X_POSITION: dc.w 60
 CAR4_START_Y_POSITION: dc.w 200
+CAR4_START_DEGREES: dc.w 0
+
+CAR5_INFO_DATA:
+CAR5_START_X_POSITION: dc.w 60
+CAR5_START_Y_POSITION: dc.w 200
+CAR5_START_DEGREES: dc.w 0
+
+CAR6_INFO_DATA:
+CAR6_START_X_POSITION: dc.w 60
+CAR6_START_Y_POSITION: dc.w 200
+CAR6_START_DEGREES: dc.w 0
+
+CAR7_INFO_DATA:
+CAR7_START_X_POSITION: dc.w 60
+CAR7_START_Y_POSITION: dc.w 200
+CAR7_START_DEGREES: dc.w 0
+
+CAR8_INFO_DATA:
+CAR8_START_X_POSITION: dc.w 60
+CAR8_START_Y_POSITION: dc.w 200
+CAR8_START_DEGREES: dc.w 0
 
 SET_CAR1_START_STATUS:
     lea 	MOVER1,a0
@@ -21,6 +49,8 @@ SET_CAR1_START_STATUS:
     muls    CAR1_START_Y_POSITION,d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
+    move.w  CAR1_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
 
@@ -28,7 +58,6 @@ SET_CAR1_START_STATUS:
 	move.w  #0*DECIMAL_MULTIPLIER,MOVER_Y_ACCELERATION_OFFSET(a0)   	; initial y acceleration (accelleration)
 
     move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
-	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
@@ -57,6 +86,8 @@ SET_CAR2_START_STATUS:
     muls    CAR2_START_Y_POSITION,d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
+    move.w  CAR2_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
 
@@ -64,7 +95,6 @@ SET_CAR2_START_STATUS:
 	move.w  #0*DECIMAL_MULTIPLIER,MOVER_Y_ACCELERATION_OFFSET(a0)   	; initial y acceleration (accelleration)
 
     move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
-	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
@@ -92,6 +122,8 @@ SET_CAR3_START_STATUS:
     muls    CAR3_START_Y_POSITION,d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
+	move.w  CAR3_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
 
@@ -99,7 +131,6 @@ SET_CAR3_START_STATUS:
 	move.w  #0*DECIMAL_MULTIPLIER,MOVER_Y_ACCELERATION_OFFSET(a0)   	; initial y acceleration (accelleration)
 
     move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
-	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
@@ -127,6 +158,8 @@ SET_CAR4_START_STATUS:
     muls    CAR4_START_Y_POSITION,d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
+    move.w  CAR4_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
 
@@ -134,7 +167,6 @@ SET_CAR4_START_STATUS:
 	move.w  #0*DECIMAL_MULTIPLIER,MOVER_Y_ACCELERATION_OFFSET(a0)   	; initial y acceleration (accelleration)
 
     move.l  #0,MOVER_HEADING_OFFSET(a0)		 	  	 	; vector representing heading direction (heading) (private)
-	move.w  #0,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)

@@ -17,8 +17,29 @@ all:
 	cat ./images/$(IMAGE32COLORS).pal >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	cat ./metadata/$(IMAGE8COLORS).data >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
+	# car 1 position
+	echo 00 aa 00 2a 00 b4 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# car 2 position
+	echo 00 b2 00 35 00 b4 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# car 3 position
+	echo 00 bf 00 23 00 a4 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# car 4 position
+	echo 00 c7 00 2e 00 a4 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# car 5 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# car 6 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# car 7 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# car 8 position
+	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
 	cp ../../../buildadf/tracks/$(TRACKNAME).TRK ../../../bin/tracks/$(TRACKNAME).TRK
 	chmod 777 ../../../bin/tracks/$(TRACKNAME).TRK
-
-	printf '\x0A\x14' | dd of=output.bin bs=1 seek=0 conv=notrunc
-
