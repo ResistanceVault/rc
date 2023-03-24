@@ -9,6 +9,9 @@ MAINCODE:
 	JSR	-$198(A6)		; OldOpenlib
 	MOVE.L	D0,DosBase
 	BEQ.w	EXIT3			; Se zero, esci! Errore!
+	IFD COLOR
+	;jsr LOAD_TRACK
+	ENDC
 	LEA	GfxName(PC),A1		; Nome libreria da aprire
 	JSR	-$198(A6)		; OldOpenLibrary - apri la lib
 	MOVE.L	d0,GfxBase

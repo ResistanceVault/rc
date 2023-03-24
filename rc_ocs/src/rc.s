@@ -404,7 +404,7 @@ moversloop:
 
 	IFND DEBUG
 	; Car behaviour must change according to the map metadata
-	bsr.w   			CHECK_MAP
+	;bsr.w   			CHECK_MAP
 	ENDC
 
     ; check collisions
@@ -465,6 +465,10 @@ exit:
 	IFD DEBUG
     include "debug.s"
     ENDC
+	IFD COLOR
+	include "load_track.s"
+	ENDC
+
 	include "car_inits.s"
 	include "calculate_wheel_positions.s"
 	include "display.s"
@@ -637,3 +641,6 @@ PHAZELOGO:
 	incbin "assets/phazelogo/phazelogo.raw"
 PHAZELOGO_PALETTE:
 	incbin "assets/phazelogo/phazelogo.plt"
+
+ALE:
+    dcb.b 300,0
