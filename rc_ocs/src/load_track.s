@@ -69,6 +69,7 @@ TRACK_COUNTER:
     dc.w    0
 
 LOAD_TRACK:
+    movem.l	d0-d7/a0-a6,-(SP)	; Salva i registri nello stack
     move.l  execBase,a6
 
     lea	    $dff000,a5
@@ -280,6 +281,7 @@ LOAD_TRACK:
 	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
     move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
     clr.b               KEY_ESC
+    movem.l	(sp)+,d0-d7/a0-a6
     rts
 
 .endoflist
