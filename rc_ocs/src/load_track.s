@@ -92,13 +92,12 @@ LOAD_TRACK:
     tst.w   d0
     beq     .exit
 
-        bra.w .exit
 
 
     ; for each element inside the tracks directory
 .loop:
 
-    move.l  fib,a3
+    move.l  #ALE,a3
 
     lea     fib_EntryType(a3),a4
     lea     fib_FileName(a3),a3
@@ -177,7 +176,7 @@ LOAD_TRACK:
 ; get next directory entry
 .next:
     move.l  lock,d1
-    move.l  fib,d2
+    move.l  #ALE,d2
     jsr     _LVOExNext(a6)
     tst.w   d0
     beq     .exit
