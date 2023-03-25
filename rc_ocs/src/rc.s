@@ -189,6 +189,32 @@ CIAB EQU $bff000
 ciapra EQU $0000
 ciaprb equ $0100
 START:
+
+	IFD COLORLOL
+
+	move.l  execBase,a6
+ 
+    lea	    $dff000,a5
+	MOVE.L	#$7FFF7FFF,$9A(A5)	; INTERRUPTS & INTREQS DISABLE
+
+	move.l	BaseVBR,a0	        ; Set VBR value into a0
+    move.l	OldInt68,$68(a0)    ; Sys int liv2 (I/O,ciaa,int2)
+
+	move.w #$8010,$96(A5) ; enable DMA for floppy drive
+    MOVE.W	OLDINTENA,$9A(A5)	; INTENA STATUS
+	MOVE.W	OLDINTREQ,$9C(A5)	; INTREQ
+
+	jsr CICCIO
+
+	 move.w #$0010,$96(A5) ; enable DMA for floppy drive
+    MOVE.L	#$7FFF7FFF,$9A(A5)	; DISABILITA GLI INTERRUPTS & INTREQS
+
+    move.l				BaseVBR,a0
+	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
+    move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
+
+	
+	ENDC
 	IFD INTRO
 	jsr INTROSCREEN
 	ENDC
@@ -550,30 +576,30 @@ CURSOR:
 
 	IFD COLOR
 TRACK_DATA_1:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.aa"
+	dcb.b   40*240,0
 DASHBOARD_DATA_1:
 	dcb.b   40*16,0
 TRACK_DATA_2:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ab"
+	dcb.b   40*240,0
 DASHBOARD_DATA_2:
 	dcb.b   40*16,0
 TRACK_DATA_3:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ac"
+	dcb.b   40*240,0
 DASHBOARD_DATA_3:
 	dcb.b   40*16,0
 TRACK_DATA_4:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ad"
+	dcb.b   40*240,0
 DASHBOARD_DATA_4:
 	dcb.b   40*16,0
 TRACK_DATA_5:
-	incbin  "assets/tracks/track1/rc045_320X240X32.raw.ae"
+	dcb.b   40*240,0
 DASHBOARD_DATA_5:
 	dcb.b   40*16,0
 	ELSE
 
 TRACK_DATA:
 TRACK_DATA_1:
-	incbin  "assets/tracks/track1/rc045_320X240X8.raw.aa"
+	dcb.b   40*240,0
 DASHBOARD_DATA_1:
 	dcb.b   40*16,0
 TRACK_DATA_2:

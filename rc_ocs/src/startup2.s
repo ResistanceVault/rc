@@ -1,6 +1,10 @@
 ******************************************************************************
 ;    680X0 & AGA STARTUP BY FABIO CIUCCI - Livello di complessita' 2
 ******************************************************************************
+DEBUG3 MACRO
+  clr.w                  $100
+  move.w                 #$\1,d3
+  ENDM
 
 MAINCODE:
 	movem.l	d0-d7/a0-a6,-(SP)	; Salva i registri nello stack
@@ -9,9 +13,20 @@ MAINCODE:
 	JSR	-$198(A6)		; OldOpenlib
 	MOVE.L	D0,DosBase
 	BEQ.w	EXIT3			; Se zero, esci! Errore!
-	IFD COLOR
-	;jsr LOAD_TRACK
-	ENDC
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	LEA	GfxName(PC),A1		; Nome libreria da aprire
 	JSR	-$198(A6)		; OldOpenLibrary - apri la lib
 	MOVE.L	d0,GfxBase
@@ -61,6 +76,8 @@ VecchiaIntui:
 
 	bsr.w	InputOff	; Disabilita l'input di intuition (ossia non
 				; legge piu' il mouse e la tastiera)
+
+	
 
 	MOVE.L	4.w,A6
 	SUB.L	A1,A1		; NULL task - trova questo task
@@ -591,3 +608,51 @@ nocaches:
 	movem.l	(sp)+,d0-d7/a0-a6
 	rts
 
+	IFD COLOR
+CICCIO:
+	movem.l d0-d7/a0-a6,-(sp)
+	; get directory lock
+    move.l  dosBase,a6
+    move.l  #pathString,d1
+    move.l  #ACCESS_READ,d2
+    jsr     _LVOLock(a6)
+    move.l  d0,lock
+    beq     .exit
+
+
+	; examine directory for ExNext
+    move.l  lock,d1
+    ;move.l #ALE,fib
+    move.l  #ALE,d2
+    jsr     _LVOExamine(a6)
+    tst.w   d0
+    beq     .exit
+
+	; for each element inside the tracks directory
+.loop:
+	lea     fib_EntryType(a3),a4
+    lea     fib_FileName(a3),a3
+
+    cmpi.l #$2,(a4)
+    beq.w .next
+	
+	; get next directory entry
+.next:
+    move.l  lock,d1
+    move.l  #ALE,d2
+    jsr     _LVOExNext(a6)
+    tst.w   d0
+    beq     .exit
+
+.nomatch:
+    bra     .loop
+
+.exit:
+    move.l  dosBase,a6
+    move.l  lock,d1
+    jsr     _LVOUnLock(a6)
+
+	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+	ENDC
