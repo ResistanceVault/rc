@@ -425,10 +425,10 @@ keyboardaction_noreset:
 	bne.w				noaction
     tst.w               JOY1FIREPRESSED
     bne.s               noaction
+    move.w              #1,JOY1FIREPRESSED
     move.l              ENTRIES_PTR,a0
     move.l              8(a0),a1
     jsr                 (a1)
-    move.w              #1,JOY1FIREPRESSED
 noaction:
     btst				#7,$bfe001	; joy fire pressed?
 	beq.w				joy1firenotpressed

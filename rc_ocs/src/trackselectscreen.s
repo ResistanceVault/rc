@@ -8,6 +8,10 @@ BANNERTXT2:             dc.b "JOY1 FIRE TO CONFIRM."
 SET_TRACK_SELECT_BITPLANE: dc.w 1
 
 SCREEN_TRACK_SELECT:
+    ; wait for fire released
+trackselectscreen_firstend:
+    btst				#7,$bfe001	; joy 1 fire released?
+	beq.s				trackselectscreen_firstend
 
     move.w				COLORS_FONTS_SMALL+2,COPCOLOR_TRACK_BANNER_1+2
 	move.w				COLORS_FONTS_SMALL+4,COPCOLOR_TRACK_BANNER_2+2
@@ -23,7 +27,7 @@ SCREEN_TRACK_SELECT:
 	move.w				COLORS_FONTS_SMALL+10,COPCOLOR_TRACK_BANNER2_5+2
 	move.w				COLORS_FONTS_SMALL+12,COPCOLOR_TRACK_BANNER2_6+2
 	move.w				COLORS_FONTS_SMALL+14,COPCOLOR_TRACK_BANNER2_7+2
-   
+
     clr.w               TRACK_INCREMENT
 
 load_next_track:
@@ -217,7 +221,7 @@ fireloadtrack:
     btst				#7,$bfe001	; joy 1 fire pressed?
 	bne.s				fireloadtrack_end
 fireloadtrackrel:
-    btst				#7,$bfe001	; joy i fire released?
+    btst				#7,$bfe001	; joy 1 fire released?
 	beq.s				fireloadtrackrel
     bra.s               trackselectscreen_end
 fireloadtrack_end:

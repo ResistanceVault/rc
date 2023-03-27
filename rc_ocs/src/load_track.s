@@ -16,7 +16,7 @@
 ; byte from 124888 to 124893 -> car 5 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124894 to 124899 -> car 6 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
-; byte from 124906 to 124911 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
+; byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
 
 execBase equ 4
 ACCESS_READ equ -2
@@ -214,31 +214,31 @@ LOAD_TRACK:
     jsr     _LVORead(a6)
 
     ; car 5 position
-    ;move.l fd,d1
-    ;move.l #CAR5_INFO_DATA,d2
-    ;move.l #6,d3
-    ;jsr     _LVORead(a6)
+    move.l fd,d1
+    move.l #CAR5_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
 
     ; car 6 position
-    ;move.l fd,d1
-    ;move.l #CAR6_INFO_DATA,d2
-    ;move.l #6,d3
-    ;jsr     _LVORead(a6)
+    move.l fd,d1
+    move.l #CAR6_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
 
     ; car 7 position
-    ;move.l fd,d1
-    ;move.l #CAR7_INFO_DATA,d2
-    ;move.l #6,d3
-    ;jsr     _LVORead(a6)
+    move.l fd,d1
+    move.l #CAR7_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
 
     ; car 8 position
-    ;move.l fd,d1
-    ;move.l #CAR8_INFO_DATA,d2
-    ;move.l #6,d3
-    ;jsr     _LVORead(a6)
+    move.l fd,d1
+    move.l #CAR8_INFO_DATA,d2
+    move.l #6,d3
+    jsr     _LVORead(a6)
 
     ; close the file
-	move.l	fd,d1				; result = LVOClose(handle[d1])      
+	move.l	fd,d1				; result = LVOClose(handle[d1])
     jsr     _LVOClose(a6)
 
     bra.s .exit
@@ -271,22 +271,24 @@ LOAD_TRACK:
     beq     .l1
     jsr     _LVOFreeVec(a6)
 .l1
-    move.l  dosBase,a1
-    jsr     _LVOCloseLibrary(a6)
+    ;move.l  dosBase,a1
+    ;jsr     _LVOCloseLibrary(a6)
 
-    move.w #$0010,$96(A5) ; enable DMA for floppy drive
-    MOVE.L	#$7FFF7FFF,$9A(A5)	; DISABILITA GLI INTERRUPTS & INTREQS
+    move.w              #$0010,$96(A5)       ; enable DMA for floppy drive
+    MOVE.L	            #$7FFF7FFF,$9A(A5)	; Disable INTERRUPTS & INTREQS
 
     move.l				BaseVBR,a0
 	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
     move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
     clr.b               KEY_ESC
-    movem.l	(sp)+,d0-d7/a0-a6
+    clr.w               JOY1FIREPRESSED
+    jsr                 SETPOT
+    movem.l	            (sp)+,d0-d7/a0-a6
     rts
 
 .endoflist
-    move.w TRACK_COUNTER(PC),TRACK_NUMBER
-    bra.s .exit
+    move.w              TRACK_COUNTER(PC),TRACK_NUMBER
+    bra.s               .exit
 
 ;
 ; variables
