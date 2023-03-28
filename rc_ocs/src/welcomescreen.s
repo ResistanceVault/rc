@@ -215,6 +215,7 @@ welcomescreen:
     move.w #0,Sprite7pointers+2
     move.w #0,Sprite7pointers+6
 
+      
     ; reset a5
     lea                 $dff000,a5
 

@@ -2,3 +2,4 @@ rc_ocs/src/*.o
 rc_ocs/src/rc.o
 rc_ocs/bin/*
 rc_ocs/adf
+rc_ocs/buildadf/rc32

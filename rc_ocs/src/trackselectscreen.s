@@ -202,6 +202,12 @@ nosettrackselectbitplane:
 
 trackselectscreen_start:
 
+mousewelcometrack:
+    cmpi.b  			#$ff,$dff006    ; Linea 255?
+    bne.s   			mousewelcometrack
+
+    ;move.w #$0ff0,$dff180
+
     ;joy1_right_pressed ?
     jsr                 READJOY1
     btst                #0,d0
@@ -220,13 +226,20 @@ trackselectscreen_check_joy1_left:
 fireloadtrack:
     btst				#7,$bfe001	; joy 1 fire pressed?
 	bne.s				fireloadtrack_end
+    DEBUG 7777
+
 fireloadtrackrel:
+                move.w #$0f00,$dff180
+
     btst				#7,$bfe001	; joy 1 fire released?
 	beq.s				fireloadtrackrel
     bra.s               trackselectscreen_end
 fireloadtrack_end:
     tst.b 				KEY_ESC
 	bne.w 				trackselectscreen_end
+waitwelcometrack:
+    cmpi.b  			#$ff,$dff006    ; linea 255?
+    beq.s   			waitwelcometrack
     bra.s               trackselectscreen_start
 trackselectscreen_end:
     rts

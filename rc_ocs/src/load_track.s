@@ -69,7 +69,13 @@ TRACK_COUNTER:
     dc.w    0
 
 LOAD_TRACK:
-    movem.l	d0-d7/a0-a6,-(SP)	; Salva i registri nello stack
+
+    ;movem.l	d0-d7/a0-a6,-(SP)	; Salva i registri nello stack
+
+    ;moveq	#5,d1		; num. di frames da aspettare
+	;bsr.w	AspettaBlanks	; aspetta 5 frames
+
+
     move.l  execBase,a6
 
     lea	    $dff000,a5
@@ -78,16 +84,13 @@ LOAD_TRACK:
 	move.l	BaseVBR,a0	        ; Set VBR value into a0
     move.l	OldInt68,$68(a0)    ; Sys int liv2 (I/O,ciaa,int2)
 
-	move.w #$8010,$96(A5) ; enable DMA for floppy drive
+	MOVE.W	#%1000001001010000,$96(A5) ; Abilita blit e disk per sicurezza
     MOVE.W	OLDINTENA,$9A(A5)	; INTENA STATUS
 	MOVE.W	OLDINTREQ,$9C(A5)	; INTREQ
 
-    ; allocate memory for file info block
-    move.l  #fib_SIZEOF,d0
-    move.l  #MEMF_ANY,d1
-    jsr     _LVOAllocVec(a6)
-    move.l  d0,fib
-    beq     .exit
+   
+    moveq	#50,d1		; num. di frames da aspettare
+	bsr.w	AspettaBlanks	; aspetta 5 frames
 
     ; get directory lock
     move.l  dosBase,a6
@@ -97,12 +100,16 @@ LOAD_TRACK:
     move.l  d0,lock
     beq     .exit
 
+
     ; examine directory for ExNext
     move.l  lock,d1
     move.l  fib,d2
     jsr     _LVOExamine(a6)
     tst.w   d0
     beq     .exit
+
+      
+    DEBUG 7777
 
     ; reset track counter to 1
     move.w  #0,TRACK_COUNTER
@@ -135,9 +142,9 @@ LOAD_TRACK:
     beq.s .endcopy
     bra.s .startcopy
 .endcopy:
-
     move.l  #MODE_OLDFILE,d2
     move.l	#TRACK_FILENAME,d1
+    DEBUG 5555
     jsr     _LVOOpen(a6)
     ;tst.l	d0
     move.l	d0,fd
@@ -264,15 +271,9 @@ LOAD_TRACK:
     move.l  lock,d1
     jsr     _LVOUnLock(a6)
 
-    move.l  execBase,a6
-    move.l  fib,a1
-    ;tst.l a1
-    tst.l   fib
-    beq     .l1
-    jsr     _LVOFreeVec(a6)
-.l1
-    ;move.l  dosBase,a1
-    ;jsr     _LVOCloseLibrary(a6)
+    DEBUG 6666
+    move.l	#150,d1		; num. di frames da aspettare
+	bsr.w	AspettaBlanks	; aspetta 5 frames
 
     move.w              #$0010,$96(A5)       ; enable DMA for floppy drive
     MOVE.L	            #$7FFF7FFF,$9A(A5)	; Disable INTERRUPTS & INTREQS
@@ -280,10 +281,13 @@ LOAD_TRACK:
     move.l				BaseVBR,a0
 	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
     move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
+    
+    
+    
     clr.b               KEY_ESC
     clr.w               JOY1FIREPRESSED
     jsr                 SETPOT
-    movem.l	            (sp)+,d0-d7/a0-a6
+    ;movem.l	            (sp)+,d0-d7/a0-a6
     rts
 
 .endoflist
@@ -296,6 +300,28 @@ LOAD_TRACK:
 lock
     dc.l    0
 fib
-    dc.l    0
+    dc.l    MY_FIB
 fd
     dc.l    0
+MY_FIB:
+    ds.b    fib_SIZEOF
+
+*****************************************************************************
+; Questa routine aspetta D1 fotogrammi. Ogni 50 fotogrammi passa 1 secondo.
+;
+; d1 = numero di fotogrammi da attendere
+;
+*****************************************************************************
+
+AspettaBlanks:
+	LEA	$DFF000,A5	; CUSTOM REG per OFFSETS
+WBLAN1xb:
+	MOVE.w	#$80,D0
+WBLAN1bxb:
+	CMP.B	6(A5),D0	; vhposr
+	BNE.S	WBLAN1bxb
+WBLAN2xb:
+	CMP.B	6(A5),D0	; vhposr
+	Beq.S	WBLAN2xb
+	DBRA	D1,WBLAN1xb
+	rts
