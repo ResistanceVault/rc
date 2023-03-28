@@ -81,14 +81,7 @@ LOAD_TRACK:
     lea	    $dff000,a5
 	MOVE.L	#$7FFF7FFF,$9A(A5)	; INTERRUPTS & INTREQS DISABLE
 
-	move.l	BaseVBR,a0	        ; Set VBR value into a0
-    move.l	OldInt68,$68(a0)    ; Sys int liv2 (I/O,ciaa,int2)
-
-	MOVE.W	#%1000001001010000,$96(A5) ; Abilita blit e disk per sicurezza
-    MOVE.W	OLDINTENA,$9A(A5)	; INTENA STATUS
-	MOVE.W	OLDINTREQ,$9C(A5)	; INTREQ
-
-   
+	bsr.w PreparaLoad
     moveq	#50,d1		; num. di frames da aspettare
 	bsr.w	AspettaBlanks	; aspetta 5 frames
 
@@ -275,12 +268,7 @@ LOAD_TRACK:
     move.l	#150,d1		; num. di frames da aspettare
 	bsr.w	AspettaBlanks	; aspetta 5 frames
 
-    move.w              #$0010,$96(A5)       ; enable DMA for floppy drive
-    MOVE.L	            #$7FFF7FFF,$9A(A5)	; Disable INTERRUPTS & INTREQS
-
-    move.l				BaseVBR,a0
-	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
-    move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
+    bsr.w DopoLoad
     
     
     
@@ -324,4 +312,117 @@ WBLAN2xb:
 	CMP.B	6(A5),D0	; vhposr
 	Beq.S	WBLAN2xb
 	DBRA	D1,WBLAN1xb
+	rts
+
+*****************************************************************************
+; Routine che ripristina il sistema operativo, tranne la copperlist, e in
+; piu' setta un interrupt $6c nostro, che poi salta a quello di sistema.
+; Da notare che durante il load l'interrupt e' gestito dall'int "COPER"
+*****************************************************************************
+
+PreparaLoad:
+	LEA	$DFF000,A5		; Base dei registri CUSTOM per Offsets
+	MOVE.W	$2(A5),OLDDMAL		; Salva il vecchio status di DMACON
+	MOVE.W	$1C(A5),OLDINTENAL	; Salva il vecchio status di INTENA
+	MOVE.W	$1E(A5),OLDINTREQL	; Salva il vecchio status di INTREQ
+	MOVE.L	#$80008000,d0		; Prepara la maschera dei bit alti
+	OR.L	d0,OLDDMAL		; Setta il bit 15 dei valori salvati
+	OR.W	d0,OLDINTREQL		; dei registri, per poterli rimettere.
+
+	jsr	ClearMyCache
+
+	MOVE.L	#$7FFF7FFF,$9A(a5)	; DISABILITA GLI INTERRUPTS & INTREQS
+
+	move.l	BaseVBR,a0	     ; In a0 il valore del VBR
+	move.l	OldInt64,$64(a0) ; Sys int liv1 salvato (softint,dskblk)
+	move.l	OldInt68,$68(a0) ; Sys int liv2 salvato (I/O,ciaa,int2)
+	move.l	OldInt6c,$6c(a0) ; Sys int liv3 salvato (coper,vblanc,blit)
+
+	move.l	OldInt70,$70(a0) ; Sys int liv4 salvato (audio)
+	move.l	OldInt74,$74(a0) ; Sys int liv5 salvato (rbf,dsksync)
+	move.l	OldInt78,$78(a0) ; Sys int liv6 salvato (exter,ciab,inten)
+
+	MOVE.W	#%1000001001010000,$96(A5) ; Abilita blit e disk per sicurezza
+	MOVE.W	OLDINTENA,$9A(A5)	; INTENA STATUS
+	MOVE.W	OLDINTREQ,$9C(A5)	; INTREQ
+	move.w	#$c010,$9a(a5)		; dobbiamo essere sicuri che COPER
+					; (interrupt via copperlist) sia ON!
+
+	move.l	4.w,a6
+	JSR	-$7e(A6)	; Enable
+	JSR	-$8a(a6)	; Permit
+
+	MOVE.L	GfxBase,A6
+	jsr	-$E4(A6)	; Aspetta la fine di eventuali blittate
+	JSR	-$E4(A6)	; WaitBlit
+	jsr	-$1ce(a6)	; DisOwnBlitter, il sistema operativo ora
+				; puo' nuovamente usare il blitter
+				; (nel kick 1.3 serve per caricare da disk)
+	MOVE.L	4.w,A6
+	SUBA.L	A1,A1		; NULL task - trova questo task
+	JSR	-$126(A6)	; findtask (Task(name) in a1, -> d0=task)
+	MOVE.L	D0,A1		; Task in a1
+	MOVEQ	#0,D0		; Priorita' in d0 (-128, +127) - NORMALE
+				; (Per permettere ai drives di respirare)
+	JSR	-$12C(A6)	;_LVOSetTaskPri (d0=priorita', a1=task)
+	rts
+
+OLDDMAL:
+	dc.w	0
+OLDINTENAL:		; Vecchio status INTENA
+	dc.w	0
+OLDINTREQL:		; Vecchio status INTREQ
+	DC.W	0
+
+
+*****************************************************************************
+; Routine che richiude il sistema operativo e rimette il nostro interrupt
+*****************************************************************************
+
+DopoLoad:
+	MOVE.L	4.w,A6
+	SUBA.L	A1,A1		; NULL task - trova questo task
+	JSR	-$126(A6)	; findtask (Task(name) in a1, -> d0=task)
+	MOVE.L	D0,A1		; Task in a1
+	MOVEQ	#127,D0		; Priorita' in d0 (-128, +127) - MASSIMA
+	JSR	-$12C(A6)	;_LVOSetTaskPri (d0=priorita', a1=task)
+
+	JSR	-$84(a6)	; Forbid
+	JSR	-$78(A6)	; Disable
+
+	MOVE.L	GfxBase,A6
+	jsr	-$1c8(a6)	; OwnBlitter, che ci da l'esclusiva sul blitter
+				; impedendone l'uso al sistema operativo.
+	jsr	-$E4(A6)	; WaitBlit - Attende la fine di ogni blittata
+	JSR	-$E4(A6)	; WaitBlit
+
+	jsr	ClearMyCache
+
+	LEA	$dff000,a5		; Custom base per offsets
+AspettaF:
+	MOVE.L	4(a5),D0	; VPOSR e VHPOSR - $dff004/$dff006
+	AND.L	#$1ff00,D0	; Seleziona solo i bit della pos. verticale
+	CMP.L	#$12d00,D0	; aspetta la linea $12d per evitare che
+	BEQ.S	AspettaF	; spegnendo i DMA si abbiano sfarfallamenti
+
+	MOVE.L	#$7FFF7FFF,$9A(A5)	; DISABILITA GLI INTERRUPTS & INTREQS
+
+		; 5432109876543210
+	MOVE.W	#%0000010101110000,d0	; DISABILITA DMA
+
+	btst	#8-8,olddmal	; test bitplane
+	beq.s	NoPlanesA
+	bclr.l	#8,d0		; non spengere planes
+NoPlanesA:
+	btst	#5,olddmal+2	; test sprite
+	beq.s	NoSpritez
+	bclr.l	#5,d0		; non spengere sprite
+NoSpritez:
+	MOVE.W	d0,$96(A5) ; DISABILITA DMA
+
+	move.l	BaseVBR,a0		; In a0 il valore del VBR
+	move.l				#MioInt68KeyB,$68(A0)	; Routine for keyboard on int 2
+	MOVE.W	OLDDMAL(PC),$96(A5)	; Rimetti il vecchio status DMA
+	MOVE.W	OLDINTENAL(PC),$9A(A5)	; INTENA STATUS
+	MOVE.W	OLDINTREQL(PC),$9C(A5)	; INTREQ
 	rts
