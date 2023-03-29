@@ -19,6 +19,7 @@ firenotpressed_ok:
 
     ;reset race flag in case we are returning here after the race
     move.w              #0,START_RACE_FLAG
+    move.w              #1,LOAD_NEXT_TRACK_FLAG
 
     ; Init tiles bitplanes
     move.l              #SCREEN_0,d0

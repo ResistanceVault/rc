@@ -188,6 +188,7 @@ JOY1UPPRESSED: dc.w 0
 KEYUPPRESSED: dc.w 0
 START_RACE_FLAG: dc.w 0
 EXIT_TO_OS_FLAG: dc.w 0
+LOAD_NEXT_TRACK_FLAG: dc.w 1
 
 welcomescreen:
     ; clean bitplanes
@@ -244,9 +245,12 @@ welcomescreen:
     move.w              #$000F,$dff096
 
     IFD                 COLOR
+    tst.w               LOAD_NEXT_TRACK_FLAG
+    beq.s               no_load_next_track
     addi.w              #1,TRACK_NUMBER
     jsr                 LOAD_TRACK
     bsr.w               PRINT_TRACK_NAME
+no_load_next_track:
     ENDC
 
 	move.w				COLORS_FONTS_SMALL+2,COPCOLOR_WELCOME_1+2
@@ -573,6 +577,7 @@ bigfontcycle:
 
 ACTION_START_RACE:
     move.w              #1,START_RACE_FLAG
+    clr.w               LOAD_NEXT_TRACK_FLAG
 
     ; Cars init
     jsr 	SET_CAR1_START_STATUS
