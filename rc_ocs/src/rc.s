@@ -113,6 +113,21 @@ SPRITES								EQU 1
 MAX_LAPS							EQU 2
 MAX_CARS							EQU 4
 
+                    rsset   0
+fib_DiskKey         rs.l    1
+fib_DirEntryType    rs.l    1
+fib_FileName        rs.b    108
+fib_Protection      rs.l    1
+fib_EntryType       rs.l    1
+fib_Size            rs.l    1
+fib_NumBlocks       rs.l    1
+fib_DateStamp       rs.b    12
+fib_Comment         rs.b    80
+fib_OwnerUID        rs.w    1
+fib_OwnerGID        rs.w    1
+fib_Reserved        rs.b    32
+fib_SIZEOF          rs.b    0
+
 	include "macros.i"
 
 MOVER_INIT_MEM MACRO
@@ -656,3 +671,5 @@ PHAZELOGO_5:
 	dcb.b 10240,0
 PHAZELOGO_PALETTE:
 	incbin "assets/phazelogo/phazelogo.plt"
+MY_FIB:
+    ds.b    fib_SIZEOF

@@ -229,8 +229,7 @@ fireloadtrack:
     DEBUG 7777
 
 fireloadtrackrel:
-                move.w #$0f00,$dff180
-
+    ;move.w #$0f00,$dff180
     btst				#7,$bfe001	; joy 1 fire released?
 	beq.s				fireloadtrackrel
     bra.s               trackselectscreen_end

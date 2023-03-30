@@ -1,4 +1,4 @@
-; How a .trk file works
+; How a .TRK file works
 ; - FILE must be inside track subfolder
 ; - FILE name must be uppercase and letter + space character only
 ; - FILE MUST HAVE .TRK extension
@@ -20,16 +20,7 @@
 
 execBase equ 4
 ACCESS_READ equ -2
-MEMF_ANY equ 0
 MODE_OLDFILE EQU 1005
-;
-; from exec includes
-;
-_LVOOpenLibrary equ -552
-_LVOCloseLibrary equ -414
-_LVOAllocVec equ -684
-_LVOFreeVec equ -690
-
 ;
 ; from dos includes
 ;
@@ -41,20 +32,7 @@ _LVOOpen	EQU	-30
 _LVOClose	EQU	-36
 _LVORead     EQU   -42
 
-                    rsset   0
-fib_DiskKey         rs.l    1
-fib_DirEntryType    rs.l    1
-fib_FileName        rs.b    108
-fib_Protection      rs.l    1
-fib_EntryType       rs.l    1
-fib_Size            rs.l    1
-fib_NumBlocks       rs.l    1
-fib_DateStamp       rs.b    12
-fib_Comment         rs.b    80
-fib_OwnerUID        rs.w    1
-fib_OwnerGID        rs.w    1
-fib_Reserved        rs.b    32
-fib_SIZEOF          rs.b    0
+
 
 pathString
     dc.b    "tracks/",0
@@ -69,12 +47,6 @@ TRACK_COUNTER:
     dc.w    0
 
 LOAD_TRACK:
-
-    ;movem.l	d0-d7/a0-a6,-(SP)	; Salva i registri nello stack
-
-    ;moveq	#5,d1		; num. di frames da aspettare
-	;bsr.w	AspettaBlanks	; aspetta 5 frames
-
 
     move.l  execBase,a6
 
@@ -93,24 +65,19 @@ LOAD_TRACK:
     move.l  d0,lock
     beq     .exit
 
-
     ; examine directory for ExNext
     move.l  lock,d1
     move.l  fib,d2
+    move.l #$98765432,d0
     jsr     _LVOExamine(a6)
     tst.w   d0
     beq     .exit
-
-      
-    DEBUG 7777
 
     ; reset track counter to 1
     move.w  #0,TRACK_COUNTER
 
     ; for each element inside the tracks directory
 .loop:
-
-    
 
     move.l  fib,a3
 
@@ -137,7 +104,6 @@ LOAD_TRACK:
 .endcopy:
     move.l  #MODE_OLDFILE,d2
     move.l	#TRACK_FILENAME,d1
-    DEBUG 5555
     jsr     _LVOOpen(a6)
     ;tst.l	d0
     move.l	d0,fd
@@ -251,11 +217,6 @@ LOAD_TRACK:
     tst.w   d0
     beq     .endoflist
 
-    ;move.l  a3,(a2)
-    ;move.l  #formatString,d1
-    ;move.l  #printfArgs,d2
-    ;jsr     _LVOVPrintf(a6)
-
 .nomatch
     bra     .loop
 
@@ -264,7 +225,6 @@ LOAD_TRACK:
     move.l  lock,d1
     jsr     _LVOUnLock(a6)
 
-    DEBUG 6666
     move.l	#150,d1		; num. di frames da aspettare
 	bsr.w	AspettaBlanks	; aspetta 5 frames
 
@@ -275,7 +235,6 @@ LOAD_TRACK:
     clr.b               KEY_ESC
     clr.w               JOY1FIREPRESSED
     jsr                 SETPOT
-    ;movem.l	            (sp)+,d0-d7/a0-a6
     rts
 
 .endoflist
@@ -291,8 +250,6 @@ fib
     dc.l    MY_FIB
 fd
     dc.l    0
-MY_FIB:
-    ds.b    fib_SIZEOF
 
 *****************************************************************************
 ; Questa routine aspetta D1 fotogrammi. Ogni 50 fotogrammi passa 1 secondo.

@@ -411,6 +411,14 @@ nounder255start:
     add.w               #16,d1
     move.b              d1,CURSOR+2
 
+    btst                #8,d1
+    beq.s               cursor_y_vstopset
+    bset.b              #1,3+CURSOR
+    bra.s               cursor_y_end
+cursor_y_vstopset:
+    bclr.b              #1,3+CURSOR
+cursor_y_end:
+
     ;keyboard fire pressed ?
     tst.b	            KEYBOARD_OPTION_FIRE
     beq.s               nokeyboardaction
@@ -644,7 +652,7 @@ notendofinputlist:
 
     move.l              (sp)+,a5
     rts
-nextinputroutine
+nextinputroutine:
 
     addq                #4,a3
     addq                #4,a6
@@ -664,7 +672,7 @@ disable_enable_car_first:
     bset                d6,CARS_IN_PLAY+1
     move.l              (sp)+,d6
     rts
-    disablecar_first:
+disablecar_first:
     bclr                d6,CARS_IN_PLAY+1
     move.l              (sp)+,d6
     rts
