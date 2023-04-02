@@ -5,7 +5,7 @@
 ; byte from to 9599         -> raw planar image first bitplane (320X240)
 ; byte from 9600 to 19199   -> raw planar image second bitplane (320X240)
 ; byte from 19200 to 28799  -> raw planar image third bitplane (320X240)
-; byte from 28800 to 38399  -> raw planar image fouth bitplane (320X240)
+; byte from 28800 to 38399  -> raw planar image fourth bitplane (320X240)
 ; byte from 38400 to 47999  -> raw planar image fifth bitplane (320X240)
 ; byte from 48000 to 48063  -> color palette (32 colors)
 ; byte from 48064 to 124863 -> track metadata (raw indexed image 1 byte each pixel)
@@ -38,7 +38,7 @@ pathString
     dc.b    "tracks/",0
     even
 
-TRACK_FILENAME: 
+TRACK_FILENAME:
     dc.b "tracks/"
     dcb.b 108+1,0
     even
