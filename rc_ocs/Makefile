@@ -1,6 +1,7 @@
 .PHONY: adf
 
 all:
+	cp assets/extra/rc.guide* ./bin/
 	cd src
 	vasmm68k_mot -devpac -nocase -Fhunk -DMATRIX_STACK_SIZE=0 -DSOUND -DQ4_12_TABLE_LOOKUP -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  -o ./src/rc.o ./src/rc.s
 	vlink -bamigahunk -o ./bin/rc -s -DMATRIX_STACK_SIZE=0 -DSOUND -DQ4_12_TABLE_LOOKUP -DUSE_CLIPPING -DSQRT_BIG -DUSE_DBLBUF -DUSE_BPL_SECTION  ./src/rc.o
@@ -20,6 +21,7 @@ all:
 
 adf:
 	make all
+	cp assets/extra/rc.guide* ./buildadf/
 	$(eval $@_TMP := $(shell date +'%F_%T'))
 	cp bin/rc32 buildadf
 	exe2adf-linux64bit -d buildadf  -l rc_$($@_TMP) -a ./adf/rc_$($@_TMP).adf

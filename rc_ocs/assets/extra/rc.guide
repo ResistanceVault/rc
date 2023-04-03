@@ -6,7 +6,7 @@
 @index Main
 @remark Created with Heddley v1.1 (c) Edd Dumbill 1994
 
-@node "Main" "Heddley v1.1 (C) Edd Dumbill 1994"
+@node "Main" "RC (Rally Cars) (C) Alessio Garzi aka Ozzyboshi (2023)"
 
                                @{b}RC (Rally Cross)@{ub}
 
@@ -22,19 +22,15 @@
 
     Contents
 
-    @{" IMPORTANT -- DISTRIBUTION " link "distribution" 0}    distributing RC
+    @{" IMPORTANT -- DISTRIBUTION " link "distribution" 0}    distributing RC
 
 
-    @{" Introduction              " link "intro" 0}    about RC
-    @{" Installing RC             " link "installation" 0}    installing RC on your system
-    @{" Starting RC               " link "startingup" 0}    starting the game
+    @{" Introduction              " link "intro" 0}    about RC
+    @{" Installing RC             " link "installation" 0}    installing RC on your system
+    @{" Starting RC               " link "startingup" 0}    starting the game
 
-    @{" How to contact the author " link "author" 0}    for bug reports and contributions
-    @{" License                   " link "license" 0}    license info
-
-
-An HTML version of this documentation, created with Heddley, is available on the WWW at:
-@{u}https://github.com/Ozzyboshi/RC/RC.guide.html@{uu}
+    @{" How to contact the author " link "author" 0}    for bug reports and contributions
+    @{" License                   " link "license" 0}    license info
 
 The latest version of RC should be obtainable from the page:
 @{u}http://github.com/Ozzyboshi/rc/releases@{uu}
@@ -42,7 +38,7 @@ The latest version of RC should be obtainable from the page:
 @{b}Both RC and this documentation are copyright (C) 2023 by Alessio Garzi.@{ub}
 @endnode
 
-@node "intro" "Introduction to Heddley"
+@node "intro" "Introduction to RC"
 @{u}Why was RC written?@{uu}
 
 First of all the RC concept is not mine, I used to play an RC game in the late 90s on my Pentium
