@@ -465,3 +465,104 @@ COPCOLOR_TRACK_BANNER2_7:
 
   dc.w	$FFFF,$FFFE	;
 ; END OF COPPERLIST_TRACK_SELECTION
+
+COPPERLIST_MAIN:
+
+Sprite0Mainpointers:
+  dc.w       $120,$0000,$122,$0000
+  dc.w       $124,$0000,$126,$0000
+  dc.w       $128,$0000,$12a,$0000
+  dc.w       $12c,$0000,$12e,$0000
+  dc.w       $130,$0000,$132,$0000
+  dc.w       $134,$0000,$136,$0000
+  dc.w       $138,$0000,$13a,$0000
+  dc.w       $13c,$0000,$13e,$0000
+
+  dc.w		 $8E,$2c81	; DiwStrt
+  dc.w		 $90,$2cc1	; DiwStop
+  dc.w		 $92,$0038	; DdfStart
+  dc.w		 $94,$00d0	; DdfStop
+  dc.w		 $102,0		; BplCon1
+  dc.w		 $104,$24	; BplCon2
+  dc.w		 $108,0		; Bpl1Mod
+  dc.w		 $10a,0		; Bpl2Mod
+
+	; Bitplanes Pointers
+BPLPTR1_MAIN:
+  dc.w       $e0,$0000,$e2,$0000                                       ;first	 bitplane - BPL0PT
+BPLPTR2_MAIN:
+  dc.w       $e4,$0000,$e6,$0000                                       ;second bitplane - BPL1PT
+BPLPTR3_MAIN:
+  dc.w       $e8,$0000,$ea,$0000                                       ;third	 bitplane - BPL2PT
+BPLPTR4_MAIN:
+  dc.w       $ec,$0000,$ee,$0000                                       ;fourth bitplane - BPL3PT
+BPLPTR5_MAIN:
+  dc.w       $f0,$0000,$f2,$0000
+  COPSET5BPL
+
+COPCOLOR_MAIN_0:
+	dc.w	$0180,$000	; color0
+COPCOLOR_MAIN_1:
+	dc.w	$0182,$000	; color1
+COPCOLOR_MAIN_2:
+	dc.w	$0184,$000	; color2
+COPCOLOR_MAIN_3:
+	dc.w	$0186,$000	; color3
+COPCOLOR_MAIN_4:
+	dc.w	$0188,$000	; color4
+COPCOLOR_MAIN_5:
+	dc.w	$018A,$000	; color5
+COPCOLOR_MAIN_6:
+	dc.w	$018C,$000	; color6
+COPCOLOR_MAIN_7:
+	dc.w	$018E,$000	; color7
+COPCOLOR_MAIN_8:
+	dc.w	$0190,$000	; color8
+COPCOLOR_MAIN_9:
+	dc.w	$0192,$000	; color9
+COPCOLOR_MAIN_10:
+	dc.w	$0194,$000	; color10
+COPCOLOR_MAIN_11:
+	dc.w	$0196,$000	; color11
+COPCOLOR_MAIN_12:
+	dc.w	$0198,$000	; color12
+COPCOLOR_MAIN_13:
+	dc.w	$019A,$000	; color13
+COPCOLOR_MAIN_14:
+	dc.w	$019C,$000	; color14
+COPCOLOR_MAIN_15:
+	dc.w	$019E,$000	; color15
+COPCOLOR_MAIN_16:
+	dc.w	$01a0,$000	; color16
+COPCOLOR_MAIN_17:
+	dc.w	$01a2,$000	; color17
+COPCOLOR_MAIN_18:
+	dc.w	$01a4,$000	; color18
+COPCOLOR_MAIN_19:
+	dc.w	$01a6,$000	; color19
+COPCOLOR_MAIN_20:
+	dc.w	$01a8,$000	; color20
+COPCOLOR_MAIN_21:
+	dc.w	$01aa,$000	; color21
+COPCOLOR_MAIN_22:
+	dc.w	$01ac,$000	; color22
+COPCOLOR_MAIN_23:
+	dc.w	$01ae,$000	; color23
+COPCOLOR_MAIN_24:
+	dc.w	$1b0,$000	; color24
+COPCOLOR_MAIN_25:
+	dc.w	$1b2,$000	; color25
+COPCOLOR_MAIN_26:
+	dc.w	$1b2,$000	; color26
+COPCOLOR_MAIN_27:
+	dc.w	$1b4,$000	; color27
+COPCOLOR_MAIN_28:
+	dc.w	$1b8,$000	; color28
+COPCOLOR_MAIN_29:
+	dc.w	$1ba,$000	; color29
+COPCOLOR_MAIN_30:
+	dc.w	$1bc,$000	; color30
+COPCOLOR_MAIN_31:
+	dc.w	$1be,$000	; color31
+  dc.w	$FFFF,$FFFE	;
+; END OF COPPERLIST_TRACK_SELECTION

@@ -224,6 +224,10 @@ clearintroscreen:
 	jsr					CAR3_INIT
 	jsr					CAR4_INIT
 
+	; Open main screen
+	IFD COLOR
+	jsr MAINSCREEN
+	ENDC
 	; Open welcome screen
 welcomescreen_start:
 	jsr 				welcomescreen
@@ -512,8 +516,11 @@ exit:
 	include "race_manager.s"
 	include "track_info_manager.s"
 	include "race_results.s"
+	IFD INTRO
 	include "introscreen.s"
+	ENDC
 	IFD COLOR
+	include "mainscreen.s"
 	include "load_track.s"
 	include "trackselectscreen.s"
 	ENDC
@@ -555,6 +562,9 @@ POINTINCOPPERLIST_FUNCT:
 	dc.b	0,40,90,110,127,110,90,40,0,-40,-90,-110,-127,-110,-90,-40
 	;incbin "assets/sounds/Squares.wav.asd"
 	ENDC
+
+	SECTION FONTS,DATA_C
+	include "fonts.i"
 
 	SECTION	SPRITES,DATA_C
 	include "carsprites.i"
