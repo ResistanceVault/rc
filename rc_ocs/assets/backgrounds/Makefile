@@ -6,3 +6,5 @@ all:
 
 	cp ./Sfondo\ titoli\ Scuro\ RC.raw ../../bin/main.data
 	cat ./Sfondo\ titoli\ Scuro\ RC.pal >> ../../bin/main.data
+
+	cp ../../bin/main.data ../../buildadf/main.data

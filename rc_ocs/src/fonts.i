@@ -61,7 +61,7 @@ BIGFONTS:
     even
 
 BIGFONTS_REVERSE_MASK:
-    dcb.b 2*16*1,$00 ; space
+    dcb.b 2*16*1,$FF ; space
     dcb.b 2*16*1,$00 ; !
     dcb.b 2*16*1,$00 ; "
     dcb.b 2*16*1,$00 ; #

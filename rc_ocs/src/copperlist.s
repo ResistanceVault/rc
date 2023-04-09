@@ -433,9 +433,9 @@ COPCOLOR_TRACK_24:
 COPCOLOR_TRACK_25:
 	dc.w	$1b2,$000	; color25
 COPCOLOR_TRACK_26:
-	dc.w	$1b2,$000	; color26
+	dc.w	$1b4,$000	; color26
 COPCOLOR_TRACK_27:
-	dc.w	$1b4,$000	; color27
+	dc.w	$1b6,$000	; color27
 COPCOLOR_TRACK_28:
 	dc.w	$1b8,$000	; color28
 COPCOLOR_TRACK_29:
@@ -553,9 +553,9 @@ COPCOLOR_MAIN_24:
 COPCOLOR_MAIN_25:
 	dc.w	$1b2,$000	; color25
 COPCOLOR_MAIN_26:
-	dc.w	$1b2,$000	; color26
+	dc.w	$1b4,$000	; color26
 COPCOLOR_MAIN_27:
-	dc.w	$1b4,$000	; color27
+	dc.w	$1b6,$000	; color27
 COPCOLOR_MAIN_28:
 	dc.w	$1b8,$000	; color28
 COPCOLOR_MAIN_29:
