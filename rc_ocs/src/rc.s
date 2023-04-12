@@ -511,19 +511,19 @@ exit:
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"
-	include "welcomescreen.s"
+	include "screens/welcomescreen.s"
 	include "banner_manager.s"
 	include "race_manager.s"
 	include "track_info_manager.s"
 	include "race_results.s"
 	IFD INTRO
-	include "introscreen.s"
+	include "screens/introscreen.s"
 	ENDC
 	IFD COLOR
 	include "menu.s"
-	include "mainscreen.s"
+	include "screens/mainscreen.s"
 	include "load_track.s"
-	include "trackselectscreen.s"
+	include "screens/trackselectscreen.s"
 	ENDC
 
 MOVERS:
