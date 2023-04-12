@@ -22,4 +22,8 @@ NOALTO_WELCOME:
 	BEQ.S	ENDJOYST_WELCOME	; se no finisci
 	bset	#3,d0	; se si sposta lo sprite
 ENDJOYST_WELCOME:
+	btst				#7,$bfe001	; fire pressed?
+	bne.w				JOY1_NOFIREPRESSED_WELCOME
+	bset 				#4,d0
+JOY1_NOFIREPRESSED_WELCOME:
 	RTS

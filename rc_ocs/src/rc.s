@@ -520,6 +520,7 @@ exit:
 	include "introscreen.s"
 	ENDC
 	IFD COLOR
+	include "menu.s"
 	include "mainscreen.s"
 	include "load_track.s"
 	include "trackselectscreen.s"
@@ -571,7 +572,7 @@ POINTINCOPPERLIST_FUNCT:
 
 CURSOR:
 	dc.b $3b,$40,$4b,$00
-	incbin "assets/cars/car0_16x16.sprite"
+	incbin "assets/cars_small/car_0.raw"
 	dc.w 0,0
 
 	SECTION	MIOPLANE,DATA_C
