@@ -227,6 +227,8 @@ clearintroscreen:
 	; Open main screen
 	IFD COLOR
 	jsr MAINSCREEN
+	;jsr RESULTSCREEN
+
 	ENDC
 	; Open welcome screen
 welcomescreen_start:
@@ -522,6 +524,7 @@ exit:
 	IFD COLOR
 	include "menu.s"
 	include "screens/mainscreen.s"
+	include "screens/resultscreen.s"
 	include "load_track.s"
 	include "screens/trackselectscreen.s"
 	ENDC

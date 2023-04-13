@@ -104,11 +104,11 @@ menuloop:
     beq.s                setcursormain
 
     ; set the cursor if entry is selcted
-    cmp.l                MENU_MAIN_CURRENTLY_SELECTED,a6
-    bne.s                entry_not_currently_selected
+    ;cmp.l                MENU_MAIN_CURRENTLY_SELECTED,a6
+    ;bne.s                entry_not_currently_selected
 
-    bsr.w                set_cursor_sprite_position
-entry_not_currently_selected:
+    ;bsr.w                set_cursor_sprite_position
+;entry_not_currently_selected:
     move.w               menu_EntryX(a6),d0
     move.w               menu_EntryY(a6),d1
     move.l               menu_DescPtr(a6),a1
@@ -154,8 +154,6 @@ waitmain:
     move.l              MENUSCREEN_SELECTED_ENTRY(PC),a6
     bsr.w               set_cursor_sprite_position
 
-    ;btst				#7,$bfe001	; joy fire pressed?
-	;beq.s				exitmainscreen
     tst.w               MAIN_EXIT
     beq.s               mousemain
     clr.w               MAIN_EXIT
