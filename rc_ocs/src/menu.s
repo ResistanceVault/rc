@@ -1,3 +1,6 @@
+FADE_SPEED          EQU     5
+CURSOR_CLEARING     EQU     5
+
                     rsset   0
 menu_EntryX         rs.w    1
 menu_EntryY         rs.w    1
@@ -16,6 +19,8 @@ MAIN_JOY1_FIRE_1_PRESSED: dc.b 0
 MAIN_JOY1_FIRE_2_PRESSED: dc.b 0
 
 MAIN_EXIT: dc.w 0
+
+FADE_SPEED_COUNTER: dc.w FADE_SPEED
 
 MENUSCREEN:
 
@@ -72,13 +77,15 @@ MENUSCREEN:
     jsr                 _LVORead(a6)
 
     moveq               #16-1,d7
-    move.l              #COPCOLOR_MAIN_0+2,d2
+    ;move.l              #COPCOLOR_MAIN_0+2,d2
+    move.l               #MAIN_PALETTE,d2
 menucolorloop:
     move.l              fd,d1
     move.l              #2,d3
     jsr                 _LVORead(a6)
 
-    addq                #4,d2
+    ;addq                #4,d2
+    addq                #2,d2
     dbra                d7,menucolorloop
 
     ; close the file
@@ -90,13 +97,19 @@ menucolorloop:
 
     bsr.w               DopoLoad
 
-    move.w				COLORS_FONTS_SMALL+2,COPCOLOR_MAIN_25+2
-	move.w				COLORS_FONTS_SMALL+4,COPCOLOR_MAIN_26+2
-	move.w				COLORS_FONTS_SMALL+6,COPCOLOR_MAIN_27+2
-	move.w				COLORS_FONTS_SMALL+8,COPCOLOR_MAIN_28+2
-	move.w				COLORS_FONTS_SMALL+10,COPCOLOR_MAIN_29+2
-	move.w				COLORS_FONTS_SMALL+12,COPCOLOR_MAIN_30+2
-	move.w				COLORS_FONTS_SMALL+14,COPCOLOR_MAIN_31+2
+    ;move.w				COLORS_FONTS_SMALL+2,COPCOLOR_MAIN_25+2
+	;move.w				COLORS_FONTS_SMALL+4,COPCOLOR_MAIN_26+2
+	;move.w				COLORS_FONTS_SMALL+6,COPCOLOR_MAIN_27+2
+	;move.w				COLORS_FONTS_SMALL+8,COPCOLOR_MAIN_28+2
+	;move.w				COLORS_FONTS_SMALL+10,COPCOLOR_MAIN_29+2
+	;move.w				COLORS_FONTS_SMALL+12,COPCOLOR_MAIN_30+2
+	;move.w				COLORS_FONTS_SMALL+14,COPCOLOR_MAIN_31+2
+    moveq #7-1,d7
+    lea                 COLORS_FONTS_SMALL+2,a0
+    lea                 MAIN_PALETTE_25,a1
+mainfontcolorloop:
+    move.w (a0)+,(a1)+
+    dbra d7,mainfontcolorloop
 
     move.l               MENUSCREEN_ENTRIES,a6
 menuloop:
@@ -130,6 +143,12 @@ waitmain:
     cmpi.b  			#$ff,$dff006    ; linea 255?
     beq.s   			waitmain
 
+    subi.w              #1,FADE_SPEED_COUNTER
+    bne.s               nomainfadein
+    bsr.w               MAIN_FadeIn
+    move.w              #FADE_SPEED,FADE_SPEED_COUNTER
+nomainfadein:
+
     jsr                 READJOY1_WELCOME
 
     ; check if up has been pressed
@@ -157,6 +176,26 @@ waitmain:
     tst.w               MAIN_EXIT
     beq.s               mousemain
     clr.w               MAIN_EXIT
+
+    move.w              #FADE_SPEED,FADE_SPEED_COUNTER
+
+mousemain2:
+    cmpi.b  			#$ff,$dff006    ; Linea 255?
+    bne.s   			mousemain2
+
+waitmain2:
+    cmpi.b  			#$ff,$dff006    ; linea 255?
+    beq.s   			waitmain2
+
+    subi.w              #1,FADE_SPEED_COUNTER
+    bne.s               nomainfadeout
+    bsr.w               MAIN_FadeOut
+    move.w              #FADE_SPEED,FADE_SPEED_COUNTER
+nomainfadeout:
+    tst.w	            MAIN_FaseDelFade	; abbiamo superato l'ultima fase? (16)?
+	beq.s	            exitmainscreen
+    bra.s               mousemain2
+
 exitmainscreen:
     rts
 
@@ -297,6 +336,7 @@ set_cursor_sprite_position:
     move.w               d0,d1 ; d1 holds the least sig bit to determine if the number is odd or even
     lsr.w                #1,d0
     add.w                #60,d0
+    sub.w                #CURSOR_CLEARING,d0
     btst                 #0,d1
     beq.s                car_no_odd_x_main
     bset                 #0,3+CURSOR
@@ -363,3 +403,144 @@ move_cursor_up:
 main_no_previous_entry_2:
     move.l              (sp)+,a0
     rts
+
+MAIN_FaseDelFade:		; fase attuale del fade (0-16)
+	dc.w	0
+
+MAIN_FadeOut:
+	tst.w	MAIN_FaseDelFade	; abbiamo superato l'ultima fase? (16)?
+	beq.s	MAIN_FinitoOut
+	subq.w	#1,MAIN_FaseDelFade	; sistema per la prossima volta la fase da fare
+	moveq	#0,d0
+	move.w	MAIN_FaseDelFade(PC),d0
+	moveq	#32-1,d7		; D7 = Numero di colori
+	lea     MAIN_PALETTE,a0	; A0 = indirizzo tabella dei colori
+					; della figura da "dissolvere"
+	lea	    COPCOLOR_MAIN_0+2,a1		; A1 = indirizzo colori in copperlist
+					; da notare che parte dal COLOR1 e
+					; non dal color0, in quanto il color0
+					; e'=$000 e cosi' rimane.
+	bsr.s	MAIN_Fade
+	rts
+MAIN_FinitoOut:
+	rts
+
+MAIN_FadeIn:
+	cmp.w	#17,MAIN_FaseDelFade
+	beq.s	MAIN_FinitoFadeIn
+	moveq	#0,d0
+	move.w	MAIN_FaseDelFade(PC),d0
+	moveq	#32-1,d7		; D7 = Numero di colori
+	lea	    MAIN_PALETTE,a0	; A0 = indirizzo tabella dei colori
+					; della figura da "dissolvere"
+	lea	    COPCOLOR_MAIN_0+2,a1		; A1 = indirizzo colori in copperlist
+					; da notare che parte dal COLOR1 e
+					; non dal color0, in quanto il color0
+					; e'=$000 e cosi' rimane.
+	bsr.s	MAIN_Fade
+	addq.w	#1,MAIN_FaseDelFade	; sistema per la prossima volta la fase da fare
+	rts
+MAIN_FinitoFadeIn:
+	;move.l  #MAIN_FadeOut,MAIN_PHAZE_FUNCT_ADDR
+	rts
+
+*****************************************************************************
+*		Routine per Fade In/Out da e verso il NERO (versione 2)	    *
+* Input:								    *
+*									    *
+* d7 = Numero colori-1							    *
+* a0 = Indirizzo tabella con i colori della figura			    *
+* a1 = Indirizzo primo colore in copperlist				    *
+* d0 = Momento del fade, multiplier - per esempio con d0=0 lo schermo	    *
+*	e' bianco totalmente, con d0=8 siamo a meta' fade e con d0=16	    *
+*	siamo ai colori pieni; dunque ci sono 17 fasi, dalla 0 alla 16.	    *
+*	Per fare un fade IN, dal bianco al colore, si deve dare a ogni	    *
+*	chiamata alla routine un valore di d0 crescente da 0 a 16	    *
+*	Per un fade OUT, si dovra' partire da d0=16 fino a d0=0		    *
+*									    *
+*  Il procedimento di FADE e' quello di moltiplicare ogni componente R,G,B  *
+*  del colore per un Multiplier, che va da 0 per il NERO (x*0=0), a 16 per  *
+*  i colori normali, dato che poi il colore viene diviso per 16,	    *
+*  moltiplicare un colore per 16 e ridividerlo non fa che lasciarlo uguale. *
+*									    *
+*****************************************************************************
+
+;	   .      .-~\
+;	  / `-'\.'    `- :
+;	  |    /          `._
+;	  |   |   .-.        {
+;	   \  |   `-'         `.
+;	 .  \ |                /
+;	~-.`. \|            .-~_
+;	  `.\-.\       .-~      \
+;	    `-'/~~ -.~          /
+;	  .-~/|`-._ /~~-.~ -- ~
+;	 /  |  \    ~- . _\
+
+MAIN_Fade:
+;	Calcola la componente BLU
+
+	MOVE.W	(A0),D4		; Metti il colore dalla tabella colori in d4
+	AND.W	#$00f,D4	; Seleziona solo la componente blu ($RGB->$00B)
+	MULU.W	D0,D4		; Moltiplica per la fase del fade (0-16)
+	ASR.W	#4,D4		; shift 4 BITS a destra, ossia divisione per 16
+	AND.W	#$00f,D4	; Seleziona solo la componente BLU
+	MOVE.W	D4,D5		; Salva la componente BLU in d5
+
+;	Calcola la componente VERDE (GREEN)
+
+	MOVE.W	(A0),D4		; Metti il colore dalla tabella colori in d4
+	AND.W	#$0f0,D4	; Selez. solo la componente verde ($RGB->$0G0)
+	MULU.W	D0,D4		; Moltiplica per la fase del fade (0-16)
+	ASR.W	#4,D4		; shift 4 BITS a destra, ossia divisione per 16
+	AND.W	#$0f0,D4	; Seleziona solo la componente VERDE
+	OR.W	D4,D5		; Salva la comp.verde assieme a quella BLU
+
+;	Calcola la componente ROSSA (RED)
+
+	MOVE.W	(A0)+,D4	; leggi il colore dalla tabella
+				; e fai puntare a0 al prossimo col.
+	AND.W	#$f00,D4	; Selez. solo la componente rossa ($RGB->$R00)
+	MULU.W	D0,D4		; Moltiplica per la fase del fade (0-16)
+	ASR.W	#4,D4		; shift 4 BITS a destra, ossia divisione per 16
+	AND.W	#$f00,D4	; Selez. solo la componente rossa ($RGB->$R00)
+	OR.W	D4,D5		; Salva la c. ROSSA assieme alla BLU e VERDE
+
+	MOVE.W	D5,(A1)		; E metti il colore $0RGB finale in copperlist
+	addq.w	#4,a1		; prossimo colore in copperlist
+	DBRA	D7,MAIN_Fade		; fai tutti i colori
+	rts
+
+MAIN_PALETTE:
+MAIN_PALETTE_0:     dc.w 0    ; color 0
+MAIN_PALETTE_1:     dc.w 0    ; color 1
+MAIN_PALETTE_2:     dc.w 0    ; color 2
+MAIN_PALETTE_3:     dc.w 0    ; color 3
+MAIN_PALETTE_4:     dc.w 0    ; color 4
+MAIN_PALETTE_5:     dc.w 0    ; color 5
+MAIN_PALETTE_6:     dc.w 0    ; color 6
+MAIN_PALETTE_7:     dc.w 0    ; color 7
+MAIN_PALETTE_8:     dc.w 0    ; color 8
+MAIN_PALETTE_9:     dc.w 0    ; color 9
+MAIN_PALETTE_10:    dc.w 0    ; color 10
+MAIN_PALETTE_11:    dc.w 0    ; color 11
+MAIN_PALETTE_12:    dc.w 0    ; color 12
+MAIN_PALETTE_13:    dc.w 0    ; color 13
+MAIN_PALETTE_14:    dc.w 0    ; color 14
+MAIN_PALETTE_15:    dc.w 0    ; color 15
+MAIN_PALETTE_16:    dc.w $d73 ; color 16
+MAIN_PALETTE_17:    dc.w $333 ; color 17
+MAIN_PALETTE_18:    dc.w $921 ; color 18
+MAIN_PALETTE_19:    dc.w $ccc ; color 19
+MAIN_PALETTE_20:    dc.w 0    ; color 20
+MAIN_PALETTE_21:    dc.w 0    ; color 21
+MAIN_PALETTE_22:    dc.w 0    ; color 22
+MAIN_PALETTE_23:    dc.w 0    ; color 23
+MAIN_PALETTE_24:    dc.w 0    ; color 24
+MAIN_PALETTE_25:    dc.w 0    ; color 25
+MAIN_PALETTE_26:    dc.w 0    ; color 26
+MAIN_PALETTE_27:    dc.w 0    ; color 27
+MAIN_PALETTE_28:    dc.w 0    ; color 28
+MAIN_PALETTE_29:    dc.w 0    ; color 29
+MAIN_PALETTE_30:    dc.w 0    ; color 30
+MAIN_PALETTE_31:    dc.w 0    ; color 31

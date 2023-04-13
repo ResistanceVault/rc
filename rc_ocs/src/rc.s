@@ -226,7 +226,9 @@ clearintroscreen:
 
 	; Open main screen
 	IFD COLOR
-	jsr MAINSCREEN
+	jsr 				MAINSCREEN
+	tst.w               EXIT_TO_OS_FLAG
+    bne.w               exit
 	;jsr RESULTSCREEN
 
 	ENDC
@@ -683,7 +685,9 @@ PHAZELOGO_4:
 	dcb.b 10240,0
 PHAZELOGO_5:
 	dcb.b 10240,0
+	IFD INTRO
 PHAZELOGO_PALETTE:
 	incbin "assets/phazelogo/phazelogo.plt"
+	ENDC
 MY_FIB:
     ds.b    fib_SIZEOF

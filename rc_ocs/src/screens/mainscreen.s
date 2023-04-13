@@ -17,6 +17,11 @@ START_RACE_FUNCTION:
     move.w  #1,MAIN_EXIT
     rts
 
+EXIT_TO_OS_FUNCTION:
+    move.w  #1,EXIT_TO_OS_FLAG
+    move.w  #1,MAIN_EXIT
+    rts
+
 DRAFT_FUNCTION:
     rts
 
@@ -31,7 +36,7 @@ MENU_MAIN:
 
     dc.w 5,11
     dc.l EXIT_TO_OS_TXT
-    dc.l DRAFT_FUNCTION
+    dc.l EXIT_TO_OS_FUNCTION
 
     dc.w 0,0
     dc.l 0

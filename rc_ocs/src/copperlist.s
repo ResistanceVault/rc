@@ -533,13 +533,13 @@ COPCOLOR_MAIN_14:
 COPCOLOR_MAIN_15:
 	dc.w	$019E,$000	; color15
 COPCOLOR_MAIN_16:
-	dc.w	$01a0,$d73	; color16
+	dc.w	$01a0,$000	; color16
 COPCOLOR_MAIN_17:
-	dc.w	$01a2,$333	; color17
+	dc.w	$01a2,$000	; color17
 COPCOLOR_MAIN_18:
-	dc.w	$01a4,$921	; color18
+	dc.w	$01a4,$000	; color18
 COPCOLOR_MAIN_19:
-	dc.w	$01a6,$ccc	; color19
+	dc.w	$01a6,$000	; color19
 COPCOLOR_MAIN_20:
 	dc.w	$01a8,$000	; color20
 COPCOLOR_MAIN_21:
