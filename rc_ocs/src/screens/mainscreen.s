@@ -1,6 +1,10 @@
 MAIN_FILENAME:
     dc.b "main.data",0
     even
+
+TITLE_TXT: dc.b "BY OZZY AND Z3K",$FF
+    even
+
 START_GAME_TXT:
     dc.b "START GAME",$FF
     even
@@ -42,12 +46,20 @@ MENU_MAIN:
     dc.l 0
     dc.l 0
 
+TXT_MAIN:
+    dc.w 2,15
+    dc.l TITLE_TXT
+
+    dc.w 0,0
+    dc.l 0
+
 MENU_MAIN_CURRENTLY_SELECTED:
     dc.l    MENU_MAIN;+menu_SIZEOF
 
 MAINSCREEN:
     move.l  #MAIN_FILENAME,MENUSCREEN_IMAGE
     move.l  #MENU_MAIN,MENUSCREEN_ENTRIES
+    move.l  #TXT_MAIN,TXTSCREEN_ENTRIES
     move.l  MENU_MAIN_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY
     jsr     MENUSCREEN
     rts

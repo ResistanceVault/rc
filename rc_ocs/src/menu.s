@@ -8,8 +8,15 @@ menu_DescPtr        rs.l    1
 menu_FunctPtr       rs.l    1
 menu_SIZEOF         rs.b    0
 
+                    rsset   0
+txt_EntryX         rs.w    1
+txt_EntryY         rs.w    1
+txt_DescPtr        rs.l    1
+txt_SIZEOF         rs.b    0
+
 MENUSCREEN_IMAGE: dc.l  0
 MENUSCREEN_ENTRIES: dc.l 0
+TXTSCREEN_ENTRIES: dc.l 0
 
 MENUSCREEN_SELECTED_ENTRY: dc.l 0
 
@@ -97,21 +104,31 @@ menucolorloop:
 
     bsr.w               DopoLoad
 
-    ;move.w				COLORS_FONTS_SMALL+2,COPCOLOR_MAIN_25+2
-	;move.w				COLORS_FONTS_SMALL+4,COPCOLOR_MAIN_26+2
-	;move.w				COLORS_FONTS_SMALL+6,COPCOLOR_MAIN_27+2
-	;move.w				COLORS_FONTS_SMALL+8,COPCOLOR_MAIN_28+2
-	;move.w				COLORS_FONTS_SMALL+10,COPCOLOR_MAIN_29+2
-	;move.w				COLORS_FONTS_SMALL+12,COPCOLOR_MAIN_30+2
-	;move.w				COLORS_FONTS_SMALL+14,COPCOLOR_MAIN_31+2
+    ; set font color into the colors table - START
     moveq #7-1,d7
     lea                 COLORS_FONTS_SMALL+2,a0
     lea                 MAIN_PALETTE_25,a1
 mainfontcolorloop:
     move.w (a0)+,(a1)+
     dbra d7,mainfontcolorloop
+    ; set font color into the colors table - END
 
-    move.l               MENUSCREEN_ENTRIES,a6
+    ; draw txt - START
+    move.l              TXTSCREEN_ENTRIES(PC),a6
+menutxtloop:
+    tst.l                txt_DescPtr(a6)
+    beq.s                menutxtloopend
+    move.w               txt_EntryX(a6),d0
+    move.w               txt_EntryY(a6),d1
+    move.l               txt_DescPtr(a6),a1
+    bsr.w                printstringhigh
+
+    adda.l               #txt_SIZEOF,a6
+    bra.s                menutxtloop
+menutxtloopend:
+    ; draw txt - END
+
+    move.l               MENUSCREEN_ENTRIES(PC),a6
 menuloop:
     tst.l                menu_DescPtr(a6)
     beq.s                setcursormain
