@@ -25,9 +25,26 @@ MAIN_JOY1_DOWN_PRESSED: dc.b 0
 MAIN_JOY1_FIRE_1_PRESSED: dc.b 0
 MAIN_JOY1_FIRE_2_PRESSED: dc.b 0
 
+MAIN_WASD_UP_PRESSED: dc.b 0
+MAIN_WASD_DOWN_PRESSED: dc.b 0
+MAIN_WASD_FIRE_1_PRESSED: dc.b 0
+MAIN_WASD_FIRE_2_PRESSED: dc.b 0
+
+MAIN_ARROWS_UP_PRESSED: dc.b 0
+MAIN_ARROWS_DOWN_PRESSED: dc.b 0
+MAIN_ARROWS_FIRE_1_PRESSED: dc.b 0
+MAIN_ARROWS_FIRE_2_PRESSED: dc.b 0
+
+
 MAIN_EXIT: dc.w 0
 
 FADE_SPEED_COUNTER: dc.w FADE_SPEED
+
+MENU_INPUT_FUNCT_LIST:
+    dc.l READJOY1_WELCOME
+    dc.l KEYBOARD_WASD_WELCOME
+    dc.l KEYBOARD_ARROWS_WELCOME
+    dc.l 0
 
 MENUSCREEN:
 
@@ -91,7 +108,6 @@ menucolorloop:
     move.l              #2,d3
     jsr                 _LVORead(a6)
 
-    ;addq                #4,d2
     addq                #2,d2
     dbra                d7,menucolorloop
 
@@ -104,8 +120,10 @@ menucolorloop:
 
     bsr.w               DopoLoad
 
+    move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
+
     ; set font color into the colors table - START
-    moveq #7-1,d7
+    moveq               #7-1,d7
     lea                 COLORS_FONTS_SMALL+2,a0
     lea                 MAIN_PALETTE_25,a1
 mainfontcolorloop:
@@ -166,32 +184,47 @@ waitmain:
     move.w              #FADE_SPEED,FADE_SPEED_COUNTER
 nomainfadein:
 
-    jsr                 READJOY1_WELCOME
+    lea                 MENU_INPUT_FUNCT_LIST(PC),a3
+    lea                 MAIN_JOY1_UP_PRESSED-1,a6
+menu_input_list_loop_start:
+    tst.l               (a3)
+    beq.s               menu_input_list_loop_end
+
+    move.l              (a3),a4
+    jsr                 (a4)
 
     ; check if up has been pressed
     moveq               #2,d1
-    lea                 MAIN_JOY1_UP_PRESSED(PC),a6
+    addq                #1,a6
     move.l              #move_cursor_down,a1
     bsr.w               input_cmd_key_release
 
     ; check if down has been pressed
     moveq               #3,d1
-    lea                 MAIN_JOY1_DOWN_PRESSED(PC),a6
+    addq                #1,a6
     move.l              #move_cursor_up,a1
     bsr.w               input_cmd_key_release
 
     ; check if fire has been pressed
     moveq               #4,d1
-    lea                 MAIN_JOY1_FIRE_1_PRESSED(PC),a6
+    addq                #1,a6
     move.l              MENUSCREEN_SELECTED_ENTRY,a1
     move.l              menu_FunctPtr(a1),a1
     bsr.w               input_cmd_key_release
 
+    move.l              a6,-(sp)
     move.l              MENUSCREEN_SELECTED_ENTRY(PC),a6
     bsr.w               set_cursor_sprite_position
+    move.l              (sp)+,a6
+
+    addq                #4,a3
+    addq                #1,a6
+    bra.s               menu_input_list_loop_start
+
+menu_input_list_loop_end:
 
     tst.w               MAIN_EXIT
-    beq.s               mousemain
+    beq.w               mousemain
     clr.w               MAIN_EXIT
 
     move.w              #FADE_SPEED,FADE_SPEED_COUNTER

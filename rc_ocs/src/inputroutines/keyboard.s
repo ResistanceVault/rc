@@ -45,7 +45,6 @@ MioInt68KeyB:	; $68
 
 	; if we are here the key is pressed
 keynotreleased:
-
     not.b d0
     lsr.b #1,d0
 	move.b #$FF,(a0,d0.w)
