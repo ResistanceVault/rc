@@ -1,21 +1,20 @@
 KEYBOARD_IJKL:
-    moveq   #0,d0
-	tst.b	KEY_L		; if L is pressed go to right
-	BEQ.S	NODESTRA_KIJKL
-	bset 	#0,d0
-	BRA.S	CHECK_Y_KIJKL
-NODESTRA_KIJKL:
-	tst.b	KEY_J		; if J is pressed go to left
-	BEQ.S	CHECK_Y_KIJKL
-	bset	#1,d0
-CHECK_Y_KIJKL:
-	tst.b	KEY_I
-	BEQ.S	NOALTO_KIJKL ; if I is pressed go to up
-	bset 	#2,d0	; se si sposta lo sprite
-	BRA.S	ENDKEYBOARD_IJKL
-NOALTO_KIJKL:
-	tst.b	KEY_K		; if K is pressed go to down
-	BEQ.S	ENDKEYBOARD_IJKL	; se no finisci
-	bset	#3,d0	; se si sposta lo sprite
-ENDKEYBOARD_IJKL:
-	RTS
+
+	move.b KEY_L,d0 ; right?
+    ror.w #1,d0
+
+    move.b KEY_J,d0 ; left?
+    ror.w #1,d0
+
+    move.b KEY_I,d0 ; up?
+    ror.w #1,d0
+
+    move.b KEY_K,d0 ; down?
+    ror.w #1,d0
+
+    rol.w #4,d0 ; put back bits into d0 lower byte
+
+    andi.w #$000f,d0     ; clean up
+
+    rts
+

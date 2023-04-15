@@ -1,22 +1,19 @@
 KEYBOARD_ARROWS:
-    ;rts
-    moveq   #0,d0
-	tst.b	KEY_ARROW_RIGHT		; if ARROW RIGHT is pressed go to right
-	BEQ.S	NODESTRA_KARROWS
-	bset 	#0,d0
-	BRA.S	CHECK_Y_KARROWS
-NODESTRA_KARROWS:
-	tst.b	KEY_ARROW_LEFT		; if ARROW LEFT is pressed go to left
-	BEQ.S	CHECK_Y_KARROWS
-	bset	#1,d0
-CHECK_Y_KARROWS:
-	tst.b	KEY_ARROW_UP
-	BEQ.S	NOALTO_KARROWS ; if ARROW IP is pressed go to up
-	bset 	#2,d0	; se si sposta lo sprite
-	BRA.S	ENDKEYBOARD_ARROWS
-NOALTO_KARROWS:
-	tst.b	KEY_ARROW_DOWN		; if ARROW DOWN is pressed go to down
-	BEQ.S	ENDKEYBOARD_ARROWS	; se no finisci
-	bset	#3,d0	; se si sposta lo sprite
-ENDKEYBOARD_ARROWS:
-	RTS
+
+    move.b KEY_ARROW_RIGHT,d0 ; right?
+    ror.w #1,d0
+
+    move.b KEY_ARROW_LEFT,d0 ; left?
+    ror.w #1,d0
+
+    move.b KEY_ARROW_UP,d0 ; up?
+    ror.w #1,d0
+
+    move.b KEY_ARROW_DOWN,d0 ; down?
+    ror.w #1,d0
+
+    rol.w #4,d0 ; put back bits into d0 lower byte
+
+    andi.w #$000f,d0     ; clean up
+
+    rts

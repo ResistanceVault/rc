@@ -1,5 +1,5 @@
 KEYBOARD_WASD_WELCOME:
-    ; start algo
+
     move.b KEY_D,d0 ; right?
     ror.w #1,d0
 

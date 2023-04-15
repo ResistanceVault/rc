@@ -513,7 +513,6 @@ exit:
 	include "inputroutines/keyboard_wasd_welcome.s"
 	include "inputroutines/keyboard_ijkl.s"
 	include "inputroutines/keyboard_arrows.s"
-	include "inputroutines/keyboard_arrows_welcome.s"
 	include "inputroutines/joystick2.s"
 	include "inputroutines/joystick3.s"
 	include "car_management.s"
