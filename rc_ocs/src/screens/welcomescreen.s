@@ -228,6 +228,7 @@ no_load_next_track:
     moveq               #7,d1
     bsr.w               printstring
 
+    move.b              #$40,CURSOR+1
     move.l              #CURSOR,d0
     lea       		    Sprite0Welcomepointers,a1
     jsr       		    POINTINCOPPERLIST_FUNCT

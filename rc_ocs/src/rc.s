@@ -110,7 +110,7 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 2
+MAX_LAPS							EQU 1
 MAX_CARS							EQU 4
 
                     rsset   0
@@ -162,6 +162,10 @@ SWAP_BPL MACRO
 ;   move.w    d0,(a1)
 ;    move.w    d1,2(a1)
 ;    ENDM
+
+DISABLE_AUDIO_DMA MACRO
+    move.w              #$000F,$dff096
+	ENDM
 
 	;include	"daworkbench.s"	; togliere il ; prima di salvare con "WO"
 
@@ -229,8 +233,6 @@ clearintroscreen:
 	jsr 				MAINSCREEN
 	tst.w               EXIT_TO_OS_FLAG
     bne.w               exit
-	;jsr RESULTSCREEN
-
 	ENDC
 	; Open welcome screen
 welcomescreen_start:
@@ -519,7 +521,9 @@ exit:
 	include "banner_manager.s"
 	include "race_manager.s"
 	include "track_info_manager.s"
-	include "race_results.s"
+	IFND COLOE
+	include "screens/race_results.s"
+	ENDC
 	IFD INTRO
 	include "screens/introscreen.s"
 	ENDC

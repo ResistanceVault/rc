@@ -155,7 +155,12 @@ MANAGE_END_STATE:
     subi.w              #1,RACE_MANAGER_TIMER
     bne.s               no_real_end_race
     move.W              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
+    IFND COLOR
     bra.w               RACE_RESULTS_SCREEN
+    ELSE
+    jsr RESULTSCREEN
+    beq.w				welcomescreen_start
+    ENDIF
 no_real_end_race:
     bra.w               before_moversloop
 
