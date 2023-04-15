@@ -1,24 +1,22 @@
 KEYBOARD_WASD_WELCOME:
-    move.l d1,-(sp)
-    moveq  #0,d0
+    ; start algo
+    move.b KEY_D,d0 ; right?
+    ror.w #1,d0
 
-    move.b KEY_D,d0
-    andi.b #%00000001,d0
+    move.b KEY_A,d0 ; left?
+    ror.w #1,d0
 
-    move.b KEY_A,d1
-    andi.b #%00000010,d1
-    or.b   d1,d0
+    move.b KEY_W,d0 ; up?
+    ror.w #1,d0
 
-    move.b KEY_W,d1
-    andi.b #%00000100,d1
-    or.b   d1,d0
+    move.b KEY_S,d0 ; down?
+    ror.w #1,d0
 
-    move.b KEY_S,d1
-    andi.b #%00001000,d1
-    or.b   d1,d0
+    move.b KEY_ENTER,d0 ; fire?
+    ror.w #1,d0
 
-    move.b KEY_ENTER,d1
-    andi.b #%00010000,d1
-    or.b   d1,d0
-    move.l (sp)+,d1
+    rol.w #5,d0 ; put back bits into d0 lower byte
+
+    andi.w #$001f,d0     ; clean up
+
     rts
