@@ -5,53 +5,161 @@ define strip_odd_bytes
     done
 endef
 
+define strip_odd_bytes_mask
+    > $2
+	for number in 0 2 4 6 8 10 12; do \
+		dd if=$1 skip=$$number count=1 bs=1 status=none oflag=append conv=notrunc of=$2; \
+    done
+endef
+
 define copy
 	cp $1 $2
 endef
 
 all:
-	rm -f ./small/0.raw ../../src/assets/fonts/small/colors.plt
-	ilbm2raw  ./small/0.iff ./small/0.raw -p ../../src/assets/fonts/small/colors.plt
+	ilbm2raw -f -r ./small/0_mask_reversed.raw ./small/0.iff ./small/0.raw -p ../../src/assets/fonts/small/colors.plt
 	$(call strip_odd_bytes,./small/0.raw,../../src/assets/fonts/small/0.raw)
+	$(call strip_odd_bytes_mask,./small/0_mask_reversed.raw,../../src/assets/fonts/small/0_mask_reversed.raw)
 
-	rm -f ./small/1.raw
-	ilbm2raw  ./small/1.iff ./small/1.raw
+	ilbm2raw -f -r ./small/1_mask_reversed.raw ./small/1.iff ./small/1.raw
 	$(call strip_odd_bytes,./small/1.raw,../../src/assets/fonts/small/1.raw)
+	$(call strip_odd_bytes_mask,./small/1_mask_reversed.raw,../../src/assets/fonts/small/1_mask_reversed.raw)
 
-	rm -f ./small/2.raw
-	ilbm2raw  ./small/2.iff ./small/2.raw
+	ilbm2raw -f -r ./small/2_mask_reversed.raw ./small/2.iff ./small/2.raw
 	$(call strip_odd_bytes,./small/2.raw,../../src/assets/fonts/small/2.raw)
+	$(call strip_odd_bytes_mask,./small/2_mask_reversed.raw,../../src/assets/fonts/small/2_mask_reversed.raw)
 
-	rm -f ./small/3.raw
-	ilbm2raw  ./small/3.iff ./small/3.raw
+	ilbm2raw -f -r ./small/3_mask_reversed.raw ./small/3.iff ./small/3.raw
 	$(call strip_odd_bytes,./small/3.raw,../../src/assets/fonts/small/3.raw)
+	$(call strip_odd_bytes_mask,./small/3_mask_reversed.raw,../../src/assets/fonts/small/3_mask_reversed.raw)
 
-	rm -f ./small/4.raw
-	ilbm2raw  ./small/4.iff ./small/4.raw
+	ilbm2raw  -f -r ./small/4_mask_reversed.raw ./small/4.iff ./small/4.raw
 	$(call strip_odd_bytes,./small/4.raw,../../src/assets/fonts/small/4.raw)
+	$(call strip_odd_bytes_mask,./small/4_mask_reversed.raw,../../src/assets/fonts/small/4_mask_reversed.raw)
 
-	rm -f ./small/5.raw
-	ilbm2raw  ./small/5.iff ./small/5.raw
+	ilbm2raw  -f -r ./small/5_mask_reversed.raw ./small/5.iff ./small/5.raw
 	$(call strip_odd_bytes,./small/5.raw,../../src/assets/fonts/small/5.raw)
+	$(call strip_odd_bytes_mask,./small/5_mask_reversed.raw,../../src/assets/fonts/small/5_mask_reversed.raw)
 
-	rm -f ./small/6.raw
-	ilbm2raw  ./small/6.iff ./small/6.raw
+	ilbm2raw -f -r ./small/6_mask_reversed.raw ./small/6.iff ./small/6.raw
 	$(call strip_odd_bytes,./small/6.raw,../../src/assets/fonts/small/6.raw)
+	$(call strip_odd_bytes_mask,./small/6_mask_reversed.raw,../../src/assets/fonts/small/6_mask_reversed.raw)
 
-	rm -f ./small/7.raw
-	ilbm2raw  ./small/7.iff ./small/7.raw
+	ilbm2raw -f -r ./small/7_mask_reversed.raw ./small/7.iff ./small/7.raw
 	$(call strip_odd_bytes,./small/7.raw,../../src/assets/fonts/small/7.raw)
+	$(call strip_odd_bytes_mask,./small/7_mask_reversed.raw,../../src/assets/fonts/small/7_mask_reversed.raw)
 
-	rm -f ./small/8.raw
-	ilbm2raw  ./small/8.iff ./small/8.raw
+	ilbm2raw -f -r ./small/8_mask_reversed.raw ./small/8.iff ./small/8.raw
 	$(call strip_odd_bytes,./small/8.raw,../../src/assets/fonts/small/8.raw)
+	$(call strip_odd_bytes_mask,./small/8_mask_reversed.raw,../../src/assets/fonts/small/8_mask_reversed.raw)
 
-	rm -f ./small/9.raw
-	ilbm2raw  ./small/9.iff ./small/9.raw
+	ilbm2raw -f -r ./small/9_mask_reversed.raw ./small/9.iff ./small/9.raw
 	$(call strip_odd_bytes,./small/9.raw,../../src/assets/fonts/small/9.raw)
+	$(call strip_odd_bytes_mask,./small/9_mask_reversed.raw,../../src/assets/fonts/small/9_mask_reversed.raw)
 
+	ilbm2raw -f -r ./small/a_mask_reversed.raw ./small/a.iff ./small/a.raw
+	$(call strip_odd_bytes,./small/a.raw,../../src/assets/fonts/small/a.raw)
+	$(call strip_odd_bytes_mask,./small/a_mask_reversed.raw,../../src/assets/fonts/small/a_mask_reversed.raw)
 
+	ilbm2raw -f -r ./small/b_mask_reversed.raw ./small/b.iff ./small/b.raw
+	$(call strip_odd_bytes,./small/b.raw,../../src/assets/fonts/small/b.raw)
+	$(call strip_odd_bytes_mask,./small/b_mask_reversed.raw,../../src/assets/fonts/small/b_mask_reversed.raw)
 
+	ilbm2raw -f -r ./small/c_mask_reversed.raw ./small/c.iff ./small/c.raw
+	$(call strip_odd_bytes,./small/c.raw,../../src/assets/fonts/small/c.raw)
+	$(call strip_odd_bytes_mask,./small/c_mask_reversed.raw,../../src/assets/fonts/small/c_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/d_mask_reversed.raw ./small/d.iff ./small/d.raw
+	$(call strip_odd_bytes,./small/d.raw,../../src/assets/fonts/small/d.raw)
+	$(call strip_odd_bytes_mask,./small/d_mask_reversed.raw,../../src/assets/fonts/small/d_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/e_mask_reversed.raw ./small/e.iff ./small/e.raw
+	$(call strip_odd_bytes,./small/e.raw,../../src/assets/fonts/small/e.raw)
+	$(call strip_odd_bytes_mask,./small/e_mask_reversed.raw,../../src/assets/fonts/small/e_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/f_mask_reversed.raw ./small/f.iff ./small/f.raw
+	$(call strip_odd_bytes,./small/f.raw,../../src/assets/fonts/small/f.raw)
+	$(call strip_odd_bytes_mask,./small/f_mask_reversed.raw,../../src/assets/fonts/small/f_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/g_mask_reversed.raw ./small/g.iff ./small/g.raw
+	$(call strip_odd_bytes,./small/g.raw,../../src/assets/fonts/small/g.raw)
+	$(call strip_odd_bytes_mask,./small/g_mask_reversed.raw,../../src/assets/fonts/small/g_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/h_mask_reversed.raw ./small/h.iff ./small/h.raw
+	$(call strip_odd_bytes,./small/h.raw,../../src/assets/fonts/small/h.raw)
+	$(call strip_odd_bytes_mask,./small/h_mask_reversed.raw,../../src/assets/fonts/small/h_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/i_mask_reversed.raw ./small/i.iff ./small/i.raw
+	$(call strip_odd_bytes,./small/i.raw,../../src/assets/fonts/small/i.raw)
+	$(call strip_odd_bytes_mask,./small/i_mask_reversed.raw,../../src/assets/fonts/small/i_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/j_mask_reversed.raw ./small/j.iff ./small/j.raw
+	$(call strip_odd_bytes,./small/j.raw,../../src/assets/fonts/small/j.raw)
+	$(call strip_odd_bytes_mask,./small/j_mask_reversed.raw,../../src/assets/fonts/small/j_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/k_mask_reversed.raw ./small/k.iff ./small/k.raw
+	$(call strip_odd_bytes,./small/k.raw,../../src/assets/fonts/small/k.raw)
+	$(call strip_odd_bytes_mask,./small/k_mask_reversed.raw,../../src/assets/fonts/small/k_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/l_mask_reversed.raw ./small/l.iff ./small/l.raw
+	$(call strip_odd_bytes,./small/l.raw,../../src/assets/fonts/small/l.raw)
+	$(call strip_odd_bytes_mask,./small/l_mask_reversed.raw,../../src/assets/fonts/small/l_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/m_mask_reversed.raw ./small/m.iff ./small/m.raw
+	$(call strip_odd_bytes,./small/m.raw,../../src/assets/fonts/small/m.raw)
+	$(call strip_odd_bytes_mask,./small/m_mask_reversed.raw,../../src/assets/fonts/small/m_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/n_mask_reversed.raw ./small/n.iff ./small/n.raw
+	$(call strip_odd_bytes,./small/n.raw,../../src/assets/fonts/small/n.raw)
+	$(call strip_odd_bytes_mask,./small/n_mask_reversed.raw,../../src/assets/fonts/small/n_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/o_mask_reversed.raw ./small/o.iff ./small/o.raw
+	$(call strip_odd_bytes,./small/o.raw,../../src/assets/fonts/small/o.raw)
+	$(call strip_odd_bytes_mask,./small/o_mask_reversed.raw,../../src/assets/fonts/small/o_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/p_mask_reversed.raw ./small/p.iff ./small/p.raw
+	$(call strip_odd_bytes,./small/p.raw,../../src/assets/fonts/small/p.raw)
+	$(call strip_odd_bytes_mask,./small/p_mask_reversed.raw,../../src/assets/fonts/small/p_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/q_mask_reversed.raw ./small/q.iff ./small/q.raw
+	$(call strip_odd_bytes,./small/q.raw,../../src/assets/fonts/small/q.raw)
+	$(call strip_odd_bytes_mask,./small/q_mask_reversed.raw,../../src/assets/fonts/small/q_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/r_mask_reversed.raw ./small/r.iff ./small/r.raw
+	$(call strip_odd_bytes,./small/r.raw,../../src/assets/fonts/small/r.raw)
+	$(call strip_odd_bytes_mask,./small/r_mask_reversed.raw,../../src/assets/fonts/small/r_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/s_mask_reversed.raw ./small/s.iff ./small/s.raw
+	$(call strip_odd_bytes,./small/s.raw,../../src/assets/fonts/small/s.raw)
+	$(call strip_odd_bytes_mask,./small/s_mask_reversed.raw,../../src/assets/fonts/small/s_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/t_mask_reversed.raw ./small/t.iff ./small/t.raw
+	$(call strip_odd_bytes,./small/t.raw,../../src/assets/fonts/small/t.raw)
+	$(call strip_odd_bytes_mask,./small/t_mask_reversed.raw,../../src/assets/fonts/small/t_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/u_mask_reversed.raw ./small/u.iff ./small/u.raw
+	$(call strip_odd_bytes,./small/u.raw,../../src/assets/fonts/small/u.raw)
+	$(call strip_odd_bytes_mask,./small/u_mask_reversed.raw,../../src/assets/fonts/small/u_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/v_mask_reversed.raw ./small/v.iff ./small/v.raw
+	$(call strip_odd_bytes,./small/v.raw,../../src/assets/fonts/small/v.raw)
+	$(call strip_odd_bytes_mask,./small/v_mask_reversed.raw,../../src/assets/fonts/small/v_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/w_mask_reversed.raw ./small/w.iff ./small/w.raw
+	$(call strip_odd_bytes,./small/w.raw,../../src/assets/fonts/small/w.raw)
+	$(call strip_odd_bytes_mask,./small/w_mask_reversed.raw,../../src/assets/fonts/small/w_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/x_mask_reversed.raw ./small/x.iff ./small/x.raw
+	$(call strip_odd_bytes,./small/x.raw,../../src/assets/fonts/small/x.raw)
+	$(call strip_odd_bytes_mask,./small/x_mask_reversed.raw,../../src/assets/fonts/small/x_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/y_mask_reversed.raw ./small/y.iff ./small/y.raw
+	$(call strip_odd_bytes,./small/y.raw,../../src/assets/fonts/small/y.raw)
+	$(call strip_odd_bytes_mask,./small/y_mask_reversed.raw,../../src/assets/fonts/small/y_mask_reversed.raw)
+
+	ilbm2raw -f -r ./small/z_mask_reversed.raw ./small/z.iff ./small/z.raw
+	$(call strip_odd_bytes,./small/z.raw,../../src/assets/fonts/small/z.raw)
+	$(call strip_odd_bytes_mask,./small/z_mask_reversed.raw,../../src/assets/fonts/small/z_mask_reversed.raw)
 
 	rm -f ./big/0.raw ../../src/assets/fonts/big/colors.plt ./big/0_mask_reversed.raw
 	ilbm2raw  ./big/0.iff ./big/0.raw -p ../../src/assets/fonts/big/colors.plt -r ./big/0_mask_reversed.raw
