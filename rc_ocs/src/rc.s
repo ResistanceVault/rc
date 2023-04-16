@@ -201,6 +201,10 @@ CARS_IN_PLAY: 	dc.w %0000000000001111
 ARRIVAL_ORDER:	dcb.b MAX_CARS*4,$00
 ARRIVAL_ORDER_PTR: dc.l ARRIVAL_ORDER
 
+	IFD COLOR
+NEXT_SCREEN: dc.l MAINSCREEN
+	ENDIF
+
 JOY2_FIRE0_BIT    equ    2
 CIAA EQU $bfe001
 CIAB EQU $bff000
@@ -230,9 +234,13 @@ clearintroscreen:
 
 	; Open main screen
 	IFD COLOR
-	jsr 				MAINSCREEN
+print_screen:
+	move.l				NEXT_SCREEN,a0
+	jsr 				(a0)
 	tst.w               EXIT_TO_OS_FLAG
     bne.w               exit
+	tst.l				NEXT_SCREEN
+	bne.s				print_screen
 	ENDC
 	; Open welcome screen
 welcomescreen_start:
@@ -531,6 +539,7 @@ exit:
 	IFD COLOR
 	include "menu.s"
 	include "screens/mainscreen.s"
+	include "screens/cars_setup_screen.s"
 	include "screens/resultscreen.s"
 	include "load_track.s"
 	include "screens/trackselectscreen.s"

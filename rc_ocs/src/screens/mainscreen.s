@@ -2,9 +2,6 @@ MAIN_FILENAME:
     dc.b "main.data",0
     even
 
-TITLE_TXT: dc.b "BY OZZY AND Z3K",$FF
-    even
-
 START_GAME_TXT:
     dc.b "START GAME",$FF
     even
@@ -13,12 +10,17 @@ OPTIONS_TXT:
     dc.b "OPTIONS",$FF
     even
 
+CARS_SETUP_TXT:
+    dc.b "CARS SETUP",$FF
+    even
+
 EXIT_TO_OS_TXT:
     dc.b "EXIT TO OS",$FF
     even
 
 START_RACE_FUNCTION:
     move.w  #1,MAIN_EXIT
+    clr.l   NEXT_SCREEN
     rts
 
 EXIT_TO_OS_FUNCTION:
@@ -27,6 +29,11 @@ EXIT_TO_OS_FUNCTION:
     rts
 
 DRAFT_FUNCTION:
+    rts
+
+CARS_SETUP_SCREEN_FUNCTION:
+    move.w  #1,MAIN_EXIT
+    move.l  #CARS_SETUP_SCREEN,NEXT_SCREEN
     rts
 
 MENU_MAIN:
@@ -39,6 +46,10 @@ MENU_MAIN:
     dc.l DRAFT_FUNCTION
 
     dc.w 5,11
+    dc.l CARS_SETUP_TXT
+    dc.l CARS_SETUP_SCREEN_FUNCTION
+
+    dc.w 5,13
     dc.l EXIT_TO_OS_TXT
     dc.l EXIT_TO_OS_FUNCTION
 
@@ -47,9 +58,6 @@ MENU_MAIN:
     dc.l 0
 
 TXT_MAIN:
-    dc.w 2,15
-    dc.l TITLE_TXT
-
     dc.w 0,0
     dc.l 0
 

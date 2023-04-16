@@ -18,3 +18,12 @@ all:
 	chmod 666 ../../bin/raceresult.data
 	chown 1000:1000 ../../bin/raceresult.data
 	cp ../../bin/raceresult.data ../../buildadf/raceresult.data
+
+	ilbm2raw -f ./Sfondo\ Titolo\ Chiaro.iff ./Sfondo\ Titolo\ Chiaro.raw -p ./Sfondo\ Titolo\ Chiaro.pal
+	cp ././Sfondo\ Titolo\ Chiaro.raw ../../bin/carsetup.data
+	dd if=/dev/zero bs=1 count=10240 >> ../../bin/carsetup.data
+	cat ././Sfondo\ Titolo\ Chiaro.pal >> ../../bin/carsetup.data
+	dd if=/dev/zero bs=1 count=32 >> ../../bin/carsetup.data
+	chmod 666 ../../bin/carsetup.data
+	chown 1000:1000 ../../bin/carsetup.data
+	cp ../../bin/carsetup.data ../../buildadf/carsetup.data
