@@ -28,33 +28,46 @@ MENU_CARS_SETUP_SCREEN_BACK_FUNCT:
     rts
 
 MENU_CARS_SETUP_SCREEN:
-    dc.w 1,3
+    dc.w 3,3
     dc.l MENU_CARS_SETUP_SCREEN_CAR_1_TXT
     dc.l DRAFT_FUNCTION
+    dc.w 8
+    dc.w 7
 
-    dc.w 1,5
+    dc.w 3,5
     dc.l MENU_CARS_SETUP_SCREEN_CAR_2_TXT
     dc.l DRAFT_FUNCTION
+    dc.w 8
+    dc.w 7
 
-    dc.w 1,7
+    dc.w 3,7
     dc.l MENU_CARS_SETUP_SCREEN_CAR_3_TXT
     dc.l DRAFT_FUNCTION
+    dc.w 8
+    dc.w 7
 
-    dc.w 1,9
+    dc.w 3,9
     dc.l MENU_CARS_SETUP_SCREEN_CAR_4_TXT
     dc.l DRAFT_FUNCTION
+    dc.w 8
+    dc.w 7
 
     dc.w 1,13
     dc.l MENU_CARS_SETUP_SCREEN_BACK_TXT
     dc.l MENU_CARS_SETUP_SCREEN_BACK_FUNCT
+    dc.w 16
+    dc.w 16
 
     dc.w 0,0
     dc.l 0
     dc.l 0
+    dc.w 0
+    dc.w 0
 
 TXT_CARS_SETUP_SCREEN:
     dc.w 0,0
     dc.l 0
+    dc.w 0,0
 
 MENU_CARS_SETUP_SCREEN_CURRENTLY_SELECTED:
     dc.l    MENU_CARS_SETUP_SCREEN;+menu_SIZEOF

@@ -6,12 +6,16 @@ menu_EntryX         rs.w    1
 menu_EntryY         rs.w    1
 menu_DescPtr        rs.l    1
 menu_FunctPtr       rs.l    1
+menu_FontWidthPx rs.w    1
+menu_FontHeightPx   rs.w    1
 menu_SIZEOF         rs.b    0
 
                     rsset   0
 txt_EntryX         rs.w    1
 txt_EntryY         rs.w    1
 txt_DescPtr        rs.l    1
+txt_FontWidthPx    rs.w    1
+txt_FontHeightPx   rs.w    1
 txt_SIZEOF         rs.b    0
 
 MENUSCREEN_IMAGE: dc.l  0
@@ -145,8 +149,17 @@ menutxtloop:
     move.w               txt_EntryX(a6),d0
     move.w               txt_EntryY(a6),d1
     move.l               txt_DescPtr(a6),a1
-    bsr.w                printstringhigh
 
+    ; check if small fonts here
+            DEBUG 1111
+
+    cmp.w                #8,txt_FontWidthPx(a6)
+    bne.s                printbigfonts
+    bsr.w                printstringhigh_small
+    bra.s                next_txt_entry_please
+printbigfonts:
+    bsr.w                printstringhigh
+next_txt_entry_please:
     adda.l               #txt_SIZEOF,a6
     bra.s                menutxtloop
 menutxtloopend:
@@ -166,7 +179,13 @@ menuloop:
     move.w               menu_EntryX(a6),d0
     move.w               menu_EntryY(a6),d1
     move.l               menu_DescPtr(a6),a1
+    cmp.w                #8,menu_FontWidthPx(a6)
+    bne.s                printbigfonts_entry
+    bsr.w                printstringhigh_small
+    bra.s                next_entry_please
+printbigfonts_entry:
     bsr.w                printstringhigh
+next_entry_please:
 
     adda.l               #menu_SIZEOF,a6
     bra.s                menuloop
@@ -255,6 +274,108 @@ nomainfadeout:
 exitmainscreen:
     rts
 
+printstringhigh_small:
+    moveq               #0,d6
+    move.b              (a1)+,d6
+    cmp.w               #$FF,d6
+    beq.s               printstringendhigh_small
+    sub.w               #32,d6
+
+    bsr.w               drawhole_small
+    muls.w              #1*7*3,d6
+
+    lea                 SMALLFONTS,a0
+    adda.l              d6,a0
+    bsr.w               printbigfonthigh_small
+    addq                #1,d0
+    bra.s               printstringhigh_small
+
+printstringendhigh_small:
+    rts
+
+drawhole_small:
+    movem.l             d0/d1/d6/a1,-(sp)
+    ;lsl.w               #1,d0
+    mulu.w              #40*7,d1
+    add.w               d1,d0
+
+    muls.w              #1*7*1,d6
+
+    ; draw the hole
+    lea                 SMALLFONTS_REVERSE_MASK,a0
+    adda.l              d6,a0
+    ;move.w              (a0),d5
+    lea                 PHAZELOGO,a1
+    lea                 PHAZELOGO+10240,a2
+    lea                 PHAZELOGO+10240*2,a3
+    lea                 PHAZELOGO+10240*3,a4
+    lea                 PHAZELOGO+10240*4,a5
+
+    adda.w              d0,a1
+    adda.w              d0,a2
+    adda.w              d0,a3
+    adda.w              d0,a4
+    adda.w              d0,a5
+
+    moveq               #7-1,d6
+.holestartscanlineloop_small:
+    move.b              (a0)+,d5
+
+    and.b               d5,(a1)
+    and.b               d5,(a2)
+    and.b               d5,(a3)
+
+    not.w               d5
+
+    or.b                d5,(a4)
+    or.b                d5,(a5)
+
+    adda.l              #40,a1
+    adda.l              #40,a2
+    adda.l              #40,a3
+    adda.l              #40,a4
+    adda.l              #40,a5
+
+    dbra                d6,.holestartscanlineloop_small
+    movem.l             (sp)+,d0/d1/d6/a1
+    rts
+
+printbigfonthigh_small:
+    movem.l             a0/a1/a2/a3/d0/d1,-(sp)
+    lea                 PHAZELOGO,a1
+    lea                 PHAZELOGO+10240,a2
+    lea                 PHAZELOGO+20480,a3
+
+    ;lsl.w               #1,d0
+    adda.w              d0,a1
+    adda.w              d0,a2
+    adda.w              d0,a3
+
+    mulu.w              #40*7,d1
+    adda.w              d1,a1
+    adda.w              d1,a2
+    adda.w              d1,a3
+
+    moveq               #7-1,d7
+bigfontcyclehigh_small:
+    move.b              (a0),d2
+    or.b                d2,(a1)
+
+    move.b              1*7*1(a0),d2
+    or.b                d2,(a2)
+
+    move.b              1*7*2(a0),d2
+    or.b                d2,(a3)
+
+    addq                #1,a0
+    adda.l              #40,a1
+    adda.l              #40,a2
+    adda.l              #40,a3
+
+    dbra                d7,bigfontcyclehigh_small
+    movem.l             (sp)+,a0/a1/a2/a3/d0/d1
+    rts
+
 printstringhigh:
     moveq               #0,d6
     move.b              (a1)+,d6
@@ -285,7 +406,7 @@ drawhole:
     ; draw the hole
     lea                 BIGFONTS_REVERSE_MASK,a0
     adda.l              d6,a0
-    move.w              (a0),d5
+    ;move.w              (a0),d5
     lea                 PHAZELOGO,a1
     lea                 PHAZELOGO+10240,a2
     lea                 PHAZELOGO+10240*2,a3
@@ -386,11 +507,14 @@ bigfontcyclehigh:
 
 
 set_cursor_sprite_position:
+    move.l d2,-(sp)
     ; set up cursor X position
     move.w               menu_EntryX(a6),d0
-    muls                 #16,d0
+    muls                 menu_FontWidthPx(a6),d0
     move.w               d0,d1 ; d1 holds the least sig bit to determine if the number is odd or even
     lsr.w                #1,d0
+    ;move.w               menu_FontWidthPx(a6),d2
+    ;lsr.w                d2,d0
     add.w                #60,d0
     sub.w                #CURSOR_CLEARING,d0
     btst                 #0,d1
@@ -405,8 +529,15 @@ car_place_coords_main:
     ; set up cursor Y position
     move.b               #0,3+CURSOR
     move.w               menu_EntryY(a6),d1
-    muls                 #16,d1
-    add.w                #$2b,d1
+    muls                 menu_FontHeightPx(a6),d1
+    ;add.w                #$2b,d1
+    add.w                #SPRITES_VSTART-5,d1
+    ;center sprite vertically to the text
+    move.w               menu_FontHeightPx(a6),d2
+    subq                 #7,d2
+    lsr.w                #1,d2
+    add.w                d2,d1
+
     btst                 #8,d1
     beq.s                nounder255_main
     bset.b               #2,3+CURSOR
@@ -422,6 +553,7 @@ nounder255_main:
 cursor_y_vstopset_main:
     bclr.b              #1,3+CURSOR
 cursor_y_end_main:
+    move.l (sp)+,d2
     rts
 
 ; read input and wait for release before issuing the action
