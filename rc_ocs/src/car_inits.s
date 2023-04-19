@@ -9,12 +9,23 @@ CAR_BOUNCE_WALL_FORCE EQU %0000101000000000
 CAR_STEERING_ANGLE	EQU 2
 CAR_HALF_WIDTH		EQU 6
 
+PLAYER_ONE_NAME: 	dc.b "A CROST    ",$FF ; perrari
+PLAYER_FIVE_NAME: 	dc.b "ALBERETTO  ",$FF ; perrari
+PLAYER_TWO_NAME: 	dc.b "JJ LENTO   ",$FF ; alfa marameo
+PLAYER_FOUR_NAME: 	dc.b "M PALLADIO ",$FF ; alfa maraneo
+PLAYER_SIX_NAME: 	dc.b "BAGNACAUDA ",$FF ; perault
+PLAYER_SEVEN_NAME: 	dc.b "FRITTICALDI",$FF ; perault
+PLAYER_EIGHT_NAME: 	dc.b "R PRETESE  ",$FF ; mc lallen
+PLAYER_THREE_NAME: 	dc.b "STARNOUX   ",$FF ; mc lallen
+
 TRACK_START_PIXEL_DATA:
 	dc.w %10110000
 
 CAR1_INIT:
 	jsr 	SET_CAR1_START_STATUS
 	lea 	MOVER1,a0
+
+	move.l  #PLAYER_ONE_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
 
 	move.w 	#0,CAR_ID_OFFSET(a0)										; Car unique identifier
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
@@ -98,6 +109,8 @@ CAR2_INIT:
 	jsr 	SET_CAR2_START_STATUS
 	lea 	MOVER2,a0
 
+	move.l  #PLAYER_TWO_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
+
 	move.w 	#1,CAR_ID_OFFSET(a0)										; Car unique identifier
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
 
@@ -179,6 +192,8 @@ CAR3_INIT:
 	jsr		SET_CAR3_START_STATUS
 	lea 	MOVER3,a0
 
+	move.l  #PLAYER_THREE_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
+
 	move.w 	#2,CAR_ID_OFFSET(a0)										; Car unique identifier
 
 	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
@@ -258,6 +273,8 @@ CAR3_INIT:
 CAR4_INIT:
 	jsr		SET_CAR4_START_STATUS
 	lea 	MOVER4,a0
+
+	move.l  #PLAYER_FOUR_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
 
 	move.w 	#3,CAR_ID_OFFSET(a0)										; Car unique identifier
 
