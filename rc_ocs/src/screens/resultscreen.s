@@ -32,10 +32,12 @@ RESULT_MENU_MAIN:
     dc.w 5,11
     dc.l EXIT_TO_NEXT_RACE
     dc.l EXIT_TO_NEXT_RACE_FUNCTION
+    dc.l 0
     dc.w 16
     dc.w 16
 
     dc.w 0,0
+    dc.l 0
     dc.l 0
     dc.l 0
     dc.w 0

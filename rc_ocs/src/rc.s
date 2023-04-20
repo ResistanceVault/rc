@@ -514,6 +514,7 @@ exit:
 	include "move.s"
 	include "check_collisions_with_other_cars.s"
 	include "check_collisions.s"
+	include "inputroutines/inputroutines.i"
 	include "inputroutines/mouseinput.s"
 	include "inputroutines/joystickinput.s"
 	include "inputroutines/joystickinput_welcome.s"

@@ -40,29 +40,34 @@ MENU_MAIN:
     dc.w 4,7
     dc.l START_GAME_TXT
     dc.l START_RACE_FUNCTION
+    dc.l 0
     dc.w 16
     dc.w 16
 
     dc.w 4,9
     dc.l OPTIONS_TXT
     dc.l DRAFT_FUNCTION
+    dc.l 0
     dc.w 16
     dc.w 16
 
     dc.w 4,11
     dc.l CARS_SETUP_TXT
     dc.l CARS_SETUP_SCREEN_FUNCTION
+    dc.l 0
     dc.w 16
     dc.w 16
 
     dc.w 4,13
     dc.l EXIT_TO_OS_TXT
     dc.l EXIT_TO_OS_FUNCTION
+    dc.l 0
     dc.w 16
     dc.w 16
 
 
     dc.w 0,0
+    dc.l 0
     dc.l 0
     dc.l 0
     dc.w 0

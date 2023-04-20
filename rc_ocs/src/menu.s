@@ -6,7 +6,8 @@ menu_EntryX         rs.w    1
 menu_EntryY         rs.w    1
 menu_DescPtr        rs.l    1
 menu_FunctPtr       rs.l    1
-menu_FontWidthPx rs.w    1
+menu_FunctArgsPtr   rs.l    1
+menu_FontWidthPx    rs.w    1
 menu_FontHeightPx   rs.w    1
 menu_SIZEOF         rs.b    0
 
@@ -151,8 +152,6 @@ menutxtloop:
     move.l               txt_DescPtr(a6),a1
 
     ; check if small fonts here
-            DEBUG 1111
-
     cmp.w                #8,txt_FontWidthPx(a6)
     bne.s                printbigfonts
     bsr.w                printstringhigh_small
