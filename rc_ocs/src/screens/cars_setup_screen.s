@@ -5,6 +5,8 @@ CARS_SETUP_COL_3_X	EQU 34
 
 CARS_SETUP_START_Y  EQU 9
 
+NUM_TXT_COLUMNS     EQU 3
+
 CARS_SETUP_TITLE_TXT:
     dc.b "CAR CONTROLS MENU",$FF
 
@@ -77,29 +79,29 @@ MENU_CARS_SETUP_SCREEN:
 
     dc.w CARS_SETUP_COL_0_X,CARS_SETUP_START_Y
     dc.l CARS_SETUP_CAR_1_TXT
-    dc.l DRAFT_FUNCTION
+    dc.l ACTION_TEST
     dc.l MOVERS
     dc.w 8
     dc.w 7
 
     dc.w CARS_SETUP_COL_0_X,CARS_SETUP_START_Y+2
     dc.l CARS_SETUP_CAR_2_TXT
-    dc.l DRAFT_FUNCTION
-    dc.l 0
+    dc.l ACTION_TEST
+    dc.l MOVERS2
     dc.w 8
     dc.w 7
 
     dc.w CARS_SETUP_COL_0_X,CARS_SETUP_START_Y+4
     dc.l CARS_SETUP_CAR_3_TXT
-    dc.l DRAFT_FUNCTION
-    dc.l 0
+    dc.l ACTION_TEST
+    dc.l MOVERS3
     dc.w 8
     dc.w 7
 
     dc.w CARS_SETUP_COL_0_X,CARS_SETUP_START_Y+6
     dc.l CARS_SETUP_CAR_4_TXT
-    dc.l DRAFT_FUNCTION
-    dc.l 0
+    dc.l ACTION_TEST
+    dc.l MOVERS4
     dc.w 8
     dc.w 7
 
@@ -317,26 +319,102 @@ CARS_SETUP_SCREEN:
 ; this function takes a mover object as input, then it determines which input routine
 ; is associated with it (for example the routine to read joy1 state), then it looks up
 ; the address of this routine through each record of the list of input routines.
+; If found it copies the address of the record within the list into a1.
+; Input: a0 (address) of mover object
+; Output: a1 (address) of the text entry where to place record address
+;        a1 will have zero if the entry is not found in list
+CARS_SETUP_FIND_CAR_CONTROL:
+    movem.l a2/a4/a5,-(sp)
+    lea     ROUTINES_INPUTLIST,a4
+
+car_setup_find_car_control_start_loop:
+    lea     input_routines_Function(a4),a5
+    lea     INPUT_ROUTINE_OFFSET(a0),a2
+
+    cmpm.l  (a2)+,(a5)+
+    bne.s   car_setup_find_car_control_next
+    movea.l a4,a1
+    movem.l (sp)+,a2/a4/a5
+    rts
+
+car_setup_find_car_control_next:
+    adda.l  #input_routines_SIZEOF,a4
+
+    tst.l   input_routines_Description(a4)
+    bne.s   car_setup_find_car_control_start_loop
+    movea.l #0,a1
+    movem.l (sp)+,a2/a4/a5
+    rts
+
+; this function takes a mover object as input, then it determines which input routine
+; is associated with it (for example the routine to read joy1 state), then it looks up
+; the address of this routine through each record of the list of input routines.
 ; If found it assigns to the text entry the corresponding text taken from the list.
 ; Input: a0 (address) of mover object
 ;        a1 (address) of the text entry where to place text address
 CARS_SETUP_PRINT_CAR_CONTROL:
-    lea ROUTINES_INPUTLIST,a4
-
-car_setup_print_car_control_start_loop:
-    lea input_routines_Function(a4),a5
-    lea INPUT_ROUTINE_OFFSET(a0),a2
-
-    cmpm.l (a2)+,(a5)+
-    bne.s   car_setup_print_car_control_next
-    move.l input_routines_Description-4(a5),txt_DescPtr(a1)
+    move.l  a2,-(sp)
+    move.l  a1,a2
+    bsr.w   CARS_SETUP_FIND_CAR_CONTROL
+    cmp.l   #0,a1
+    beq.s   cars_setup_print_car_control_end
+    move.l  input_routines_Description(a1),txt_DescPtr(a2)
+cars_setup_print_car_control_end:
+    move.l  (sp)+,a2
     rts
 
-car_setup_print_car_control_next:
-    adda.l #input_routines_SIZEOF,a4
+; this function takes a mover object, then tries to match
+; the corresponding record from  the input routines list
+; and tries to get the next record.
+; if there is no next record or routine not found in list it returns 0 in a1
+; Input: a0 (address) of mover object
+; Output: a1 (address) of the next record in list
+CARS_SETUP_FIND_NEXT_INPUT_ROUTINE:
+    bsr.w   CARS_SETUP_FIND_CAR_CONTROL
+    cmp.l   #0,a1
+    beq.s   cars_setup_find_next_input_routine_end
+    adda.l  #input_routines_SIZEOF,a1
+    tst.l   input_routines_Description(a1)
+    bne.s   cars_setup_find_next_input_routine_end
+    ; if we are here it means we are at the end of the list, start again
+    lea     ROUTINES_INPUTLIST,a1
+cars_setup_find_next_input_routine_end:
+    rts
 
-    tst.l  input_routines_Description(a4)
-    bne.s  car_setup_print_car_control_start_loop
+ACTION_TEST:
+    movem.l a0-a2/d3,-(sp)
+    ; get mover obj addr
+    move.l  MENUSCREEN_SELECTED_ENTRY,a0
+    lea     menu_FunctArgsPtr(a0),a0
+    move.l  (a0),a0
+
+    ; save txt record into a2
+    movea.l a1,a2
+    ; find next
+
+    bsr.w   CARS_SETUP_FIND_NEXT_INPUT_ROUTINE
+
+    ; copy next input routine into the mover obj
+    move.l  input_routines_Function(a1),INPUT_ROUTINE_OFFSET(a0)
+    ;move.l  input_routines_Description(a1),txt_DescPtr(a2)
+
+    ; setup text entries
+    move.w  CAR_ID_OFFSET(a0),d3
+    ;addq    #1,d3
+    muls    #txt_SIZEOF*NUM_TXT_COLUMNS,d3
+    lea     txt_car_1_control(PC),a1
+    adda.l  d3,a1
+    bsr.w   CARS_SETUP_PRINT_CAR_CONTROL
+
+    move.w  CAR_ID_OFFSET(a0),d3
+    ;DEBUG 6669
+    ;addq    #1,d3
+    muls    #txt_SIZEOF*NUM_TXT_COLUMNS,d3
+    lea     txt_car_1_control(PC),a1
+    adda.l  d3,a1
+    bsr.w   REFRESH_TXT_ENTRY
+
+    movem.l (sp)+,a0-a2/d3
     rts
 
 ACTION_FUNCTION:
@@ -367,4 +445,76 @@ car_setup_next_iteration:
     bra.s  car_setup_start_iteration
 car_setup_end_iteration:
     movem.l (sp)+,a0-a4
+    rts
+
+REFRESH_TXT_ENTRY:
+    movem.l              d0-d1/a0/a1/a6/d6/d3,-(sp)
+    move.l               a1,a6
+    move.w               txt_EntryX(a6),d0
+    move.w               txt_EntryY(a6),d1
+    move.l               txt_DescPtr(a6),a1
+    cmp.w                #8,txt_FontWidthPx(a6)
+    bne.s                refresh_txt_entry_printbigfonts
+    bsr.w                restorebackground_small
+    bsr.w                printstringhigh_small
+    movem.l              (sp)+,d0-d1/a0/a1/a6/d6/d3
+    rts
+refresh_txt_entry_printbigfonts:
+    bsr.w                printstringhigh
+    movem.l              (sp)+,d0-d1/a0/a1/a6/d6/d3
+    rts
+
+restorebackground_small:
+    movem.l             a1/d0,-(sp)
+restorebackground_small_startcycle
+    moveq               #0,d6
+    move.b              (a1)+,d6
+    cmp.w               #$FF,d6
+    beq.s               restorebackground_small_end
+    bsr.w               restorebackground_tile_small
+    addq                #1,d0
+    bra.s               restorebackground_small_startcycle
+restorebackground_small_end:
+    movem.l             (sp)+,a1/d0
+    rts
+
+
+restorebackground_tile_small:
+    movem.l             d0/d1/d6/a0-a5,-(sp)
+    mulu.w              #40*7,d1
+    add.w               d1,d0
+    lea                 SCREEN_0,a0
+    lea                 SCREEN_1,a1
+    lea                 SCREEN_00,a2
+
+    lea                 PHAZELOGO,a3
+    lea                 PHAZELOGO+10240,a4
+    lea                 PHAZELOGO+10240*2,a5
+
+    adda.l              d0,a0
+    adda.l              d0,a1
+    adda.l              d0,a2
+
+    adda.l              d0,a3
+    adda.l              d0,a4
+    adda.l              d0,a5
+
+    moveq               #7-1,d6
+restorebackground_tile_small_start_loop:
+    move.b              (a0),(a3)
+    move.b              (a1),(a4)
+    move.b              (a2),(a5)
+    clr.b               40*256(a5)
+    clr.b               40*256*2(a5)
+
+    adda.l              #40,a0
+    adda.l              #40,a1
+    adda.l              #40,a2
+    adda.l              #40,a3
+    adda.l              #40,a4
+    adda.l              #40,a5
+
+    dbra                d6,restorebackground_tile_small_start_loop
+
+    movem.l             (sp)+,d0/d1/d6/a0-a5
     rts

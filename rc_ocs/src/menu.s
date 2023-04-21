@@ -1,4 +1,4 @@
-FADE_SPEED          EQU     5
+FADE_SPEED          EQU     3
 CURSOR_CLEARING     EQU     5
 
                     rsset   0
@@ -12,43 +12,43 @@ menu_FontHeightPx   rs.w    1
 menu_SIZEOF         rs.b    0
 
                     rsset   0
-txt_EntryX         rs.w    1
-txt_EntryY         rs.w    1
-txt_DescPtr        rs.l    1
-txt_FontWidthPx    rs.w    1
-txt_FontHeightPx   rs.w    1
-txt_SIZEOF         rs.b    0
+txt_EntryX          rs.w    1
+txt_EntryY          rs.w    1
+txt_DescPtr         rs.l    1
+txt_FontWidthPx     rs.w    1
+txt_FontHeightPx    rs.w    1
+txt_SIZEOF          rs.b    0
 
-MENUSCREEN_IMAGE: dc.l  0
-MENUSCREEN_ENTRIES: dc.l 0
-TXTSCREEN_ENTRIES: dc.l 0
+MENUSCREEN_IMAGE:           dc.l  0
+MENUSCREEN_ENTRIES:         dc.l 0
+TXTSCREEN_ENTRIES:          dc.l 0
 
-MENUSCREEN_SELECTED_ENTRY: dc.l 0
+MENUSCREEN_SELECTED_ENTRY:  dc.l 0
 
-MAIN_JOY1_UP_PRESSED: dc.b 0
-MAIN_JOY1_DOWN_PRESSED: dc.b 0
-MAIN_JOY1_FIRE_1_PRESSED: dc.b 0
-MAIN_JOY1_FIRE_2_PRESSED: dc.b 0
+MAIN_JOY1_UP_PRESSED:       dc.b 0
+MAIN_JOY1_DOWN_PRESSED:     dc.b 0
+MAIN_JOY1_FIRE_1_PRESSED:   dc.b 0
+MAIN_JOY1_FIRE_2_PRESSED:   dc.b 0
 
-MAIN_WASD_UP_PRESSED: dc.b 0
-MAIN_WASD_DOWN_PRESSED: dc.b 0
-MAIN_WASD_FIRE_1_PRESSED: dc.b 0
-MAIN_WASD_FIRE_2_PRESSED: dc.b 0
+MAIN_WASD_UP_PRESSED:       dc.b 0
+MAIN_WASD_DOWN_PRESSED:     dc.b 0
+MAIN_WASD_FIRE_1_PRESSED:   dc.b 0
+MAIN_WASD_FIRE_2_PRESSED:   dc.b 0
 
-MAIN_ARROWS_UP_PRESSED: dc.b 0
-MAIN_ARROWS_DOWN_PRESSED: dc.b 0
+MAIN_ARROWS_UP_PRESSED:     dc.b 0
+MAIN_ARROWS_DOWN_PRESSED:   dc.b 0
 MAIN_ARROWS_FIRE_1_PRESSED: dc.b 0
 MAIN_ARROWS_FIRE_2_PRESSED: dc.b 0
 
-MAIN_IJKL_UP_PRESSED: dc.b 0
-MAIN_IJKL_DOWN_PRESSED: dc.b 0
-MAIN_IJKL_FIRE_1_PRESSED: dc.b 0
-MAIN_IJKL_FIRE_2_PRESSED: dc.b 0
+MAIN_IJKL_UP_PRESSED:       dc.b 0
+MAIN_IJKL_DOWN_PRESSED:     dc.b 0
+MAIN_IJKL_FIRE_1_PRESSED:   dc.b 0
+MAIN_IJKL_FIRE_2_PRESSED:   dc.b 0
 
 
-MAIN_EXIT: dc.w 0
+MAIN_EXIT:                  dc.w 0
 
-FADE_SPEED_COUNTER: dc.w FADE_SPEED
+FADE_SPEED_COUNTER:         dc.w FADE_SPEED
 
 MENU_INPUT_FUNCT_LIST:
     dc.l READJOY1_WELCOME
@@ -142,6 +142,21 @@ mainfontcolorloop:
     dbra d7,mainfontcolorloop
     ; set font color into the colors table - END
 
+    ; save image for rewriting/refreshing
+    lea                 PHAZELOGO+40*256*0,a0
+    lea                 PHAZELOGO+40*256*1,a1
+    lea                 PHAZELOGO+40*256*2,a2
+
+    lea                 SCREEN_0,a3
+    lea                 SCREEN_1,a4
+    lea                 SCREEN_00,a5
+    move.w              #40*256/4-1,d7
+.savemenuimageloopstart
+    move.l              (a0)+,(a3)+
+    move.l              (a1)+,(a4)+
+    move.l              (a2)+,(a5)+
+    dbra                d7,.savemenuimageloopstart
+    
     ; draw txt - START
     move.l              TXTSCREEN_ENTRIES(PC),a6
 menutxtloop:
@@ -293,8 +308,7 @@ printstringendhigh_small:
     rts
 
 drawhole_small:
-    movem.l             d0/d1/d6/a1,-(sp)
-    ;lsl.w               #1,d0
+    movem.l             d0/d1/d6/a0-a5,-(sp)
     mulu.w              #40*7,d1
     add.w               d1,d0
 
@@ -336,7 +350,7 @@ drawhole_small:
     adda.l              #40,a5
 
     dbra                d6,.holestartscanlineloop_small
-    movem.l             (sp)+,d0/d1/d6/a1
+    movem.l             (sp)+,d0/d1/d6/a0-a5
     rts
 
 printbigfonthigh_small:

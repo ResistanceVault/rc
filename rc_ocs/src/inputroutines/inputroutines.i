@@ -5,11 +5,19 @@ input_routines_SIZEOF           rs.b    0
 
 READJOY1_DESC:          dc.b "JOY 1",$FF
                         even
-KEYBOARD_WASD_DESC:     dc.b "WASD",$FF
+KEYBOARD_WASD_DESC:     dc.b "WASD  ",$FF
                         even
-KEYBOARD_IJKL_DESC:     dc.b "IJKL",$FF
+KEYBOARD_IJKL_DESC:     dc.b "IJKL  ",$FF
                         even
 KEYBOARD_ARROWS_DESC:   dc.b "ARROWS",$FF
+                        even
+READJOY0_DESC:          dc.b "JOY 0 ",$FF
+                        even
+READJOY2_DESC:          dc.b "JOY 2 ",$FF
+                        even
+READJOY3_DESC:          dc.b "JOY 3 ",$FF
+                        even
+OFF_DESC:               dc.b "OFF   ",$FF
                         even
 
 ROUTINES_INPUTLIST:
@@ -24,6 +32,18 @@ ROUTINES_INPUTLIST:
 
     dc.l  KEYBOARD_ARROWS
     dc.l  KEYBOARD_ARROWS_DESC
+
+    dc.l  READJOY0
+    dc.l  READJOY0_DESC
+
+    dc.l  READJOY2
+    dc.l  READJOY2_DESC
+
+    dc.l  READJOY3
+    dc.l  READJOY3_DESC
+
+    dc.l  0
+    dc.l  OFF_DESC
 
     dc.l 0
     dc.l 0
