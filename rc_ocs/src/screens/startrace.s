@@ -15,7 +15,11 @@ MAIN_MENU_TXT:
     even
 
 START_RACE_TRACK_NAME_TXT:
-    dc.b "NEXT   TRACKLOL     ",$FF
+    dc.b "NEXT   TRACKLOL      ",$FF
+    even
+
+START_RACE_NEXT_TRACK_TXT:
+    dc.b "NEXT TRACK",$FF
     even
 
 MENU_START_RACE_SCREEN:
@@ -46,9 +50,14 @@ MENU_START_RACE_SCREEN:
 TXT_START_RACE_SCREEN:
 
     dc.w 1,5
+    dc.l START_RACE_NEXT_TRACK_TXT
+    dc.w 16
+    dc.w 16
+
+    dc.w 2,15
     dc.l START_RACE_TRACK_NAME_TXT
-    dc.w 16
-    dc.w 16
+    dc.w 8
+    dc.w 7
 
     dcb.b  txt_SIZEOF,$00
 
@@ -122,7 +131,12 @@ ACTION_SELECT_TRACK_NEW:
     move.l              (a2)+,(a5)+
     dbra                d7,.restorebakgroundloop
 
+    bsr.w               PRINT_TRACK_NAME_NEW
+
     lea                 TXT_START_RACE_SCREEN(PC),a1
+    jsr                 REFRESH_TXT_ENTRY
+
+    lea                 TXT_START_RACE_SCREEN+txt_SIZEOF,a1
     jsr                 REFRESH_TXT_ENTRY
 
     lea                 MENU_START_RACE_SCREEN+menu_SIZEOF*0,a1
@@ -143,8 +157,10 @@ ACTION_SELECT_TRACK_NEW:
 START_RACE_SCREEN:
 
     ; load track
-    addi.w              #1,TRACK_NUMBER
+    addi.w  #1,TRACK_NUMBER
     jsr     LOAD_TRACK
+
+    bsr.w   PRINT_TRACK_NAME_NEW
 
     ; print screen
     move.l  #START_RACE_SCREEN_FILENAME,MENUSCREEN_IMAGE
@@ -169,4 +185,16 @@ REFRESH_MENU_ENTRY:
 refresh_menu_entry_printbigfonts:
     bsr.w                printstringhigh
     movem.l              (sp)+,d0-d1/a0/a1/a6/d6/d3
+    rts
+
+PRINT_TRACK_NAME_NEW:
+     ; now that the track is loaded we can copy
+    ; the filename into the text
+    lea                 TRACK_FILENAME+7,a0
+    lea                 START_RACE_TRACK_NAME_TXT(PC),a1
+.copytrackfilename
+    move.b              (a0)+,(a1)+
+    cmp.b               #46,-1(a1)
+    bne.s               .copytrackfilename
+    move.b              #$FF,-1(a1)
     rts
