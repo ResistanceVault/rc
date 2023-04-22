@@ -58,6 +58,7 @@ MENU_INPUT_FUNCT_LIST:
     dc.l 0
 
 MENUSCREEN:
+    movem.l a0-a6/d0-d7,-(sp)
 
     ; Init tiles bitplanes
     move.l              #PHAZELOGO,d0
@@ -286,6 +287,7 @@ nomainfadeout:
     bra.s               mousemain2
 
 exitmainscreen:
+    movem.l (sp)+,a0-a6/d0-d7
     rts
 
 printstringhigh_small:

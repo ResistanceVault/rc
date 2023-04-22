@@ -246,20 +246,25 @@ print_screen:
 	ENDC
 	; Open welcome screen
 welcomescreen_start:
-	jsr 				welcomescreen
-	tst.w               EXIT_TO_OS_FLAG
-    bne.w               exit
-
 	IFD COLOR
 	; Reset race with banner
 	jsr					RESET_RACE
+	jsr					START_RACE_SCREEN
+
+	; go back to mainscreen if back has been selected
+	cmp.l				#MAINSCREEN,NEXT_SCREEN
+	beq.s				print_screen
+
+	ELSE
+	jsr 				welcomescreen
+	tst.w               EXIT_TO_OS_FLAG
+    bne.w               exit
 	ENDC
 
 	; Print track image
 TRACK_DATA_HEIGHT	EQU 240
 
 	IFD COLOR
-
 	move.l              #TRACK_DATA_1,d0
   	lea                 BPLPTR1,A1
   	bsr.w               POINTINCOPPERLIST_FUNCT
@@ -365,7 +370,9 @@ nosound1:
 
 	move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
 
+	IFND COLOR
 	ENABLE_CLIPPING
+	ENDC
 
 	; Start of gameloop
 mouse:
@@ -395,6 +402,8 @@ mouse:
 	ENDC
 
 	; if i have to display the go banner
+		DEBUG 9999
+
 	cmp.w 				#RACE_WAIT_GO,RACE_PROGRESS
 	beq.w				DISPLAY_GO_BANNER
 end_display_go_banner:
@@ -546,6 +555,7 @@ exit:
 	include "screens/resultscreen.s"
 	include "load_track.s"
 	include "screens/trackselectscreen.s"
+	include "screens/startrace.s"
 	ENDC
 
 MOVERS:
