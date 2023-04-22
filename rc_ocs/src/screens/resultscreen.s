@@ -1,3 +1,7 @@
+RESULT_COLUMN_0_X   EQU 1
+RESULT_COLUMN_1_X   EQU 13
+RESULT_COLUMN_2_X   EQU 26
+
 RESULT_FILENAME:
     dc.b "raceresult.data",0
     even
@@ -52,11 +56,19 @@ TXT_RESULT:
     dc.l TXT_RESULT_FIRST_PLACE_NAME
     dc.w 8,7
 
+    dc.w 22,1
+    dc.l TXT_RESULT_FIRST_PLACE_NAME
+    dc.w 8,7
+
     dc.w 1,3
     dc.l TXT_RESULT_SECOND_PLACE
     dc.w 8,7
 
     dc.w 13,3
+    dc.l TXT_RESULT_SECOND_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 22,3
     dc.l TXT_RESULT_SECOND_PLACE_NAME
     dc.w 8,7
 
@@ -68,11 +80,19 @@ TXT_RESULT:
     dc.l TXT_RESULT_THIRD_PLACE_NAME
     dc.w 8,7
 
+    dc.w 22,5
+    dc.l TXT_RESULT_THIRD_PLACE_NAME
+    dc.w 8,7
+
     dc.w 1,7
     dc.l TXT_RESULT_FOURTH_PLACE
     dc.w 8,7
 
     dc.w 13,7
+    dc.l TXT_RESULT_FOURTH_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 22,7
     dc.l TXT_RESULT_FOURTH_PLACE_NAME
     dc.w 8,7
 
@@ -102,21 +122,27 @@ resultscreen_cleanloop:
     dbra                d7,resultscreen_cleanloop
 
     ; prepare txt according to the arrival order
-    
     lea                 TXT_RESULT(PC),a0
 
     ; first place
     move.l              ARRIVAL_ORDER,a1
     tst.l               (a1)
     beq.w               result_draw_menu
-    move.w              #1,(a0)+
+    move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #1,(a0)+
     move.l              #TXT_RESULT_FIRST_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
-    move.w              #13,(a0)+
+
+    move.w              #RESULT_COLUMN_1_X,(a0)+
     move.w              #1,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_2_X,(a0)+
+    move.w              #1,(a0)+
+    move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -124,14 +150,22 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+4,a1
     tst.l               (a1)
     beq.w               result_draw_menu
-    move.w              #1,(a0)+
+
+    move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #3,(a0)+
     move.l              #TXT_RESULT_SECOND_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
-    move.w              #13,(a0)+
+
+    move.w              #RESULT_COLUMN_1_X,(a0)+
     move.w              #3,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_2_X,(a0)+
+    move.w              #3,(a0)+
+    move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -139,14 +173,22 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+8,a1
     tst.l               (a1)
     beq.w               result_draw_menu
-    move.w              #1,(a0)+
+
+    move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #5,(a0)+
     move.l              #TXT_RESULT_THIRD_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
-    move.w              #13,(a0)+
+
+    move.w              #RESULT_COLUMN_1_X,(a0)+
     move.w              #5,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_2_X,(a0)+
+    move.w              #5,(a0)+
+    move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -154,14 +196,22 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+12,a1
     tst.l               (a1)
     beq.w               result_draw_menu
-    move.w              #1,(a0)+
+
+    move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #7,(a0)+
     move.l              #TXT_RESULT_FOURTH_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
-    move.w              #13,(a0)+
+
+    move.w              #RESULT_COLUMN_1_X,(a0)+
     move.w              #7,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_2_X,(a0)+
+    move.w              #7,(a0)+
+    move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 

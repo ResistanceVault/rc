@@ -18,6 +18,11 @@ PLAYER_SEVEN_NAME: 	dc.b "FRITTICALDI",$FF ; perault
 PLAYER_EIGHT_NAME: 	dc.b "R PRETESE  ",$FF ; mc lallen
 PLAYER_THREE_NAME: 	dc.b "STARNOUX   ",$FF ; mc lallen
 
+PLAYER_ONE_FIVE_TEAM:		dc.b "PERRARI     ",$FF ; perrari for car 1 and 5
+PLAYER_TWO_SIX_TEAM:		dc.b "ALFA MARAMEO",$FF ; alfa marameo for car 2 and 6
+PLAYER_THREE_SEVEN_TEAM:	dc.b "PERAULT     ",$FF ; perault for car 3 and 6
+PLAYER_FOUR_EIGHT_TEAM:		dc.b "MC LALLEN   ",$FF ; mc lallen for car 4 and 8
+
 TRACK_START_PIXEL_DATA:
 	dc.w %10110000
 
@@ -25,7 +30,8 @@ CAR1_INIT:
 	jsr 	SET_CAR1_START_STATUS
 	lea 	MOVER1,a0
 
-	move.l  #PLAYER_ONE_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
+	move.l  #PLAYER_ONE_NAME,MOVER_PLAYER_NAME_ADDR(a0)
+	move.l  #PLAYER_ONE_FIVE_TEAM,MOVER_PLAYER_TEAM_ADDR(a0)				; Car player name
 
 	move.w 	#0,CAR_ID_OFFSET(a0)										; Car unique identifier
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
@@ -110,6 +116,7 @@ CAR2_INIT:
 	lea 	MOVER2,a0
 
 	move.l  #PLAYER_TWO_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
+	move.l  #PLAYER_TWO_SIX_TEAM,MOVER_PLAYER_TEAM_ADDR(a0)
 
 	move.w 	#1,CAR_ID_OFFSET(a0)										; Car unique identifier
 	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
@@ -193,6 +200,7 @@ CAR3_INIT:
 	lea 	MOVER3,a0
 
 	move.l  #PLAYER_THREE_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
+	move.l  #PLAYER_THREE_SEVEN_TEAM,MOVER_PLAYER_TEAM_ADDR(a0)
 
 	move.w 	#2,CAR_ID_OFFSET(a0)										; Car unique identifier
 
@@ -275,6 +283,7 @@ CAR4_INIT:
 	lea 	MOVER4,a0
 
 	move.l  #PLAYER_FOUR_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
+	move.l  #PLAYER_FOUR_EIGHT_TEAM,MOVER_PLAYER_TEAM_ADDR(a0)
 
 	move.w 	#3,CAR_ID_OFFSET(a0)										; Car unique identifier
 

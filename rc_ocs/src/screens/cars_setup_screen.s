@@ -50,22 +50,6 @@ CARS_SETUP_SCREEN_FILENAME:
     dc.b "carsetup.data",0
     even
 
-MENU_CARS_SETUP_SCREEN_CAR_1_TXT:
-    dc.b "PERRARI",$FF
-    even
-
-MENU_CARS_SETUP_SCREEN_CAR_2_TXT:
-    dc.b "ALFA MARAMEO",$FF
-    even
-
-MENU_CARS_SETUP_SCREEN_CAR_3_TXT:
-    dc.b "PERAULT",$FF
-    even
-
-MENU_CARS_SETUP_SCREEN_CAR_4_TXT:
-    dc.b "MC LALLEN",$FF
-    even
-
 MENU_CARS_SETUP_SCREEN_BACK_TXT:
     dc.b "BACK",$FF
     even
@@ -160,7 +144,7 @@ TXT_CARS_SETUP_SCREEN:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_1_TXT
+    dc.l PLAYER_ONE_FIVE_TEAM
     dc.w 8
     dc.w 7
 
@@ -176,7 +160,7 @@ txt_car_1_control:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y+2
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_2_TXT
+    dc.l PLAYER_TWO_SIX_TEAM
     dc.w 8
     dc.w 7
 
@@ -192,7 +176,7 @@ txt_car_2_control:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y+4
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_3_TXT
+    dc.l PLAYER_THREE_SEVEN_TEAM
     dc.w 8
     dc.w 7
 
@@ -208,7 +192,7 @@ txt_car_3_control:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y+6
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_4_TXT
+    dc.l PLAYER_FOUR_EIGHT_TEAM
     dc.w 8
     dc.w 7
 
@@ -224,7 +208,7 @@ txt_car_4_control:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y+8
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_1_TXT
+    dc.l PLAYER_ONE_FIVE_TEAM
     dc.w 8
     dc.w 7
 
@@ -240,7 +224,7 @@ txt_car_5_control:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y+10
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_2_TXT
+    dc.l PLAYER_TWO_SIX_TEAM
     dc.w 8
     dc.w 7
 
@@ -256,7 +240,7 @@ txt_car_6_control:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y+12
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_3_TXT
+    dc.l PLAYER_THREE_SEVEN_TEAM
     dc.w 8
     dc.w 7
 
@@ -272,7 +256,7 @@ txt_car_7_control:
     dc.w 7
 
     dc.w CARS_SETUP_COL_2_X,CARS_SETUP_START_Y+14
-    dc.l MENU_CARS_SETUP_SCREEN_CAR_4_TXT
+    dc.l PLAYER_FOUR_EIGHT_TEAM
     dc.w 8
     dc.w 7
 
