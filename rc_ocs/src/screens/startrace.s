@@ -106,6 +106,7 @@ ACTION_SELECT_TRACK_NEW:
     lea                 SCREEN_0,a0
     lea                 SCREEN_1,a1
     lea                 SCREEN_00,a2
+    lea                 SCREEN_11,a6
 
     lea                 PHAZELOGO,a3
     lea                 PHAZELOGO+40*256*1,a4
@@ -113,7 +114,7 @@ ACTION_SELECT_TRACK_NEW:
 
     move.w              #40*256/4-1,d7
 .restorebakgroundloop
-    clr.l               40*256*1(a5)
+    move.l              (a6)+,40*256*1(a5)
     clr.l               40*256*2(a5)
 
     move.l              (a0)+,(a3)+
@@ -123,6 +124,15 @@ ACTION_SELECT_TRACK_NEW:
 
     lea                 TXT_START_RACE_SCREEN(PC),a1
     jsr                 REFRESH_TXT_ENTRY
+
+    lea                 MENU_START_RACE_SCREEN+menu_SIZEOF*0,a1
+    jsr                 REFRESH_MENU_ENTRY
+
+    lea                 MENU_START_RACE_SCREEN+menu_SIZEOF*1,a1
+    jsr                 REFRESH_MENU_ENTRY
+
+    lea                 MENU_START_RACE_SCREEN+menu_SIZEOF*2,a1
+    jsr                 REFRESH_MENU_ENTRY
 
     movem.l             (sp)+,a0-a6/d0/d7
 
@@ -142,4 +152,21 @@ START_RACE_SCREEN:
     move.l  #TXT_START_RACE_SCREEN,TXTSCREEN_ENTRIES
     move.l  MENU_START_RACE_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY
     jsr     MENUSCREEN
+    rts
+
+REFRESH_MENU_ENTRY:
+    movem.l              d0-d1/a0/a1/a6/d6/d3,-(sp)
+    move.l               a1,a6
+    move.w               menu_EntryX(a6),d0
+    move.w               menu_EntryY(a6),d1
+    move.l               menu_DescPtr(a6),a1
+    cmp.w                #8,menu_FontWidthPx(a6)
+    bne.s                refresh_menu_entry_printbigfonts
+    bsr.w                restorebackground_small
+    bsr.w                printstringhigh_small
+    movem.l              (sp)+,d0-d1/a0/a1/a6/d6/d3
+    rts
+refresh_menu_entry_printbigfonts:
+    bsr.w                printstringhigh
+    movem.l              (sp)+,d0-d1/a0/a1/a6/d6/d3
     rts

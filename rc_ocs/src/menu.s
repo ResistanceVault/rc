@@ -157,7 +157,14 @@ mainfontcolorloop:
     move.l              (a1)+,(a4)+
     move.l              (a2)+,(a5)+
     dbra                d7,.savemenuimageloopstart
-    
+
+    lea                 PHAZELOGO+40*256*3,a0
+    lea                 SCREEN_11,a1
+    move.w              #40*256/4-1,d7
+.savemenuimageloopstart2
+    move.l              (a0)+,(a1)+
+    dbra                d7,.savemenuimageloopstart2
+
     ; draw txt - START
     move.l              TXTSCREEN_ENTRIES(PC),a6
 menutxtloop:
