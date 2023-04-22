@@ -20,7 +20,7 @@ MENU_START_RACE_SCREEN:
     dc.w 16
 
     dc.w 5,9
-    dc.l MENU_CARS_SETUP_SCREEN_BACK_TXT
+    dc.l MAIN_MENU_TXT
     dc.l MENU_CARS_SETUP_SCREEN_BACK_FUNCT
     dc.l 0
     dc.w 16
@@ -43,6 +43,21 @@ ACTION_START_RACE_NEW:
     jsr 	SET_CAR2_START_STATUS
     jsr 	SET_CAR3_START_STATUS
     jsr 	SET_CAR4_START_STATUS
+
+    ;disable non playing car
+    ; for each car
+	lea 				MOVERS,a0
+	move.w 				#MAX_CARS-1,d7
+.disablecarloop:
+    tst.l               INPUT_ROUTINE_OFFSET(a0)
+    beq.s               .disablecar
+    bset                d7,CARS_IN_PLAY+1
+    bra.s               .afterdisablecar
+.disablecar:
+    bclr                d7,CARS_IN_PLAY+1
+.afterdisablecar
+	adda.w  			#MOVER_SIZE,a0
+	dbra 				d7,.disablecarloop
     rts
 
 START_RACE_SCREEN:
