@@ -23,5 +23,6 @@ adf:
 	make all
 	cp assets/extra/rc.guide* ./buildadf/
 	$(eval $@_TMP := $(shell date +'%F_%T'))
-	cp bin/rc32 buildadf
+	./Shrinkler bin/rc32 bin/rc32compressed
+	cp bin/rc32compressed buildadf/rc32
 	exe2adf-linux64bit -d buildadf  -l rc_$($@_TMP) -a ./adf/rc_$($@_TMP).adf

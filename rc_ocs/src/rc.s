@@ -639,7 +639,6 @@ TRACK_DATA_5:
 DASHBOARD_DATA_5:
 	dcb.b   40*16,0
 	ELSE
-
 TRACK_DATA:
 TRACK_DATA_1:
 	incbin  "assets/tracks/track1/rc045_320X240X8.raw.aa"
@@ -708,15 +707,23 @@ START_RACE_BANNER_GO_2:
 START_RACE_BANNER_GO_3:
 	incbin "assets/banners/go.raw.2"
 
-PHAZELOGO:
-	incbin "assets/phazelogo/phazelogo.raw"
-PHAZELOGO_4:
-	dcb.b 10240,0
-PHAZELOGO_5:
-	dcb.b 10240,0
 	IFD INTRO
 PHAZELOGO_PALETTE:
 	incbin "assets/phazelogo/phazelogo.plt"
 	ENDC
 MY_FIB:
     ds.b    fib_SIZEOF
+
+	IFD INTRO
+PHAZELOGO:
+	incbin "assets/phazelogo/phazelogo.raw"
+	ELSE
+PHAZELOGO:	
+	dcb.b 10240,0
+	dcb.b 10240,0
+	dcb.b 10240,0
+	ENDC
+PHAZELOGO_4:
+	dcb.b 10240,0
+PHAZELOGO_5:
+	dcb.b 10240,0
