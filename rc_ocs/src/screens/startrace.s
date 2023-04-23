@@ -156,9 +156,37 @@ ACTION_SELECT_TRACK_NEW:
 
 START_RACE_SCREEN:
 
+    ; clear sprites pointers
+    move.w #0,Sprite0pointers+2
+    move.w #0,Sprite0pointers+6
+    move.w #0,Sprite1pointers+2
+    move.w #0,Sprite1pointers+6
+    move.w #0,Sprite2pointers+2
+    move.w #0,Sprite2pointers+6
+    move.w #0,Sprite3pointers+2
+    move.w #0,Sprite3pointers+6
+    move.w #0,Sprite4pointers+2
+    move.w #0,Sprite4pointers+6
+    move.w #0,Sprite5pointers+2
+    move.w #0,Sprite5pointers+6
+    move.w #0,Sprite6pointers+2
+    move.w #0,Sprite6pointers+6
+    move.w #0,Sprite7pointers+2
+    move.w #0,Sprite7pointers+6
+
+    ;reset race flag in case we are returning here after the race
+    move.w #0,START_RACE_FLAG
+
+    move.w 	   			#DMASET,d1
+    MOVE.W				d1,$dff096		; DMACON - enable bitplane, copper, sprites and audio (optional).
+    move.w              #$000F,$dff096
+
     ; load track
+    tst.w               LOAD_NEXT_TRACK_FLAG
+    beq.s               .no_load_next_track
     addi.w  #1,TRACK_NUMBER
     jsr     LOAD_TRACK
+.no_load_next_track:
 
     bsr.w   PRINT_TRACK_NAME_NEW
 

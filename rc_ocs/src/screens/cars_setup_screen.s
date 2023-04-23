@@ -431,6 +431,7 @@ car_setup_end_iteration:
     movem.l (sp)+,a0-a4
     rts
 
+    IFD LOL
 REFRESH_TXT_ENTRY:
     movem.l              d0-d1/a0/a1/a6/d6/d3,-(sp)
     move.l               a1,a6
@@ -447,6 +448,7 @@ refresh_txt_entry_printbigfonts:
     bsr.w                printstringhigh
     movem.l              (sp)+,d0-d1/a0/a1/a6/d6/d3
     rts
+    ENDC
 
 restorebackground_small:
     movem.l             a1/d0,-(sp)

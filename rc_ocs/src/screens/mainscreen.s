@@ -36,6 +36,11 @@ CARS_SETUP_SCREEN_FUNCTION:
     move.l  #CARS_SETUP_SCREEN,NEXT_SCREEN
     rts
 
+OPTION_SCREEN_FUNCTION:
+    move.w  #1,MAIN_EXIT
+    move.l  #OPTIONS_SCREEN,NEXT_SCREEN
+    rts
+
 MENU_MAIN:
     dc.w 4,7
     dc.l START_GAME_TXT
@@ -46,7 +51,7 @@ MENU_MAIN:
 
     dc.w 4,9
     dc.l OPTIONS_TXT
-    dc.l DRAFT_FUNCTION
+    dc.l OPTION_SCREEN_FUNCTION
     dc.l 0
     dc.w 16
     dc.w 16

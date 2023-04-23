@@ -10,6 +10,14 @@ all:
 	chown 1000:1000 ../../bin/main.data
 	cp ../../bin/main.data ../../buildadf/main.data
 
+	cp ./Sfondo\ titoli\ Scuro.raw ../../bin/options.data
+	dd if=/dev/zero bs=1 count=10240 >> ../../bin/options.data
+	cat ./Sfondo\ titoli\ Scuro.pal >> ../../bin/options.data
+	dd if=/dev/zero bs=1 count=32 >> ../../bin/options.data
+	chmod 666 ../../bin/options.data
+	chown 1000:1000 ../../bin/options.data
+	cp ../../bin/options.data ../../buildadf/options.data
+
 	ilbm2raw -f testtitolo1.iff testtitolo1.raw -p testtitolo1.pal
 	cp ./testtitolo1.raw ../../bin/raceresult.data
 	dd if=/dev/zero bs=1 count=10240 >> ../../bin/raceresult.data

@@ -557,6 +557,7 @@ exit:
 	include "load_track.s"
 	include "screens/trackselectscreen.s"
 	include "screens/startrace.s"
+	include "screens/optionsscreen.s"
 	ENDC
 
 MOVERS:
