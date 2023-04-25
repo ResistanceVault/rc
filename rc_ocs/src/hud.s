@@ -64,6 +64,7 @@ UPDATE_TIMER:
 
     ; convert to text
     STORECARPROPERTY    TIME_OFFSET,d1
+
     lea                 TIMETXT(pc),a0
     jsr                 dec2txt ; after this call buffer will be 01 02 03 04 05
 
@@ -75,15 +76,25 @@ UPDATE_TIMER:
     ;add offset on x according to car id
     moveq.l #0,d1
     STORECARPROPERTY    CAR_ID_OFFSET,d1
+    ; skip car 5
+    cmp.w #4,d1
+    bne.s no_car_5
+    move.w #0,d1
+    move.l              #(1+8)*40,d2 ; y offset in bytes of where to print
+    bra.s               print_string_exception
+no_car_5:
+
     muls.w              #80/8,d1
     move.l              #40,d2 ; y offset in bytes of where to print
+print_string_exception:    
     jsr                 PRINT_STRING_ON_HUD
     ; Print the timer of the car - end
-
+update_timer_end:
     movem.l             (sp)+,a0/a1/d0/d7
     rts
 
 UPDATE_BEST_TIMER:
+    rts ; disable to make space to more car
     movem.l             a0/a1/d0/d1/d2/d7,-(sp)
     move.l              a0,a2
 
@@ -125,9 +136,18 @@ UPDATE_LAP_COUNTER_HUD:
     ;add offset on x according to car id
     moveq.l             #0,d1
     STORECARPROPERTY    CAR_ID_OFFSET,d1
+    ; skip car 5
+    cmp.w #4,d1
+    bne.s no_car_5_2
+    move.w #7,d1
+    move.l              #(1+8)*40,d2 ; y offset in bytes of where to print
+    bra.s               print_string_exception2
+no_car_5_2:
+
     muls.w              #80/8,d1
     addq.w              #7,d1
     move.l              #(1+0)*40,d2 ; y offset in bytes of where to print
+print_string_exception2:
     jsr                 PRINT_STRING_ON_HUD
     ; Print the car lap number - end
 

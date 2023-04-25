@@ -106,15 +106,17 @@ MOVER_WIDTH_DIV_2_OFFSET			EQU 224
 MOVER_PLAYER_NAME_ADDR				EQU 226
 MOVER_PLAYER_TEAM_ADDR				EQU 230
 
-MOVER_SIZE					 		EQU 234
+TIME_OFFSET_STR						EQU 234
+
+MOVER_SIZE					 		EQU 238
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 1
-MAX_CARS							EQU 4
+MAX_LAPS							EQU 2
+MAX_CARS							EQU 5
 
                     rsset   0
 fib_DiskKey         rs.l    1
@@ -234,6 +236,7 @@ clearintroscreen:
 	jsr					CAR2_INIT
 	jsr					CAR3_INIT
 	jsr					CAR4_INIT
+	jsr					CAR5_INIT
 
 	; Open main screen
 	IFD COLOR
@@ -568,6 +571,8 @@ MOVERS3:
 	MOVER_INIT_MEM 3
 MOVERS4:
 	MOVER_INIT_MEM 4
+MOVERS5:
+	MOVER_INIT_MEM 5
 
 CLEARTOP:
             WAITBLITTER
@@ -718,7 +723,7 @@ MY_FIB:
 PHAZELOGO:
 	incbin "assets/phazelogo/phazelogo.raw"
 	ELSE
-PHAZELOGO:	
+PHAZELOGO:
 	dcb.b 10240,0
 	dcb.b 10240,0
 	dcb.b 10240,0
