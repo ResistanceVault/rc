@@ -118,8 +118,8 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 2
-MAX_CARS							EQU 5
+MAX_LAPS							EQU 1
+MAX_CARS							EQU 6
 
                     rsset   0
 fib_DiskKey         rs.l    1
@@ -240,6 +240,7 @@ clearintroscreen:
 	jsr					CAR3_INIT
 	jsr					CAR4_INIT
 	jsr					CAR5_INIT
+	jsr					CAR6_INIT
 
 	; Open main screen
 	IFD COLOR
@@ -580,6 +581,8 @@ MOVERS4:
 	MOVER_INIT_MEM 4
 MOVERS5:
 	MOVER_INIT_MEM 5
+MOVERS6:
+	MOVER_INIT_MEM 6
 
 CLEARTOP:
             WAITBLITTER

@@ -32,7 +32,7 @@ all:
 	echo 00 2c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 6 position
-	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 1c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 7 position
 	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
