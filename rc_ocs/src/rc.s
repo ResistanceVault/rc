@@ -108,7 +108,10 @@ MOVER_PLAYER_TEAM_ADDR				EQU 230
 
 TIME_OFFSET_STR						EQU 234
 
-MOVER_SIZE					 		EQU 238
+HUD_POSITION_X						EQU 238
+HUD_POSITION_Y						EQU	240
+
+MOVER_SIZE					 		EQU 242
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -406,7 +409,6 @@ mouse:
 	ENDC
 
 	; if i have to display the go banner
-		DEBUG 9999
 
 	cmp.w 				#RACE_WAIT_GO,RACE_PROGRESS
 	beq.w				DISPLAY_GO_BANNER
@@ -423,6 +425,7 @@ nouserpause:
 	tst.w				RACE_PAUSE
 	bne.w				MANAGE_PAUSE
 	ENDC
+		move.w				#$f00,$dff180
 
 before_moversloop:
 	; for each car
@@ -484,13 +487,17 @@ skip_check_collisions_with_other_cars:
 	; show the mover object on the screen
 	bsr.w				DISPLAY
 
+	move.w				#$00f0,$dff180
+
 	bsr.w   			UPDATE_TIMER
+
+	move.w				#$f00,$dff180
 
 next_car:
 	adda.l  			#MOVER_SIZE,a0
 	dbra 				d7,moversloop
-
 Aspetta:
+	move.w				#$000,$dff180
     cmpi.b  			#$ff,$dff006    ; linea 255?
     beq.s   			Aspetta
 

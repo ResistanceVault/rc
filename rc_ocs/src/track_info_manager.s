@@ -69,8 +69,8 @@ SET_CAR1_START_STATUS:
 
 	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
     move.l  #PLAYER_1_TIMER_TXT,TIME_OFFSET_STR(a0)
-    move.l  #0,PLAYER_1_TIMER_TXT
-    move.w  #0,PLAYER_1_TIMER_TXT+4
+    move.l  #$0,PLAYER_1_TIMER_TXT
+    move.w  #$0,PLAYER_1_TIMER_TXT+4
 
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
@@ -110,8 +110,8 @@ SET_CAR2_START_STATUS:
 
 	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
     move.l  #PLAYER_2_TIMER_TXT,TIME_OFFSET_STR(a0)
-    move.l  #0,PLAYER_2_TIMER_TXT
-    move.w  #0,PLAYER_2_TIMER_TXT+4
+    move.l  #$0,PLAYER_2_TIMER_TXT
+    move.w  #$1,PLAYER_2_TIMER_TXT+4
 
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
@@ -150,8 +150,8 @@ SET_CAR3_START_STATUS:
 
 	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
 	move.l  #PLAYER_3_TIMER_TXT,TIME_OFFSET_STR(a0)
-    move.l  #0,PLAYER_3_TIMER_TXT
-    move.w  #0,PLAYER_3_TIMER_TXT+4
+    move.l  #$0,PLAYER_3_TIMER_TXT
+    move.w  #$0,PLAYER_3_TIMER_TXT+4
 
     move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
@@ -190,8 +190,8 @@ SET_CAR4_START_STATUS:
 
 	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
     move.l  #PLAYER_4_TIMER_TXT,TIME_OFFSET_STR(a0)
-    move.l  #0,PLAYER_4_TIMER_TXT
-    move.w  #0,PLAYER_4_TIMER_TXT+4
+    move.l  #$0,PLAYER_4_TIMER_TXT
+    move.w  #$0,PLAYER_4_TIMER_TXT+4
 
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
@@ -230,8 +230,8 @@ SET_CAR5_START_STATUS:
 
 	move.w  #0,TIME_OFFSET(a0) ; time starts at zero
     move.l  #PLAYER_5_TIMER_TXT,TIME_OFFSET_STR(a0)
-    move.l  #0,PLAYER_5_TIMER_TXT
-    move.w  #0,PLAYER_5_TIMER_TXT+4
+    move.l  #$0,PLAYER_5_TIMER_TXT
+    move.w  #$0,PLAYER_5_TIMER_TXT+4
 
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 

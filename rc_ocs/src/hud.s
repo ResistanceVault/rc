@@ -65,28 +65,21 @@ UPDATE_TIMER:
     ; convert to text
     STORECARPROPERTY    TIME_OFFSET,d1
 
-    lea                 TIMETXT(pc),a0
-    jsr                 dec2txt ; after this call buffer will be 01 02 03 04 05
+    ;lea                 TIMETXT(pc),a0
+    ;jsr                 dec2txt ; after this call buffer will be 01 02 03 04 05
+    move.l              TIME_OFFSET_STR(a2),a0
+    bsr.w               TXT_INCR
 
     ; Print the timer of the car - start
-    lea                 TIMETXT(pc),a0 ; string to print
-    moveq               #5,d7 ; length of the string
+    ;lea                 TIMETXT(pc),a0 ; string to print
 
-    ; x offset in bytes of where to print
-    ;add offset on x according to car id
-    moveq.l #0,d1
-    STORECARPROPERTY    CAR_ID_OFFSET,d1
-    ; skip car 5
-    cmp.w #4,d1
-    bne.s no_car_5
-    move.w #0,d1
-    move.l              #(1+8)*40,d2 ; y offset in bytes of where to print
-    bra.s               print_string_exception
-no_car_5:
+    move.l              TIME_OFFSET_STR(a2),a0
+    moveq               #6,d7 ; length of the string
 
-    muls.w              #80/8,d1
-    move.l              #40,d2 ; y offset in bytes of where to print
-print_string_exception:    
+    moveq #0,d1
+    moveq #0,d2
+    STORECARPROPERTY    HUD_POSITION_X,d1
+    STORECARPROPERTY    HUD_POSITION_Y,d2
     jsr                 PRINT_STRING_ON_HUD
     ; Print the timer of the car - end
 update_timer_end:
@@ -153,3 +146,20 @@ print_string_exception2:
 
     movem.l             (sp)+,a0/a1/d0/d1/d2/d7
     rts
+
+TXT_INCR:
+    move.l a1,-(sp)
+    move.l a0,a1
+    addq #5,a1
+
+txt_incr_start:
+    cmpi.b #$9,(a1) ; is it 9?
+    beq txt_incr_change_scale
+
+    addi.b #1,(a1)
+    move.l (sp)+,a1
+    rts
+txt_incr_change_scale:
+    move.b #$0,(a1)
+    subq   #1,a1
+    bra  txt_incr_start
