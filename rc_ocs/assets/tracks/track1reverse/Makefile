@@ -36,7 +36,7 @@ all:
 	echo 00 eb 00 23 00 a4 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	# car 7 position
-	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	echo 00 fb 00 23 00 a4 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	# car 8 position
 	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK

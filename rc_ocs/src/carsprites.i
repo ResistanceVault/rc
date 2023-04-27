@@ -725,3 +725,124 @@ CAR5_345:
 	dc.b $50,$90,$60,$00
 	incbin "assets/cars_small/car_345.raw"
 	dc.w 0,0
+
+; start of car 6
+CAR6_0:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_0.raw"
+	dc.w 0,0
+
+CAR6_15:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_15.raw"
+	dc.w 0,0
+
+CAR6_30:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_30.raw"
+	dc.w 0,0
+
+CAR6_45:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_45.raw"
+	dc.w 0,0
+
+CAR6_60:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_60.raw"
+	dc.w 0,0
+
+CAR6_75:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_75.raw"
+	dc.w 0,0
+
+CAR6_90:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_90.raw"
+	dc.w 0,0
+
+CAR6_105:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_105.raw"
+	dc.w 0,0
+
+CAR6_120:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_120.raw"
+	dc.w 0,0
+
+CAR6_135:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_135.raw"
+	dc.w 0,0
+
+CAR6_150:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_150.raw"
+	dc.w 0,0
+
+CAR6_165:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_165.raw"
+	dc.w 0,0
+
+CAR6_180:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_180.raw"
+	dc.w 0,0
+
+CAR6_195:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_195.raw"
+	dc.w 0,0
+
+CAR6_210:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_210.raw"
+	dc.w 0,0
+
+CAR6_225:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_225.raw"
+	dc.w 0,0
+
+CAR6_240:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_240.raw"
+	dc.w 0,0
+
+CAR6_255:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_255.raw"
+	dc.w 0,0
+
+CAR6_270:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_270.raw"
+	dc.w 0,0
+
+CAR6_285:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_285.raw"
+	dc.w 0,0
+
+CAR6_300:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_300.raw"
+	dc.w 0,0
+
+CAR6_315:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_315.raw"
+	dc.w 0,0
+
+CAR6_330:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_330.raw"
+	dc.w 0,0
+
+CAR6_345:
+	dc.b $50,$90,$60,$00
+	incbin "assets/cars_small/car_345.raw"
+	dc.w 0,0

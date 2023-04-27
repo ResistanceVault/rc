@@ -75,6 +75,7 @@ ACTION_START_RACE_NEW:
     jsr 	SET_CAR4_START_STATUS
     jsr 	SET_CAR5_START_STATUS
     jsr 	SET_CAR6_START_STATUS
+    jsr 	SET_CAR7_START_STATUS
 
     ;disable non playing car
     ; for each car
