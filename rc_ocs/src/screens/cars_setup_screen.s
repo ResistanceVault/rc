@@ -112,8 +112,8 @@ MENU_CARS_SETUP_SCREEN:
 
     dc.w CARS_SETUP_COL_0_X,CARS_SETUP_START_Y+14
     dc.l CARS_SETUP_CAR_8_TXT
-    dc.l DRAFT_FUNCTION
-    dc.l 0
+    dc.l ACTION_TEST
+    dc.l MOVERS8
     dc.w 8
     dc.w 7
 
@@ -302,6 +302,10 @@ CARS_SETUP_SCREEN:
 
     lea     MOVERS7,a0
     lea     txt_car_7_control(PC),a1
+    bsr.w   CARS_SETUP_PRINT_CAR_CONTROL
+
+    lea     MOVERS8,a0
+    lea     txt_car_8_control(PC),a1
     bsr.w   CARS_SETUP_PRINT_CAR_CONTROL
 
     ; print screen

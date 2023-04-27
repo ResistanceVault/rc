@@ -38,6 +38,10 @@ TXT_RESULT_SEVENTH_PLACE:
     dc.b "7TH PLACE",$FF
 TXT_RESULT_SEVENTH_PLACE_NAME:
     dc.b "CAR  ",$FF
+TXT_RESULT_EIGHTH_PLACE:
+    dc.b "8TH PLACE",$FF
+TXT_RESULT_EIGHTH_PLACE_NAME:
+    dc.b "CAR  ",$FF
 
 EXIT_TO_NEXT_RACE_FUNCTION:
     move.w  #1,MAIN_EXIT
@@ -142,6 +146,18 @@ TXT_RESULT:
 
     dc.w 22,13
     dc.l TXT_RESULT_SEVENTH_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 1,15
+    dc.l TXT_RESULT_EIGHTH_PLACE
+    dc.w 8,7
+
+    dc.w 13,15
+    dc.l TXT_RESULT_EIGHTH_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 22,15
+    dc.l TXT_RESULT_EIGHTH_PLACE_NAME
     dc.w 8,7
 
     dc.w 0,0
@@ -328,6 +344,29 @@ resultscreen_cleanloop:
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
     move.w              #13,(a0)+
+    move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+     ; eight place
+    move.l              ARRIVAL_ORDER+28,a1
+    tst.l               (a1)
+    beq.w               result_draw_menu
+
+    move.w              #RESULT_COLUMN_0_X,(a0)+
+    move.w              #15,(a0)+
+    move.l              #TXT_RESULT_EIGHTH_PLACE,(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_1_X,(a0)+
+    move.w              #15,(a0)+
+    move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_2_X,(a0)+
+    move.w              #15,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+

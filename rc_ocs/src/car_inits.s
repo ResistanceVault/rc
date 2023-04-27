@@ -30,6 +30,7 @@ PLAYER_4_TIMER_TXT: 		dcb.b 6,$00
 PLAYER_5_TIMER_TXT: 		dcb.b 6,$00
 PLAYER_6_TIMER_TXT: 		dcb.b 6,$00
 PLAYER_7_TIMER_TXT: 		dcb.b 6,$00
+PLAYER_8_TIMER_TXT: 		dcb.b 6,$00
 
 TRACK_START_PIXEL_DATA:
 	dc.w %10110000
@@ -644,6 +645,94 @@ CAR7_INIT:
 
 	; hud position
 	move.w	#20,HUD_POSITION_X(a0)
+	move.w	#(1+8)*40,HUD_POSITION_Y(a0)
+
+	jsr		CALCULATE_WHEEL_POSITIONS
+
+	rts
+
+CAR8_INIT:
+	jsr		SET_CAR8_START_STATUS
+	lea 	MOVER8,a0
+
+	move.l  #PLAYER_EIGHT_NAME,MOVER_PLAYER_NAME_ADDR(a0)					; Car player name
+	move.l  #PLAYER_FOUR_EIGHT_TEAM,MOVER_PLAYER_TEAM_ADDR(a0)
+
+	move.w 	#7,CAR_ID_OFFSET(a0)										; Car unique identifier
+
+	move.w  #CAR1_WHEEL_BASE_LENGTH,MOVER_WHEEL_BASE_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base)
+	move.w  #CAR1_WHEEL_BASE_LENGTH/2,MOVER_WHEEL_BASE_DIV_2_OFFSET(a0)     	; distance between 2 wheels in pixels (wheel_base) divided by 2
+	move.w  #CAR_HALF_WIDTH,MOVER_WIDTH_DIV_2_OFFSET(a0)
+
+	move.w  #CAR_STEERING_ANGLE,MOVER_STEERING_ANGLE_OFFSET(a0)   	 	; how many degrees the car can steer at each frame? (steering angle)
+
+	; calculate forward vector
+	move.w  MOVER_STEER_DIRECTION_OFFSET(a0),d7
+	adda.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+	CREATE2DVECTORFROMANGLE					 	     	; forward vector, normalized vector form of heading (forward_vector) (private)
+	move.w (a0),d7
+	asr.w #11-DECIMAL_SHIFT,d7
+	move.w d7,(a0)
+	move.w 2(a0),d7
+	asr.w #11-DECIMAL_SHIFT,d7
+	move.w d7,2(a0)
+	suba.w  #MOVER_FORWARD_VECTOR_OFFSET,a0
+
+	move.w  #CAR1_ENGINE_POWER,MOVER_ENGINE_POWER_OFFSET(a0) 	  	 	; engine power , high number means the car will reach max speed faster (engine_power)
+	move.w 	#CAR1_MAX_SPEED,MOVER_MAX_SPEED_OFFSET(a0) 	  		 	; max speed of the car, limit maximum amount of movement pixel for each frame (max_speed)
+
+	move.w  #CAR_BRAKE,MOVER_BRAKE_COEFFICIENT_OFFSET(a0)	; brake coefficient, the higher the value, the strongest the brakes of the car (brake_factor)
+	move.w  #CAR1_FRICTION,MOVER_FRICTION_COEFFICIENT_OFFSET(a0) ; friction coefficientl, the higher the value, the greater the gravity force (friction_factor) 
+
+	; repulsion force to bounce a car when hits the wall (high value means big bounce)
+	move.w  #CAR_BOUNCE_WALL_FORCE,d0
+	neg.w   d0
+	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
+
+	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   			   ; because when the race starts, all car must be placed 
+																			   ; on the last zone
+	; input routine
+	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+
+	; car sprites address list
+	move.l  #CAR7_0,CAR_SPRITES_LIST_OFFSET_0(a0)
+    move.l  #CAR7_345,CAR_SPRITES_LIST_OFFSET_1(a0)
+    move.l  #CAR7_330,CAR_SPRITES_LIST_OFFSET_2(a0)
+    move.l  #CAR7_315,CAR_SPRITES_LIST_OFFSET_3(a0)
+    move.l  #CAR7_300,CAR_SPRITES_LIST_OFFSET_4(a0)
+    move.l  #CAR7_285,CAR_SPRITES_LIST_OFFSET_5(a0)
+    move.l  #CAR7_270,CAR_SPRITES_LIST_OFFSET_6(a0)
+    move.l  #CAR7_255,CAR_SPRITES_LIST_OFFSET_7(a0)
+    move.l  #CAR7_240,CAR_SPRITES_LIST_OFFSET_8(a0)
+	move.l  #CAR7_225,CAR_SPRITES_LIST_OFFSET_9(a0)
+	move.l  #CAR7_210,CAR_SPRITES_LIST_OFFSET_10(a0)
+	move.l  #CAR7_195,CAR_SPRITES_LIST_OFFSET_11(a0)
+	move.l  #CAR7_180,CAR_SPRITES_LIST_OFFSET_12(a0)
+	move.l  #CAR7_165,CAR_SPRITES_LIST_OFFSET_13(a0)
+	move.l  #CAR7_150,CAR_SPRITES_LIST_OFFSET_14(a0)
+	move.l  #CAR7_135,CAR_SPRITES_LIST_OFFSET_15(a0)
+	move.l  #CAR7_120,CAR_SPRITES_LIST_OFFSET_16(a0)
+	move.l  #CAR7_105,CAR_SPRITES_LIST_OFFSET_17(a0)
+	move.l  #CAR7_90,CAR_SPRITES_LIST_OFFSET_18(a0)
+	move.l  #CAR7_75,CAR_SPRITES_LIST_OFFSET_19(a0)
+	move.l  #CAR7_60,CAR_SPRITES_LIST_OFFSET_20(a0)
+	move.l  #CAR7_45,CAR_SPRITES_LIST_OFFSET_21(a0)
+	move.l  #CAR7_30,CAR_SPRITES_LIST_OFFSET_22(a0)
+	move.l  #CAR7_15,CAR_SPRITES_LIST_OFFSET_23(a0)
+	move.l  #CAR7_0,CAR_SPRITES_LIST_OFFSET_24(a0)
+
+	move.l	#Sprite7pointers,CAR_SPRITE_POINTER_OFFSET(a0)
+
+	IFD SOUND
+	move.l  #MOTOR1_SND,MOTOR_SAMPLE_OFFSET(a0)
+	move.l  #$dff0d0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
+	move.w  #%0000000000001000,AUDIO_CHANNEL_DMA_BIT(a0)
+	ENDC
+
+	; hud position
+	move.w	#30,HUD_POSITION_X(a0)
 	move.w	#(1+8)*40,HUD_POSITION_Y(a0)
 
 	jsr		CALCULATE_WHEEL_POSITIONS

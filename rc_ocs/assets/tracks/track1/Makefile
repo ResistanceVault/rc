@@ -38,7 +38,7 @@ all:
 	echo 00 1f 00 d2 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 8 position
-	echo 00 00 00 00 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 1f 00 b2 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	cp ../../../buildadf/tracks/TRACK1.TRK ../../../bin/tracks/TRACK1.TRK
 	chmod -R 777  ../../../bin/tracks
