@@ -258,6 +258,7 @@ print_screen:
 welcomescreen_start:
 	IFD COLOR
 	; Reset race with banner
+	clr.b				KEY_ESC
 	jsr					RESET_RACE
 	jsr					START_RACE_SCREEN
 
