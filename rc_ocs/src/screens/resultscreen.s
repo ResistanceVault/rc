@@ -1,6 +1,16 @@
-RESULT_COLUMN_0_X   EQU 1
-RESULT_COLUMN_1_X   EQU 13
-RESULT_COLUMN_2_X   EQU 26
+RESULT_COLUMN_0_X   EQU 0
+RESULT_COLUMN_1_X   EQU 5
+RESULT_COLUMN_2_X   EQU 19
+RESULT_COLUMN_3_X   EQU 34
+
+RESULT_COLUMN_0_Y   EQU 2
+RESULT_COLUMN_1_Y   EQU 4
+RESULT_COLUMN_2_Y   EQU 6
+RESULT_COLUMN_3_Y   EQU 8
+RESULT_COLUMN_4_Y   EQU 10
+RESULT_COLUMN_5_Y   EQU 12
+RESULT_COLUMN_6_Y   EQU 14
+RESULT_COLUMN_7_Y   EQU 16
 
 RESULT_FILENAME:
     dc.b "raceresult.data",0
@@ -11,37 +21,62 @@ EXIT_TO_NEXT_RACE:
     even
 
 TXT_RESULT_FIRST_PLACE:
-    dc.b "1ST PLACE",$FF
+    dc.b "1ST",$FF
 TXT_RESULT_FIRST_PLACE_NAME:
     dc.b "CAR  ",$FF
 TXT_RESULT_SECOND_PLACE:
-    dc.b "2ND PLACE",$FF
+    dc.b "2ND",$FF
 TXT_RESULT_SECOND_PLACE_NAME:
     dc.b "CAR  ",$FF
 TXT_RESULT_THIRD_PLACE:
-    dc.b "3RD PLACE",$FF
+    dc.b "3RD",$FF
 TXT_RESULT_THIRD_PLACE_NAME:
     dc.b "CAR  ",$FF
 TXT_RESULT_FOURTH_PLACE:
-    dc.b "4TH PLACE",$FF
+    dc.b "4TH",$FF
 TXT_RESULT_FOURTH_PLACE_NAME:
     dc.b "CAR  ",$FF
 TXT_RESULT_FIFTH_PLACE:
-    dc.b "5TH PLACE",$FF
+    dc.b "5TH",$FF
 TXT_RESULT_FIFTH_PLACE_NAME:
     dc.b "CAR  ",$FF
 TXT_RESULT_SIXTH_PLACE:
-    dc.b "6TH PLACE",$FF
+    dc.b "6TH",$FF
 TXT_RESULT_SIXTH_PLACE_NAME:
     dc.b "CAR  ",$FF
 TXT_RESULT_SEVENTH_PLACE:
-    dc.b "7TH PLACE",$FF
+    dc.b "7TH",$FF
 TXT_RESULT_SEVENTH_PLACE_NAME:
     dc.b "CAR  ",$FF
 TXT_RESULT_EIGHTH_PLACE:
-    dc.b "8TH PLACE",$FF
+    dc.b "8TH",$FF
 TXT_RESULT_EIGHTH_PLACE_NAME:
     dc.b "CAR  ",$FF
+
+TXT_CAR_1_TIME_TXT:
+    dc.b "000000",$FF
+    even
+TXT_CAR_2_TIME_TXT:
+    dc.b "000000",$FF
+    even
+TXT_CAR_3_TIME_TXT:
+    dc.b "000000",$FF
+    even
+TXT_CAR_4_TIME_TXT:
+    dc.b "000000",$FF
+    even
+TXT_CAR_5_TIME_TXT:
+    dc.b "000000",$FF
+    even
+TXT_CAR_6_TIME_TXT:
+    dc.b "000000",$FF
+    even
+TXT_CAR_7_TIME_TXT:
+    dc.b "000000",$FF
+    even
+TXT_CAR_8_TIME_TXT:
+    dc.b "000000",$FF
+    even
 
 EXIT_TO_NEXT_RACE_FUNCTION:
     move.w  #1,MAIN_EXIT
@@ -76,6 +111,10 @@ TXT_RESULT:
     dc.l TXT_RESULT_FIRST_PLACE_NAME
     dc.w 8,7
 
+    dc.w 34,1
+    dc.l TXT_CAR_1_TIME_TXT
+    dc.w 8,7
+
     dc.w 1,3
     dc.l TXT_RESULT_SECOND_PLACE
     dc.w 8,7
@@ -86,6 +125,10 @@ TXT_RESULT:
 
     dc.w 22,3
     dc.l TXT_RESULT_SECOND_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 34,3
+    dc.l TXT_CAR_2_TIME_TXT
     dc.w 8,7
 
     dc.w 1,5
@@ -100,6 +143,10 @@ TXT_RESULT:
     dc.l TXT_RESULT_THIRD_PLACE_NAME
     dc.w 8,7
 
+    dc.w 34,5
+    dc.l TXT_CAR_3_TIME_TXT
+    dc.w 8,7
+
     dc.w 1,7
     dc.l TXT_RESULT_FOURTH_PLACE
     dc.w 8,7
@@ -110,6 +157,10 @@ TXT_RESULT:
 
     dc.w 22,7
     dc.l TXT_RESULT_FOURTH_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 34,7
+    dc.l TXT_CAR_4_TIME_TXT
     dc.w 8,7
 
     dc.w 1,9
@@ -124,6 +175,10 @@ TXT_RESULT:
     dc.l TXT_RESULT_FIFTH_PLACE_NAME
     dc.w 8,7
 
+    dc.w 34,9
+    dc.l TXT_CAR_5_TIME_TXT
+    dc.w 8,7
+
     dc.w 1,11
     dc.l TXT_RESULT_SIXTH_PLACE
     dc.w 8,7
@@ -134,6 +189,10 @@ TXT_RESULT:
 
     dc.w 22,11
     dc.l TXT_RESULT_SIXTH_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 34,11
+    dc.l TXT_CAR_6_TIME_TXT
     dc.w 8,7
 
     dc.w 1,13
@@ -148,6 +207,10 @@ TXT_RESULT:
     dc.l TXT_RESULT_SEVENTH_PLACE_NAME
     dc.w 8,7
 
+    dc.w 34,13
+    dc.l TXT_CAR_7_TIME_TXT
+    dc.w 8,7
+
     dc.w 1,15
     dc.l TXT_RESULT_EIGHTH_PLACE
     dc.w 8,7
@@ -158,6 +221,10 @@ TXT_RESULT:
 
     dc.w 22,15
     dc.l TXT_RESULT_EIGHTH_PLACE_NAME
+    dc.w 8,7
+
+    dc.w 34,15
+    dc.l TXT_CAR_8_TIME_TXT
     dc.w 8,7
 
     dc.w 0,0
@@ -193,20 +260,28 @@ resultscreen_cleanloop:
     tst.l               (a1)
     beq.w               result_draw_menu
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #1,(a0)+
+    move.w              #RESULT_COLUMN_0_Y,(a0)+
     move.l              #TXT_RESULT_FIRST_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #1,(a0)+
+    move.w              #RESULT_COLUMN_0_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #1,(a0)+
+    move.w              #RESULT_COLUMN_0_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_0_Y,(a0)+
+    lea                 TXT_CAR_1_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_1_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -216,20 +291,28 @@ resultscreen_cleanloop:
     beq.w               result_draw_menu
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #3,(a0)+
+    move.w              #RESULT_COLUMN_1_Y,(a0)+
     move.l              #TXT_RESULT_SECOND_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #3,(a0)+
+    move.w              #RESULT_COLUMN_1_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #3,(a0)+
+    move.w              #RESULT_COLUMN_1_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_1_Y,(a0)+
+    lea                 TXT_CAR_2_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_2_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -239,20 +322,28 @@ resultscreen_cleanloop:
     beq.w               result_draw_menu
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #5,(a0)+
+    move.w              #RESULT_COLUMN_2_Y,(a0)+
     move.l              #TXT_RESULT_THIRD_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #5,(a0)+
+    move.w              #RESULT_COLUMN_2_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #5,(a0)+
+    move.w              #RESULT_COLUMN_2_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_2_Y,(a0)+
+    lea                 TXT_CAR_3_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_3_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -262,20 +353,28 @@ resultscreen_cleanloop:
     beq.w               result_draw_menu
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #7,(a0)+
+    move.w              #RESULT_COLUMN_3_Y,(a0)+
     move.l              #TXT_RESULT_FOURTH_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #7,(a0)+
+    move.w              #RESULT_COLUMN_3_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #7,(a0)+
+    move.w              #RESULT_COLUMN_3_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_3_Y,(a0)+
+    lea                 TXT_CAR_4_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_4_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -285,20 +384,28 @@ resultscreen_cleanloop:
     beq.w               result_draw_menu
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #9,(a0)+
+    move.w              #RESULT_COLUMN_4_Y,(a0)+
     move.l              #TXT_RESULT_FIFTH_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #9,(a0)+
+    move.w              #RESULT_COLUMN_4_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #9,(a0)+
+    move.w              #RESULT_COLUMN_4_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_4_Y,(a0)+
+    lea                 TXT_CAR_5_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_5_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -308,20 +415,28 @@ resultscreen_cleanloop:
     beq.w               result_draw_menu
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #11,(a0)+
+    move.w              #RESULT_COLUMN_5_Y,(a0)+
     move.l              #TXT_RESULT_SIXTH_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #11,(a0)+
+    move.w              #RESULT_COLUMN_5_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #11,(a0)+
+    move.w              #RESULT_COLUMN_5_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_5_Y,(a0)+
+    lea                 TXT_CAR_6_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_6_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -331,20 +446,28 @@ resultscreen_cleanloop:
     beq.w               result_draw_menu
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #13,(a0)+
+    move.w              #RESULT_COLUMN_6_Y,(a0)+
     move.l              #TXT_RESULT_SEVENTH_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #13,(a0)+
+    move.w              #RESULT_COLUMN_6_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #13,(a0)+
+    move.w              #RESULT_COLUMN_6_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_6_Y,(a0)+
+    lea                 TXT_CAR_7_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_7_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -354,20 +477,28 @@ resultscreen_cleanloop:
     beq.w               result_draw_menu
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
-    move.w              #15,(a0)+
+    move.w              #RESULT_COLUMN_7_Y,(a0)+
     move.l              #TXT_RESULT_EIGHTH_PLACE,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_1_X,(a0)+
-    move.w              #15,(a0)+
+    move.w              #RESULT_COLUMN_7_Y,(a0)+
     move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
     move.w              #RESULT_COLUMN_2_X,(a0)+
-    move.w              #15,(a0)+
+    move.w              #RESULT_COLUMN_7_Y,(a0)+
     move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_7_Y,(a0)+
+    lea                 TXT_CAR_8_TIME_TXT(PC),a2
+    bsr.w               NIBBLE_TO_BYTE
+    move.l              #TXT_CAR_8_TIME_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -378,4 +509,44 @@ result_draw_menu:
     move.l              #TXT_RESULT,TXTSCREEN_ENTRIES            ; point "txt" data structure
     move.l              MENU_RESULTS_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY ; where the cursor is at the beginning?
     jsr                 MENUSCREEN
+    rts
+
+NIBBLE_TO_BYTE:
+    movem.l a0/a2/d0,-(sp)
+    move.l              TIME_OFFSET_STR(a1),a0
+    
+    move.b              3(a0),d0
+    andi.w              #$F,d0
+    add.w               #$30,d0
+    move.b              d0,5(a2)
+
+    move.b              3(a0),d0
+    lsr.b               #4,d0
+    andi.w               #$F,d0
+    add.w               #$30,d0
+    move.b              d0,4(a2)
+
+    move.b              2(a0),d0
+    andi.w              #$F,d0
+    add.w               #$30,d0
+    move.b              d0,3(a2)
+
+    move.b              2(a0),d0
+    lsr.b               #4,d0
+    andi.w               #$F,d0
+    add.w               #$30,d0
+    move.b              d0,2(a2)
+
+    move.b              1(a0),d0
+    andi.w              #$F,d0
+    add.w               #$30,d0
+    move.b              d0,1(a2)
+
+    move.b              1(a0),d0
+    lsr.b               #4,d0
+    andi.w               #$F,d0
+    add.w               #$30,d0
+    move.b              d0,(a2)
+
+    movem.l (sp)+,a0/a2/d0
     rts

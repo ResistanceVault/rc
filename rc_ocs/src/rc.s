@@ -429,7 +429,7 @@ nouserpause:
 	tst.w				RACE_PAUSE
 	bne.w				MANAGE_PAUSE
 	ENDC
-		move.w				#$f00,$dff180
+	;	move.w				#$f00,$dff180
 
 before_moversloop:
 	; for each car
@@ -491,17 +491,20 @@ skip_check_collisions_with_other_cars:
 	; show the mover object on the screen
 	bsr.w				DISPLAY
 
-	move.w				#$00f0,$dff180
+	;move.w				#$00f0,$dff180
 
+	tst.w				RACE_COMPLETED_OFFSET(a0)
+	beq.s				donotupdatetimer
 	bsr.w   			UPDATE_TIMER
+donotupdatetimer:
 
-	move.w				#$f00,$dff180
+	;move.w				#$f00,$dff180
 
 next_car:
 	adda.l  			#MOVER_SIZE,a0
 	dbra 				d7,moversloop
 Aspetta:
-	move.w				#$000,$dff180
+	;move.w				#$000,$dff180
     cmpi.b  			#$ff,$dff006    ; linea 255?
     beq.s   			Aspetta
 

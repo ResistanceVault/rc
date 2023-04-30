@@ -67,20 +67,21 @@ UPDATE_TIMER:
 
     ;lea                 TIMETXT(pc),a0
     ;jsr                 dec2txt ; after this call buffer will be 01 02 03 04 05
-    move.l              TIME_OFFSET_STR(a2),a0
-    bsr.w               TXT_INCR
+    ;move.l              TIME_OFFSET_STR(a2),a0
+    ;bsr.w               TXT_INCR
 
     ; Print the timer of the car - start
     ;lea                 TIMETXT(pc),a0 ; string to print
 
     move.l              TIME_OFFSET_STR(a2),a0
-    moveq               #6,d7 ; length of the string
+    ;moveq               #6,d7 ; length of the string
 
     moveq #0,d1
     moveq #0,d2
     STORECARPROPERTY    HUD_POSITION_X,d1
     STORECARPROPERTY    HUD_POSITION_Y,d2
-    jsr                 PRINT_STRING_ON_HUD
+    ;jsr                 PRINT_STRING_ON_HUD
+    bsr.w               INCREMENT_AND_PRINT_CAR_TIMER
     ; Print the timer of the car - end
 update_timer_end:
     movem.l             (sp)+,a0/a1/d0/d7
@@ -147,7 +148,7 @@ print_string_exception2:
     movem.l             (sp)+,a0/a1/d0/d1/d2/d7
     rts
 
-TXT_INCR:
+TXT_INCR2:
     move.l a1,-(sp)
     move.l a0,a1
     addq #5,a1
@@ -163,3 +164,359 @@ txt_incr_change_scale:
     move.b #$0,(a1)
     subq   #1,a1
     bra  txt_incr_start
+
+; increment and prints the string part of the timer for a car
+; d1 - x position where to print
+; d2 - y position where to print
+; a0 - address of the string to print
+INCREMENT_AND_PRINT_CAR_TIMER_MUL_TAB:
+    dc.b 0*SIZE_OF_CHAR_BITMAP*3
+    dc.b 1*SIZE_OF_CHAR_BITMAP*3
+    dc.b 2*SIZE_OF_CHAR_BITMAP*3
+    dc.b 3*SIZE_OF_CHAR_BITMAP*3
+    dc.b 4*SIZE_OF_CHAR_BITMAP*3
+    dc.b 5*SIZE_OF_CHAR_BITMAP*3
+    dc.b 6*SIZE_OF_CHAR_BITMAP*3
+    dc.b 7*SIZE_OF_CHAR_BITMAP*3
+    dc.b 8*SIZE_OF_CHAR_BITMAP*3
+    dc.b 9*SIZE_OF_CHAR_BITMAP*3
+    even
+
+INCREMENT_AND_PRINT_CAR_TIMER_TXT: dc.b 0,0,0,1
+INCREMENT_AND_PRINT_CAR_TIMER:
+    movem.l a1/a3/a4/a5/d0/d4,-(sp)
+    lea                    INCREMENT_AND_PRINT_CAR_TIMER_MUL_TAB(PC),a5
+
+    ;move.l #$99,(a0)
+
+    ; fetch the current timer of the car
+    move.l a0,a1
+    addq #4,a1
+    lea 4+INCREMENT_AND_PRINT_CAR_TIMER_TXT(PC),a3
+
+    ; clean extend bit
+    MOVE #$04,CCR
+
+    ; do decimal add
+    abcd -(a3),-(a1)
+    abcd -(a3),-(a1)
+    abcd -(a3),-(a1)
+
+    ;fetch result into d0
+    move.l (a0),d0
+
+    ; make a copy into d4, will use it later
+    move.l                 d0,d4
+
+    ; take the lower nibble
+    andi.w                 #$f,d0
+
+    ; load font
+    move.b                 (a5,d0.w),d0
+    lea                    TIMER_FONTS_SMALL(PC),a1
+    adda.w                 d0,a1
+
+    ; load bitplane where to copy
+    lea                    DASHBOARD_DATA_1,a3
+    adda.w                 d1,a3
+    adda.w                 d2,a3
+    move.l                 a3,a4
+    addq                   #5,a3
+
+    ; write font into bitplane
+    move.b                 7(a1),40*256(a3) ; write first raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write first raw third bitplane
+    move.b                 (a1)+,(a3) ; write first raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write second raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write second raw third bitplane
+    move.b                 (a1)+,(a3) ; write secon raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write third raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write third raw third bitplane
+    move.b                 (a1)+,40(a3) ; write third raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fourth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fourth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fourth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fifth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fifth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fifth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write sixth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write sixth raw third bitplane
+    move.b                 (a1)+,(a3) ; write sixth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write seventh raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write seventh raw first bitplane
+    move.b                 (a1),(a3) ; write seventh raw first bitplane
+
+    move.l                 a4,a3
+    addq                   #4,a3
+
+    move.l                 d4,d0
+    lsr.w                  #4,d0
+    andi.w                 #$F,d0
+    ; load font
+
+    move.b                 (a5,d0.w),d0
+
+    lea                    TIMER_FONTS_SMALL(PC),a1
+    adda.w                 d0,a1
+
+    ; write font into bitplane
+    move.b                 7(a1),40*256(a3) ; write first raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write first raw third bitplane
+    move.b                 (a1)+,(a3) ; write first raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write second raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write second raw third bitplane
+    move.b                 (a1)+,(a3) ; write secon raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write third raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write third raw third bitplane
+    move.b                 (a1)+,40(a3) ; write third raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fourth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fourth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fourth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fifth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fifth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fifth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write sixth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write sixth raw third bitplane
+    move.b                 (a1)+,(a3) ; write sixth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write seventh raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write seventh raw first bitplane
+    move.b                 (a1),(a3) ; write seventh raw first bitplane
+
+
+
+
+
+
+    move.l                 a4,a3
+    addq                   #3,a3
+
+    move.l                 d4,d0
+    lsr.w                  #8,d0
+    andi.l                 #$F,d0
+
+    move.b                 (a5,d0.w),d0
+
+    ; load font
+    lea                    TIMER_FONTS_SMALL(PC),a1
+    adda.w                 d0,a1
+
+    ; write font into bitplane
+    move.b                 7(a1),40*256(a3) ; write first raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write first raw third bitplane
+    move.b                 (a1)+,(a3) ; write first raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write second raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write second raw third bitplane
+    move.b                 (a1)+,(a3) ; write secon raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write third raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write third raw third bitplane
+    move.b                 (a1)+,40(a3) ; write third raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fourth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fourth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fourth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fifth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fifth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fifth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write sixth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write sixth raw third bitplane
+    move.b                 (a1)+,(a3) ; write sixth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write seventh raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write seventh raw first bitplane
+    move.b                 (a1),(a3) ; write seventh raw first bitplane
+
+
+
+
+
+
+
+
+
+
+    move.l                 a4,a3
+    addq                   #2,a3
+
+    move.l                 d4,d0
+    rol.w                  #4,d0
+    andi.l                 #$F,d0
+
+    move.b                 (a5,d0.w),d0
+
+    ; load font
+    lea                    TIMER_FONTS_SMALL(PC),a1
+    adda.w                 d0,a1
+
+    ; write font into bitplane
+    move.b                 7(a1),40*256(a3) ; write first raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write first raw third bitplane
+    move.b                 (a1)+,(a3) ; write first raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write second raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write second raw third bitplane
+    move.b                 (a1)+,(a3) ; write secon raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write third raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write third raw third bitplane
+    move.b                 (a1)+,40(a3) ; write third raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fourth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fourth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fourth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fifth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fifth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fifth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write sixth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write sixth raw third bitplane
+    move.b                 (a1)+,(a3) ; write sixth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write seventh raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write seventh raw first bitplane
+    move.b                 (a1),(a3) ; write seventh raw first bitplane
+
+
+
+
+
+
+    move.l                 a4,a3
+    addq                   #1,a3
+
+    move.l                 d4,d0
+    swap                   d0
+    andi.l                 #$F,d0
+    move.b                 (a5,d0.w),d0
+    ; load font
+    lea                    TIMER_FONTS_SMALL(PC),a1
+    adda.w                 d0,a1
+
+    ; write font into bitplane
+    move.b                 7(a1),40*256(a3) ; write first raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write first raw third bitplane
+    move.b                 (a1)+,(a3) ; write first raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write second raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write second raw third bitplane
+    move.b                 (a1)+,(a3) ; write secon raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write third raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write third raw third bitplane
+    move.b                 (a1)+,40(a3) ; write third raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fourth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fourth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fourth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fifth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fifth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fifth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write sixth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write sixth raw third bitplane
+    move.b                 (a1)+,(a3) ; write sixth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write seventh raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write seventh raw first bitplane
+    move.b                 (a1),(a3) ; write seventh raw first bitplane
+
+
+
+
+
+    move.l                 a4,a3
+
+    move.l                 d4,d0
+    swap                   d0
+    lsr.w                  #4,d0
+    andi.l                 #$F,d0
+    move.b                 (a5,d0.w),d0
+
+    ; load font
+    lea                    TIMER_FONTS_SMALL(PC),a1
+    adda.w                 d0,a1
+
+    ; write font into bitplane
+    move.b                 7(a1),40*256(a3) ; write first raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write first raw third bitplane
+    move.b                 (a1)+,(a3) ; write first raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write second raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write second raw third bitplane
+    move.b                 (a1)+,(a3) ; write secon raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write third raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write third raw third bitplane
+    move.b                 (a1)+,40(a3) ; write third raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fourth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fourth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fourth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write fifth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write fifth raw third bitplane
+    move.b                 (a1)+,(a3) ; write fifth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write sixth raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write sixth raw third bitplane
+    move.b                 (a1)+,(a3) ; write sixth raw first bitplane
+    adda.w                 #40,a3
+
+    move.b                 7(a1),40*256(a3) ; write seventh raw second bitplane
+    move.b                 14(a1),40*256*2(a3) ; write seventh raw first bitplane
+    move.b                 (a1),(a3) ; write seventh raw first bitplane
+
+    movem.l                (sp)+,a1/a3/a4/a5/d0/d4
+    rts
