@@ -20,38 +20,24 @@ EXIT_TO_NEXT_RACE:
     dc.b "NEXT RACE",$FF
     even
 
+TXT_RESULT_EMPTY: dc.b $FF,$FF
+
 TXT_RESULT_FIRST_PLACE:
     dc.b "1ST",$FF
-TXT_RESULT_FIRST_PLACE_NAME:
-    dc.b "CAR  ",$FF
 TXT_RESULT_SECOND_PLACE:
     dc.b "2ND",$FF
-TXT_RESULT_SECOND_PLACE_NAME:
-    dc.b "CAR  ",$FF
 TXT_RESULT_THIRD_PLACE:
     dc.b "3RD",$FF
-TXT_RESULT_THIRD_PLACE_NAME:
-    dc.b "CAR  ",$FF
 TXT_RESULT_FOURTH_PLACE:
     dc.b "4TH",$FF
-TXT_RESULT_FOURTH_PLACE_NAME:
-    dc.b "CAR  ",$FF
 TXT_RESULT_FIFTH_PLACE:
     dc.b "5TH",$FF
-TXT_RESULT_FIFTH_PLACE_NAME:
-    dc.b "CAR  ",$FF
 TXT_RESULT_SIXTH_PLACE:
     dc.b "6TH",$FF
-TXT_RESULT_SIXTH_PLACE_NAME:
-    dc.b "CAR  ",$FF
 TXT_RESULT_SEVENTH_PLACE:
     dc.b "7TH",$FF
-TXT_RESULT_SEVENTH_PLACE_NAME:
-    dc.b "CAR  ",$FF
 TXT_RESULT_EIGHTH_PLACE:
     dc.b "8TH",$FF
-TXT_RESULT_EIGHTH_PLACE_NAME:
-    dc.b "CAR  ",$FF
 
 TXT_CAR_1_TIME_TXT:
     dc.b "000000",$FF
@@ -99,131 +85,131 @@ RESULT_MENU_MAIN:
     dc.w 0
 
 TXT_RESULT:
-    dc.w 1,1
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_0_Y
     dc.l TXT_RESULT_FIRST_PLACE
     dc.w 8,7
 
-    dc.w 13,1
-    dc.l TXT_RESULT_FIRST_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_0_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,1
-    dc.l TXT_RESULT_FIRST_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_0_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,1
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_0_Y
     dc.l TXT_CAR_1_TIME_TXT
     dc.w 8,7
 
-    dc.w 1,3
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_1_Y
     dc.l TXT_RESULT_SECOND_PLACE
     dc.w 8,7
 
-    dc.w 13,3
-    dc.l TXT_RESULT_SECOND_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_1_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,3
-    dc.l TXT_RESULT_SECOND_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_1_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,3
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_1_Y
     dc.l TXT_CAR_2_TIME_TXT
     dc.w 8,7
 
-    dc.w 1,5
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_2_Y
     dc.l TXT_RESULT_THIRD_PLACE
     dc.w 8,7
 
-    dc.w 13,5
-    dc.l TXT_RESULT_THIRD_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_2_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,5
-    dc.l TXT_RESULT_THIRD_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_2_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,5
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_2_Y
     dc.l TXT_CAR_3_TIME_TXT
     dc.w 8,7
 
-    dc.w 1,7
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_3_Y
     dc.l TXT_RESULT_FOURTH_PLACE
     dc.w 8,7
 
-    dc.w 13,7
-    dc.l TXT_RESULT_FOURTH_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_3_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,7
-    dc.l TXT_RESULT_FOURTH_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_3_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,7
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_3_Y
     dc.l TXT_CAR_4_TIME_TXT
     dc.w 8,7
 
-    dc.w 1,9
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_4_Y
     dc.l TXT_RESULT_FIFTH_PLACE
     dc.w 8,7
 
-    dc.w 13,9
-    dc.l TXT_RESULT_FIFTH_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_4_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,9
-    dc.l TXT_RESULT_FIFTH_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_4_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,9
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_4_Y
     dc.l TXT_CAR_5_TIME_TXT
     dc.w 8,7
 
-    dc.w 1,11
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_5_Y
     dc.l TXT_RESULT_SIXTH_PLACE
     dc.w 8,7
 
-    dc.w 13,11
-    dc.l TXT_RESULT_SIXTH_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_5_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,11
-    dc.l TXT_RESULT_SIXTH_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_5_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,11
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_5_Y
     dc.l TXT_CAR_6_TIME_TXT
     dc.w 8,7
 
-    dc.w 1,13
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_6_Y
     dc.l TXT_RESULT_SEVENTH_PLACE
     dc.w 8,7
 
-    dc.w 13,13
-    dc.l TXT_RESULT_SEVENTH_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_6_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,13
-    dc.l TXT_RESULT_SEVENTH_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_6_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,13
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_6_Y
     dc.l TXT_CAR_7_TIME_TXT
     dc.w 8,7
 
-    dc.w 1,15
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_7_Y
     dc.l TXT_RESULT_EIGHTH_PLACE
     dc.w 8,7
 
-    dc.w 13,15
-    dc.l TXT_RESULT_EIGHTH_PLACE_NAME
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_7_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 22,15
-    dc.l TXT_RESULT_EIGHTH_PLACE_NAME
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_7_Y
+    dc.l TXT_RESULT_EMPTY
     dc.w 8,7
 
-    dc.w 34,15
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_7_Y
     dc.l TXT_CAR_8_TIME_TXT
     dc.w 8,7
 
@@ -246,10 +232,26 @@ RESULTSCREEN:
     moveq               #MAX_CARS-1,d7
     lea                 TXT_RESULT(PC),a0
 resultscreen_cleanloop:
+    ; first col
     clr.l               (a0)+
     clr.l               (a0)+
     clr.l               (a0)+
+
+    ; second col
     clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; third col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; fourth col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
     dbra                d7,resultscreen_cleanloop
 
     ; prepare txt according to the arrival order
@@ -259,6 +261,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    move.w              #10,MOVER_POINTS(a1)
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_0_Y,(a0)+
     move.l              #TXT_RESULT_FIRST_PLACE,(a0)+

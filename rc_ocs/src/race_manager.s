@@ -158,7 +158,8 @@ MANAGE_END_STATE:
     IFND COLOR
     bra.w               RACE_RESULTS_SCREEN
     ELSE
-    jsr RESULTSCREEN
+    jsr                 RESULTSCREEN
+    ;jsr                 STANDINGSSCREEN
     beq.w				welcomescreen_start
     ENDIF
 no_real_end_race:

@@ -63,7 +63,7 @@ UPDATE_TIMER:
 	addi.w              #1,TIME_OFFSET(a0)
 
     ; convert to text
-    STORECARPROPERTY    TIME_OFFSET,d1
+    ;STORECARPROPERTY    TIME_OFFSET,d1
 
     ;lea                 TIMETXT(pc),a0
     ;jsr                 dec2txt ; after this call buffer will be 01 02 03 04 05

@@ -111,7 +111,9 @@ TIME_OFFSET_STR						EQU 234
 HUD_POSITION_X						EQU 238
 HUD_POSITION_Y						EQU	240
 
-MOVER_SIZE					 		EQU 242
+MOVER_POINTS						EQU 242
+
+MOVER_SIZE					 		EQU 244
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -498,7 +500,7 @@ skip_check_collisions_with_other_cars:
 	bsr.w   			UPDATE_TIMER
 donotupdatetimer:
 
-	;move.w				#$f00,$dff180
+;	move.w				#$f00,$dff180
 
 next_car:
 	adda.l  			#MOVER_SIZE,a0
@@ -571,6 +573,7 @@ exit:
 	include "screens/mainscreen.s"
 	include "screens/cars_setup_screen.s"
 	include "screens/resultscreen.s"
+	include "screens/standingsscreen.s"
 	include "load_track.s"
 	include "screens/trackselectscreen.s"
 	include "screens/startrace.s"
