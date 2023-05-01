@@ -1,7 +1,7 @@
-RESULT_COLUMN_0_X   EQU 0
-RESULT_COLUMN_1_X   EQU 5
+RESULT_COLUMN_0_X   EQU 1
+RESULT_COLUMN_1_X   EQU 6
 RESULT_COLUMN_2_X   EQU 19
-RESULT_COLUMN_3_X   EQU 34
+RESULT_COLUMN_3_X   EQU 33
 
 RESULT_COLUMN_0_Y   EQU 2
 RESULT_COLUMN_1_Y   EQU 4
@@ -261,7 +261,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER,a1
     tst.l               (a1)
     beq.w               result_draw_menu
-    move.w              #10,MOVER_POINTS(a1)
+    addi.w              #10,MOVER_POINTS(a1)
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_0_Y,(a0)+
     move.l              #TXT_RESULT_FIRST_PLACE,(a0)+
@@ -292,6 +292,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+4,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    addi.w              #8,MOVER_POINTS(a1)
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_1_Y,(a0)+
@@ -323,6 +324,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+8,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    addi.w              #7,MOVER_POINTS(a1)
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_2_Y,(a0)+
@@ -354,6 +356,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+12,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    addi.w              #6,MOVER_POINTS(a1)
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_3_Y,(a0)+
@@ -385,6 +388,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+16,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    addi.w              #5,MOVER_POINTS(a1)
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_4_Y,(a0)+
@@ -416,6 +420,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+20,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    addi.w              #4,MOVER_POINTS(a1)
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_5_Y,(a0)+
@@ -447,6 +452,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+24,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    addi.w              #3,MOVER_POINTS(a1)
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_6_Y,(a0)+
@@ -478,6 +484,7 @@ resultscreen_cleanloop:
     move.l              ARRIVAL_ORDER+28,a1
     tst.l               (a1)
     beq.w               result_draw_menu
+    addi.w              #1,MOVER_POINTS(a1)
 
     move.w              #RESULT_COLUMN_0_X,(a0)+
     move.w              #RESULT_COLUMN_7_Y,(a0)+
@@ -517,7 +524,7 @@ result_draw_menu:
 NIBBLE_TO_BYTE:
     movem.l a0/a2/d0,-(sp)
     move.l              TIME_OFFSET_STR(a1),a0
-    
+
     move.b              3(a0),d0
     andi.w              #$F,d0
     add.w               #$30,d0

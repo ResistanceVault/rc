@@ -191,6 +191,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/vectors/sqrt_q4_12_lookup_table.i"
 	include "AProcessing/libs/rasterizers/globaloptions.s"
 	include "AProcessing/libs/trigtables.i"
+	IFND COLOR
 	include "AProcessing/libs/rasterizers/processing_table_plotrefs.s"
 	include "AProcessing/libs/rasterizers/processingfill.s"
 	include "AProcessing/libs/rasterizers/clipping.s"
@@ -200,6 +201,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/matrix/matrix.s"
 	include "AProcessing/libs/matrix/point.s"
 	include "AProcessing/libs/rasterizers/point.s"
+	ENDC
 	include "AProcessing/libs/ammxmacros.i"
 	include "AProcessing/libs/vectors/operations.s"
 	include "AProcessing/libs/vectors/trigtables.i"

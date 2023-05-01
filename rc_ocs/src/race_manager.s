@@ -159,7 +159,7 @@ MANAGE_END_STATE:
     bra.w               RACE_RESULTS_SCREEN
     ELSE
     jsr                 RESULTSCREEN
-    ;jsr                 STANDINGSSCREEN
+    jsr                 STANDINGSSCREEN
     beq.w				welcomescreen_start
     ENDIF
 no_real_end_race:

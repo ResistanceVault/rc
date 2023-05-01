@@ -138,9 +138,14 @@ UPDATE_LAP_COUNTER_HUD:
     bra.s               print_string_exception2
 no_car_5_2:
 
-    muls.w              #80/8,d1
+    moveq #0,d1
+    moveq #0,d2
+    STORECARPROPERTY    HUD_POSITION_X,d1
+    STORECARPROPERTY    HUD_POSITION_Y,d2
+
+    ;muls.w              #80/8,d1
     addq.w              #7,d1
-    move.l              #(1+0)*40,d2 ; y offset in bytes of where to print
+    ;move.l              #(1+0)*40,d2 ; y offset in bytes of where to print
 print_string_exception2:
     jsr                 PRINT_STRING_ON_HUD
     ; Print the car lap number - end
