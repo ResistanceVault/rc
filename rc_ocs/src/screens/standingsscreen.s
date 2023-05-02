@@ -24,6 +24,22 @@ STANDINGSSCREEN:
     clr.l               (a0)+
     dbra                d7,.resultscreen_cleanloop
 
+    ;reorder ARRIVAL ORDER POINTER
+    lea                 ARRIVAL_ORDER,a0
+    move.w 				#MAX_CARS-1,d6
+    moveq               #0,d7
+.countcarsarrivalorder:
+    tst.l               (a0)
+    beq.s               .countcarsarrivalorder_end
+    addq                #1,d7
+    addq                #4,a0    
+.countcarsarrivalorder_end:
+    dbra                d6,.countcarsarrivalorder
+
+    lea                 ARRIVAL_ORDER,a0
+    lea                 compare_function,a2
+    jsr                 bubble_sort_4_bytes
+
     ; prepare txt according to the arrival order
     lea                 TXT_RESULT(PC),a0
 
@@ -371,4 +387,15 @@ standings_draw_menu:
     move.l              MENU_RESULTS_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY ; where the cursor is at the beginning?
     jsr                 MENUSCREEN
 
+    rts
+
+compare_function:
+    movem.l d0/a5/a6,-(sp)
+    move.l (a5),a5
+    move.l (a6),a6
+    move.w MOVER_POINTS(a5),d0
+    moveq #0,d5
+    cmp.w MOVER_POINTS(a6),d0
+    smi d5
+    movem.l (sp)+,d0/a5/a6
     rts
