@@ -20,6 +20,7 @@ txt_FontHeightPx    rs.w    1
 txt_SIZEOF          rs.b    0
 
 MENUSCREEN_IMAGE:           dc.l  0
+MENUSCREEN_IMAGE_SIZE:      dc.l  0
 MENUSCREEN_ENTRIES:         dc.l 0
 TXTSCREEN_ENTRIES:          dc.l 0
 
@@ -108,20 +109,9 @@ MENUSCREEN:
 
     ; first bitplane
     move.l              fd,d1
-    move.l              #PHAZELOGO,d2
-    move.l              #40*256*5,d3
+    move.l              #SCREEN_0,d2
+    move.l              MENUSCREEN_IMAGE_SIZE,d3
     jsr                 _LVORead(a6)
-
-    moveq               #16-1,d7
-    ;move.l              #COPCOLOR_MAIN_0+2,d2
-    move.l               #MAIN_PALETTE,d2
-menucolorloop:
-    move.l              fd,d1
-    move.l              #2,d3
-    jsr                 _LVORead(a6)
-
-    addq                #2,d2
-    dbra                d7,menucolorloop
 
     ; close the file
 	move.l	            fd,d1				; result = LVOClose(handle[d1])
@@ -131,8 +121,19 @@ menucolorloop:
 	bsr.w	            AspettaBlanks
 
     bsr.w               DopoLoad
-
     move.w 				#$C008,$dff09a ; intena, enable interrupt lvl 2
+
+    ; decompress stage start
+    moveq               #0,d0
+    lea                 SCREEN_0,a0
+    lea                 PHAZELOGO,a1
+    jsr                 Unpack
+
+    ; set car cursor colors
+    move.w              #$d73,MAIN_PALETTE_16
+    move.w              #$333,MAIN_PALETTE_17
+    move.w              #$921,MAIN_PALETTE_18
+    move.w              #$ccc,MAIN_PALETTE_19
 
     ; set font color into the colors table - START
     moveq               #7-1,d7
@@ -720,37 +721,3 @@ MAIN_Fade:
 	addq.w	#4,a1		; prossimo colore in copperlist
 	DBRA	D7,MAIN_Fade		; fai tutti i colori
 	rts
-
-MAIN_PALETTE:
-MAIN_PALETTE_0:     dc.w 0    ; color 0
-MAIN_PALETTE_1:     dc.w 0    ; color 1
-MAIN_PALETTE_2:     dc.w 0    ; color 2
-MAIN_PALETTE_3:     dc.w 0    ; color 3
-MAIN_PALETTE_4:     dc.w 0    ; color 4
-MAIN_PALETTE_5:     dc.w 0    ; color 5
-MAIN_PALETTE_6:     dc.w 0    ; color 6
-MAIN_PALETTE_7:     dc.w 0    ; color 7
-MAIN_PALETTE_8:     dc.w 0    ; color 8
-MAIN_PALETTE_9:     dc.w 0    ; color 9
-MAIN_PALETTE_10:    dc.w 0    ; color 10
-MAIN_PALETTE_11:    dc.w 0    ; color 11
-MAIN_PALETTE_12:    dc.w 0    ; color 12
-MAIN_PALETTE_13:    dc.w 0    ; color 13
-MAIN_PALETTE_14:    dc.w 0    ; color 14
-MAIN_PALETTE_15:    dc.w 0    ; color 15
-MAIN_PALETTE_16:    dc.w $d73 ; color 16
-MAIN_PALETTE_17:    dc.w $333 ; color 17
-MAIN_PALETTE_18:    dc.w $921 ; color 18
-MAIN_PALETTE_19:    dc.w $ccc ; color 19
-MAIN_PALETTE_20:    dc.w 0    ; color 20
-MAIN_PALETTE_21:    dc.w 0    ; color 21
-MAIN_PALETTE_22:    dc.w 0    ; color 22
-MAIN_PALETTE_23:    dc.w 0    ; color 23
-MAIN_PALETTE_24:    dc.w 0    ; color 24
-MAIN_PALETTE_25:    dc.w 0    ; color 25
-MAIN_PALETTE_26:    dc.w 0    ; color 26
-MAIN_PALETTE_27:    dc.w 0    ; color 27
-MAIN_PALETTE_28:    dc.w 0    ; color 28
-MAIN_PALETTE_29:    dc.w 0    ; color 29
-MAIN_PALETTE_30:    dc.w 0    ; color 30
-MAIN_PALETTE_31:    dc.w 0    ; color 31

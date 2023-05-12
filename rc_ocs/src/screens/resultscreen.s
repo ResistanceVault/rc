@@ -13,7 +13,7 @@ RESULT_COLUMN_6_Y   EQU 14
 RESULT_COLUMN_7_Y   EQU 16
 
 RESULT_FILENAME:
-    dc.b "raceresult.data",0
+    dc.b "raceresult.rnc",0
     even
 
 EXIT_TO_NEXT_RACE:
@@ -515,6 +515,7 @@ resultscreen_cleanloop:
 result_draw_menu:
     ; draw menu
     move.l              #RESULT_FILENAME,MENUSCREEN_IMAGE        ; set background image file here
+    move.l              #20754,MENUSCREEN_IMAGE_SIZE
     move.l              #RESULT_MENU_MAIN,MENUSCREEN_ENTRIES     ; point "entry" data structure
     move.l              #TXT_RESULT,TXTSCREEN_ENTRIES            ; point "txt" data structure
     move.l              MENU_RESULTS_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY ; where the cursor is at the beginning?

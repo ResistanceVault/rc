@@ -208,6 +208,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/vectors/trigtables.i"
 	include "AProcessing/libs/precalc/dec2txt.s"
 	include "AProcessing/libs/math/operations.s"
+	include "AProcessing/libs/packers/RNC_1.S"
 
 PLAY_SOUND: 	dc.w 1
 CARS_IN_PLAY: 	dc.w %0000000000001111
@@ -758,3 +759,37 @@ PHAZELOGO_4:
 	dcb.b 10240,0
 PHAZELOGO_5:
 	dcb.b 10240,0
+
+MAIN_PALETTE:
+MAIN_PALETTE_0:     dc.w 0    ; color 0
+MAIN_PALETTE_1:     dc.w 0    ; color 1
+MAIN_PALETTE_2:     dc.w 0    ; color 2
+MAIN_PALETTE_3:     dc.w 0    ; color 3
+MAIN_PALETTE_4:     dc.w 0    ; color 4
+MAIN_PALETTE_5:     dc.w 0    ; color 5
+MAIN_PALETTE_6:     dc.w 0    ; color 6
+MAIN_PALETTE_7:     dc.w 0    ; color 7
+MAIN_PALETTE_8:     dc.w 0    ; color 8
+MAIN_PALETTE_9:     dc.w 0    ; color 9
+MAIN_PALETTE_10:    dc.w 0    ; color 10
+MAIN_PALETTE_11:    dc.w 0    ; color 11
+MAIN_PALETTE_12:    dc.w 0    ; color 12
+MAIN_PALETTE_13:    dc.w 0    ; color 13
+MAIN_PALETTE_14:    dc.w 0    ; color 14
+MAIN_PALETTE_15:    dc.w 0    ; color 15
+MAIN_PALETTE_16:    dc.w 0    ; color 16
+MAIN_PALETTE_17:    dc.w 0    ; color 17
+MAIN_PALETTE_18:    dc.w 0    ; color 18
+MAIN_PALETTE_19:    dc.w 0    ; color 19
+MAIN_PALETTE_20:    dc.w 0    ; color 20
+MAIN_PALETTE_21:    dc.w 0    ; color 21
+MAIN_PALETTE_22:    dc.w 0    ; color 22
+MAIN_PALETTE_23:    dc.w 0    ; color 23
+MAIN_PALETTE_24:    dc.w 0    ; color 24
+MAIN_PALETTE_25:    dc.w 0    ; color 25
+MAIN_PALETTE_26:    dc.w 0    ; color 26
+MAIN_PALETTE_27:    dc.w 0    ; color 27
+MAIN_PALETTE_28:    dc.w 0    ; color 28
+MAIN_PALETTE_29:    dc.w 0    ; color 29
+MAIN_PALETTE_30:    dc.w 0    ; color 30
+MAIN_PALETTE_31:    dc.w 0    ; color 31

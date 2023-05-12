@@ -25,4 +25,5 @@ adf:
 	$(eval $@_TMP := $(shell date +'%F_%T'))
 	./Shrinkler bin/rc32 bin/rc32compressed
 	cp bin/rc32compressed buildadf/rc32
+	rm -f ./buildadf/*.data
 	exe2adf-linux64bit -d buildadf  -l rc_$($@_TMP) -a ./adf/rc_$($@_TMP).adf
