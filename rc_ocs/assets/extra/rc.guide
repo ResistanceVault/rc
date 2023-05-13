@@ -28,6 +28,7 @@
     @{" Introduction              " link "intro" 0}    about RC
     @{" Installing RC             " link "installation" 0}    installing RC on your system
     @{" Starting RC               " link "startingup" 0}    starting the game
+    @{" Track files specs         " link "tracksspecs" 0}    Build your own tracks
 
     @{" How to contact the author " link "author" 0}    for bug reports and contributions
     @{" License                   " link "license" 0}    license info
@@ -89,7 +90,7 @@ Thanks go to:
     Testers &       -   Z3K, Prince Phaze.
     bug reporters   -
 
-    Fonts           -   Vecterx 28.
+    Fonts           -   Vectrex 28.
 @endnode
 
 @node "installation" "Installing RC"
@@ -134,6 +135,33 @@ just ensure you have enough CHIP ram available when you run it.
 
 Running the game from CLI is also possible, just go into the directory where you installed the game
 and type "RC".
+@endnode
+
+@node "tracksspecs" "Track files specification"
+RC does not provide a track editor, however you can create new tracks just following the TRK file specification.
+
+Tracks files must be stored inside tracks and tracksshr drawer, 
+the first must contain the file in UNCOMPRESSED format, the second its shrinklerized version.
+Files must have the .TRK extension, no other files must be stored in this drawer.
+File name must be uppercase and letter + space character only.
+The file must hold the following data:
+
+* byte from to 9599         -> raw planar image first bitplane (320X240)
+* byte from 9600 to 19199   -> raw planar image second bitplane (320X240)
+* byte from 19200 to 28799  -> raw planar image third bitplane (320X240)
+* byte from 28800 to 38399  -> raw planar image fourth bitplane (320X240)
+* byte from 38400 to 47999  -> raw planar image fifth bitplane (320X240)
+* byte from 48000 to 48063  -> color palette (32 colors)
+* byte from 48064 to 124863 -> track metadata (raw indexed image 1 byte each pixel)
+* byte from 124864 to 124869 -> car 1 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124870 to 124875 -> car 2 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124876 to 124881 -> car 3 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124882 to 124887 -> car 4 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124888 to 124893 -> car 5 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124894 to 124899 -> car 6 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
+
 @endnode
 
 @node "license" "License"
