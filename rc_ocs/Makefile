@@ -26,4 +26,6 @@ adf:
 	./Shrinkler bin/rc32 bin/rc32compressed
 	cp bin/rc32compressed buildadf/rc32
 	rm -f ./buildadf/*.data
-	exe2adf-linux64bit -d buildadf  -l rc_$($@_TMP) -a ./adf/rc_$($@_TMP).adf
+	mv ./buildadf/tracks /tmp/
+	exe2adf-linux64bit -d buildadf  -l rc -a ./adf/rc_$($@_TMP).adf
+	mv /tmp/tracks ./buildadf/tracks

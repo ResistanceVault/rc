@@ -161,25 +161,25 @@ ACTION_SELECT_TRACK_NEW:
 START_RACE_SCREEN:
 
     ; clear sprites pointers
-    move.w #0,Sprite0pointers+2
-    move.w #0,Sprite0pointers+6
-    move.w #0,Sprite1pointers+2
-    move.w #0,Sprite1pointers+6
-    move.w #0,Sprite2pointers+2
-    move.w #0,Sprite2pointers+6
-    move.w #0,Sprite3pointers+2
-    move.w #0,Sprite3pointers+6
-    move.w #0,Sprite4pointers+2
-    move.w #0,Sprite4pointers+6
-    move.w #0,Sprite5pointers+2
-    move.w #0,Sprite5pointers+6
-    move.w #0,Sprite6pointers+2
-    move.w #0,Sprite6pointers+6
-    move.w #0,Sprite7pointers+2
-    move.w #0,Sprite7pointers+6
+    move.w              #0,Sprite0pointers+2
+    move.w              #0,Sprite0pointers+6
+    move.w              #0,Sprite1pointers+2
+    move.w              #0,Sprite1pointers+6
+    move.w              #0,Sprite2pointers+2
+    move.w              #0,Sprite2pointers+6
+    move.w              #0,Sprite3pointers+2
+    move.w              #0,Sprite3pointers+6
+    move.w              #0,Sprite4pointers+2
+    move.w              #0,Sprite4pointers+6
+    move.w              #0,Sprite5pointers+2
+    move.w              #0,Sprite5pointers+6
+    move.w              #0,Sprite6pointers+2
+    move.w              #0,Sprite6pointers+6
+    move.w              #0,Sprite7pointers+2
+    move.w              #0,Sprite7pointers+6
 
     ;reset race flag in case we are returning here after the race
-    move.w #0,START_RACE_FLAG
+    move.w              #0,START_RACE_FLAG
 
     move.w 	   			#DMASET,d1
     MOVE.W				d1,$dff096		; DMACON - enable bitplane, copper, sprites and audio (optional).
@@ -188,19 +188,19 @@ START_RACE_SCREEN:
     ; load track
     tst.w               LOAD_NEXT_TRACK_FLAG
     beq.s               .no_load_next_track
-    addi.w  #1,TRACK_NUMBER
-    jsr     LOAD_TRACK
+    addi.w              #1,TRACK_NUMBER
+    jsr                 LOAD_TRACK
 .no_load_next_track:
 
-    bsr.w   PRINT_TRACK_NAME_NEW
+    bsr.w               PRINT_TRACK_NAME_NEW
 
     ; print screen
-    move.l  #START_RACE_SCREEN_FILENAME,MENUSCREEN_IMAGE
-    move.l  #12586,MENUSCREEN_IMAGE_SIZE
-    move.l  #MENU_START_RACE_SCREEN,MENUSCREEN_ENTRIES
-    move.l  #TXT_START_RACE_SCREEN,TXTSCREEN_ENTRIES
-    move.l  MENU_START_RACE_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY
-    jsr     MENUSCREEN
+    move.l              #START_RACE_SCREEN_FILENAME,MENUSCREEN_IMAGE
+    move.l              #12586,MENUSCREEN_IMAGE_SIZE
+    move.l              #MENU_START_RACE_SCREEN,MENUSCREEN_ENTRIES
+    move.l              #TXT_START_RACE_SCREEN,TXTSCREEN_ENTRIES
+    move.l              MENU_START_RACE_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY
+    jsr                 MENUSCREEN
     rts
 
 REFRESH_MENU_ENTRY:
@@ -223,7 +223,7 @@ refresh_menu_entry_printbigfonts:
 PRINT_TRACK_NAME_NEW:
      ; now that the track is loaded we can copy
     ; the filename into the text
-    lea                 TRACK_FILENAME+7,a0
+    lea                 TRACK_FILENAME+TRACKDIR_LENGTH,a0
     lea                 START_RACE_TRACK_NAME_TXT(PC),a1
 .copytrackfilename
     move.b              (a0)+,(a1)+

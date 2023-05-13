@@ -18,7 +18,25 @@
 ; byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
 
-TRACKDIR_LENGTH equ 7
+MEMCPY4 MACRO
+	move.l #\3,d7
+	subq   #1,d7
+	lea \1,a0
+	lea \2,a1
+.1\@
+	move.l (a0)+,(a1)+
+	dbra d7,.1\@
+	ENDM
+
+TRACKDIR_LENGTH 	equ 10
+TRK_FILE_SIZE		equ 124912
+TRK_FILE_FIRST_BPL 	equ 0
+TRK_FILE_SECOND_BPL equ 9600
+TRK_FILE_THIRD_BPL	equ 19200
+TRK_FILE_FOURTH_BPL	equ 28800
+TRK_FILE_FIFTH_BPL  equ 38400
+TRK_FILE_COLORS		equ 48000
+TRK_FILE_POSITIONS	equ 124864
 execBase equ 4
 ACCESS_READ equ -2
 ;
@@ -35,11 +53,11 @@ _LVORead     EQU   -42
 
 
 pathString
-    dc.b    "tracks/",0
+    dc.b    "tracksshr/",0
     even
 
 TRACK_FILENAME:
-    dc.b "tracks/"
+    dc.b "tracksshr/"
     dcb.b 108+1,0
     even
 
@@ -81,6 +99,7 @@ LOAD_TRACK:
 
     move.l  fib,a3
 
+    move.l  fib_size(a3),d3
     lea     fib_EntryType(a3),a4
     lea     fib_FileName(a3),a3
 
@@ -93,7 +112,7 @@ LOAD_TRACK:
     bne.w  .next
 
     ; copy full path
-    lea TRACK_FILENAME+7,a0
+    lea TRACK_FILENAME+10,a0
     move.l a3,a4
 .startcopy:
     move.b (a4)+,(a0)+
@@ -116,97 +135,13 @@ LOAD_TRACK:
     ; first bitplane
     move.l fd,d1
     move.l #TRACK_DATA_1,d2
-    move.l #9600,d3
-    jsr     _LVORead(a6)
-
-    ; second bitplane
-    move.l fd,d1
-    move.l #TRACK_DATA_2,d2
-    move.l #9600,d3
-    jsr     _LVORead(a6)
-
-    ; third bitplane
-    move.l fd,d1
-    move.l #TRACK_DATA_3,d2
-    move.l #9600,d3
-    jsr     _LVORead(a6)
-
-    ; fourth bitplane
-    move.l fd,d1
-    move.l #TRACK_DATA_4,d2
-    move.l #9600,d3
-    jsr     _LVORead(a6)
-
-    ; fifth bitplane
-    move.l fd,d1
-    move.l #TRACK_DATA_5,d2
-    move.l #9600,d3
-    jsr     _LVORead(a6)
-
-    ; colors
-    move.l fd,d1
-    move.l #TRACK_DATA_COLORS,d2
-    move.l #64,d3
-    jsr     _LVORead(a6)
-
-    ; track metadata
-    move.l fd,d1
-    move.l #TRACK_METADATA,d2
-    move.l #76800,d3
-    jsr     _LVORead(a6)
-
-    ; car 1 position
-    move.l fd,d1
-    move.l #CAR1_INFO_DATA,d2
-    move.l #6,d3
-    jsr     _LVORead(a6)
-
-    ; car 2 position
-    move.l fd,d1
-    move.l #CAR2_INFO_DATA,d2
-    move.l #6,d3
-    jsr     _LVORead(a6)
-
-    ; car 3 position
-    move.l fd,d1
-    move.l #CAR3_INFO_DATA,d2
-    move.l #6,d3
-    jsr     _LVORead(a6)
-
-    ; car 4 position
-    move.l fd,d1
-    move.l #CAR4_INFO_DATA,d2
-    move.l #6,d3
-    jsr     _LVORead(a6)
-
-    ; car 5 position
-    move.l fd,d1
-    move.l #CAR5_INFO_DATA,d2
-    move.l #6,d3
-    jsr     _LVORead(a6)
-
-    ; car 6 position
-    move.l fd,d1
-    move.l #CAR6_INFO_DATA,d2
-    move.l #6,d3
-    jsr     _LVORead(a6)
-
-    ; car 7 position
-    move.l fd,d1
-    move.l #CAR7_INFO_DATA,d2
-    move.l #6,d3
-    jsr     _LVORead(a6)
-
-    ; car 8 position
-    move.l fd,d1
-    move.l #CAR8_INFO_DATA,d2
-    move.l #6,d3
     jsr     _LVORead(a6)
 
     ; close the file
 	move.l	fd,d1				; result = LVOClose(handle[d1])
     jsr     _LVOClose(a6)
 
+	move.w		#1,SHR_DECOMPRESS
     bra.s .exit
 
 ; get next directory entry
@@ -229,9 +164,31 @@ LOAD_TRACK:
 	bsr.w	AspettaBlanks	; aspetta 5 frames
 
     bsr.w DopoLoad
-    
-    
-    
+
+	tst.w	SHR_DECOMPRESS
+	beq.w	.shr_no_decompress
+
+	; decompress stage start
+    moveq               #0,d0
+    lea                 TRACK_DATA_1,a0
+    lea                 TRACK_PADDING_END-TRK_FILE_SIZE,a1
+    move.l              #0,a2
+    move.l              #0,a3
+    moveq               #0,d2
+    moveq               #1,d7
+    jsr                 ShrinklerDecompress
+	clr.w				SHR_DECOMPRESS
+
+	; start copying Bitplanes
+	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FIRST_BPL,TRACK_DATA_1,9600/4
+	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_SECOND_BPL,TRACK_DATA_2,9600/4
+	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_THIRD_BPL,TRACK_DATA_3,9600/4
+	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FOURTH_BPL,TRACK_DATA_4,9600/4
+	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FIFTH_BPL,TRACK_DATA_5,9600/4
+	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_COLORS,TRACK_DATA_COLORS,64/4
+	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_POSITIONS,CAR_INFO_DATA,6*8/4
+
+.shr_no_decompress:
     clr.b               KEY_ESC
     clr.w               JOY1FIREPRESSED
     jsr                 SETPOT
@@ -239,7 +196,7 @@ LOAD_TRACK:
 
 .endoflist
     move.w              TRACK_COUNTER(PC),TRACK_NUMBER
-    bra.s               .exit
+    bra.w               .exit
 
 ;
 ; variables
@@ -250,6 +207,8 @@ fib
     dc.l    MY_FIB
 fd
     dc.l    0
+SHR_DECOMPRESS:
+	dc.w	0
 
 *****************************************************************************
 ; Questa routine aspetta D1 fotogrammi. Ogni 50 fotogrammi passa 1 secondo.

@@ -120,7 +120,7 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 1
+MAX_LAPS							EQU 2
 MAX_CARS							EQU 8
 
                     rsset   0
@@ -578,7 +578,7 @@ exit:
 	include "screens/cars_setup_screen.s"
 	include "screens/resultscreen.s"
 	include "screens/standingsscreen.s"
-	include "load_track.s"
+	include "load_track_shr.s"
 	include "screens/trackselectscreen.s"
 	include "screens/startrace.s"
 	include "screens/optionsscreen.s"
@@ -642,6 +642,14 @@ CURSOR:
 	dc.w 0,0
 
 	SECTION	MIOPLANE,DATA_C
+
+TRACK_DATA_COLORS:
+	IFD COLOR
+	dcb.b 64,0
+	ELSE
+	incbin "assets/tracks/track1/rc045_320X240X8.pal"
+	ENDC
+
 	IFND DEBUG
 
 	IFD COLOR
@@ -787,9 +795,6 @@ MAIN_PALETTE_31:    dc.w 0    ; color 31
 TRACK_METADATA:
 	dcb.b 76800,0
 
-TRACK_DATA_COLORS:
-	IFD COLOR
-	dcb.b 64,0
-	ELSE
-	incbin "assets/tracks/track1/rc045_320X240X8.pal"
-	ENDC
+TRACK_PADDING:
+	dcb.b 48,0
+TRACK_PADDING_END:

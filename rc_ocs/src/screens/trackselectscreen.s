@@ -137,7 +137,7 @@ next_track_not_zero:
     ; print filename
     move.l              fib,a3
     lea                 fib_EntryType(a3),a1
-    lea                 TRACK_FILENAME+7,a1
+    lea                 TRACK_FILENAME+TRACKDIR_LENGTH,a1
     moveq               #0,d0
     moveq               #0,d1
     bsr.w               printstringtrack
