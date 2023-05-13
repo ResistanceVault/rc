@@ -20,7 +20,6 @@
 
 execBase equ 4
 ACCESS_READ equ -2
-MODE_OLDFILE EQU 1005
 ;
 ; from dos includes
 ;
@@ -102,7 +101,7 @@ LOAD_TRACK:
     beq.s .endcopy
     bra.s .startcopy
 .endcopy:
-    move.l  #MODE_OLDFILE,d2
+    move.l  #1005,d2
     move.l	#TRACK_FILENAME,d1
     jsr     _LVOOpen(a6)
     ;tst.l	d0

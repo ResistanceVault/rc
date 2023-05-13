@@ -42,3 +42,5 @@ all:
 
 	cp ../../../buildadf/tracks/TRACK1.TRK ../../../bin/tracks/TRACK1.TRK
 	chmod -R 777  ../../../bin/tracks
+
+	cd ../../../bin/tracks && Shrinkler --data TRACK1.TRK ../tracksshr/TRACK1.TRK

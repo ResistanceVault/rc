@@ -1,55 +1,57 @@
-FADE_SPEED          EQU     3
-CURSOR_CLEARING     EQU     5
+FADE_SPEED                  EQU     3 ; how many frames do I wait before changing color?
+CURSOR_CLEARING             EQU     5 ; how many pixel between the cursor and the text?
 
-                    rsset   0
-menu_EntryX         rs.w    1
-menu_EntryY         rs.w    1
-menu_DescPtr        rs.l    1
-menu_FunctPtr       rs.l    1
-menu_FunctArgsPtr   rs.l    1
-menu_FontWidthPx    rs.w    1
-menu_FontHeightPx   rs.w    1
-menu_SIZEOF         rs.b    0
+; Struct describing an entry
+                            rsset   0
+menu_EntryX                 rs.w    1
+menu_EntryY                 rs.w    1
+menu_DescPtr                rs.l    1
+menu_FunctPtr               rs.l    1
+menu_FunctArgsPtr           rs.l    1
+menu_FontWidthPx            rs.w    1
+menu_FontHeightPx           rs.w    1
+menu_SIZEOF                 rs.b    0
 
-                    rsset   0
-txt_EntryX          rs.w    1
-txt_EntryY          rs.w    1
-txt_DescPtr         rs.l    1
-txt_FontWidthPx     rs.w    1
-txt_FontHeightPx    rs.w    1
-txt_SIZEOF          rs.b    0
+; Struct describing a text
+                            rsset   0
+txt_EntryX                  rs.w    1
+txt_EntryY                  rs.w    1
+txt_DescPtr                 rs.l    1
+txt_FontWidthPx             rs.w    1
+txt_FontHeightPx            rs.w    1
+txt_SIZEOF                  rs.b    0
 
-MENUSCREEN_IMAGE:           dc.l  0
-MENUSCREEN_IMAGE_SIZE:      dc.l  0
-MENUSCREEN_ENTRIES:         dc.l 0
-TXTSCREEN_ENTRIES:          dc.l 0
+MENUSCREEN_IMAGE:           dc.l    0
+MENUSCREEN_IMAGE_SIZE:      dc.l    0
+MENUSCREEN_ENTRIES:         dc.l    0
+TXTSCREEN_ENTRIES:          dc.l    0
 
-MENUSCREEN_SELECTED_ENTRY:  dc.l 0
+MENUSCREEN_SELECTED_ENTRY:  dc.l    0
 
-MAIN_JOY1_UP_PRESSED:       dc.b 0
-MAIN_JOY1_DOWN_PRESSED:     dc.b 0
-MAIN_JOY1_FIRE_1_PRESSED:   dc.b 0
-MAIN_JOY1_FIRE_2_PRESSED:   dc.b 0
+MAIN_JOY1_UP_PRESSED:       dc.b    0
+MAIN_JOY1_DOWN_PRESSED:     dc.b    0
+MAIN_JOY1_FIRE_1_PRESSED:   dc.b    0
+MAIN_JOY1_FIRE_2_PRESSED:   dc.b    0
 
-MAIN_WASD_UP_PRESSED:       dc.b 0
-MAIN_WASD_DOWN_PRESSED:     dc.b 0
-MAIN_WASD_FIRE_1_PRESSED:   dc.b 0
-MAIN_WASD_FIRE_2_PRESSED:   dc.b 0
+MAIN_WASD_UP_PRESSED:       dc.b    0
+MAIN_WASD_DOWN_PRESSED:     dc.b    0
+MAIN_WASD_FIRE_1_PRESSED:   dc.b    0
+MAIN_WASD_FIRE_2_PRESSED:   dc.b    0
 
-MAIN_ARROWS_UP_PRESSED:     dc.b 0
-MAIN_ARROWS_DOWN_PRESSED:   dc.b 0
-MAIN_ARROWS_FIRE_1_PRESSED: dc.b 0
-MAIN_ARROWS_FIRE_2_PRESSED: dc.b 0
+MAIN_ARROWS_UP_PRESSED:     dc.b    0
+MAIN_ARROWS_DOWN_PRESSED:   dc.b    0
+MAIN_ARROWS_FIRE_1_PRESSED: dc.b    0
+MAIN_ARROWS_FIRE_2_PRESSED: dc.b    0
 
-MAIN_IJKL_UP_PRESSED:       dc.b 0
-MAIN_IJKL_DOWN_PRESSED:     dc.b 0
-MAIN_IJKL_FIRE_1_PRESSED:   dc.b 0
-MAIN_IJKL_FIRE_2_PRESSED:   dc.b 0
+MAIN_IJKL_UP_PRESSED:       dc.b    0
+MAIN_IJKL_DOWN_PRESSED:     dc.b    0
+MAIN_IJKL_FIRE_1_PRESSED:   dc.b    0
+MAIN_IJKL_FIRE_2_PRESSED:   dc.b    0
 
 
-MAIN_EXIT:                  dc.w 0
+MAIN_EXIT:                  dc.w    0
 
-FADE_SPEED_COUNTER:         dc.w FADE_SPEED
+FADE_SPEED_COUNTER:         dc.w    FADE_SPEED
 
 MENU_INPUT_FUNCT_LIST:
     dc.l READJOY1_WELCOME
@@ -59,7 +61,7 @@ MENU_INPUT_FUNCT_LIST:
     dc.l 0
 
 MENUSCREEN:
-    movem.l a0-a6/d0-d7,-(sp)
+    movem.l             a0-a6/d0-d7,-(sp)
 
     ; Init tiles bitplanes
     move.l              #PHAZELOGO,d0
@@ -87,11 +89,11 @@ MENUSCREEN:
     MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
 
     ; copperlist setup
-	move.l				#COPPERLIST_MAIN,$80(a5)	; Copperlist point
-	move.w				d0,$88(a5)			; Copperlist start
-	move.w				#0,$1fc(a5)			; AGA disable
-	move.w				#$c00,$106(a5)		; AGA disable
-	move.w				#$11,$10c(a5)		; AGA disable
+    move.l				#COPPERLIST_MAIN,$80(a5)	; Copperlist point
+    move.w				d0,$88(a5)			; Copperlist start
+    move.w				#0,$1fc(a5)			; AGA disable
+    move.w				#$c00,$106(a5)		; AGA disable
+    move.w				#$11,$10c(a5)		; AGA disable
 
     move.l              execBase,a6
 
@@ -127,7 +129,11 @@ MENUSCREEN:
     moveq               #0,d0
     lea                 SCREEN_0,a0
     lea                 PHAZELOGO,a1
-    jsr                 Unpack
+    move.l              #0,a2
+    move.l              #0,a3
+    moveq               #0,d2
+    moveq               #1,d7
+    jsr                 ShrinklerDecompress
 
     ; set car cursor colors
     move.w              #$d73,MAIN_PALETTE_16

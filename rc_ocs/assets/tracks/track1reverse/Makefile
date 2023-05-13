@@ -43,3 +43,5 @@ all:
 
 	cp ../../../buildadf/tracks/$(TRACKNAME).TRK ../../../bin/tracks/$(TRACKNAME).TRK
 	chmod 777 ../../../bin/tracks/$(TRACKNAME).TRK
+
+	cd ../../../bin/tracks && ../../Shrinkler --data TRACK1REVERSE.TRK ../tracksshr/TRACK1REVERSE.TRK

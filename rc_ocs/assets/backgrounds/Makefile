@@ -10,9 +10,11 @@ all:
 	chown 1000:1000 ../../bin/main.data
 	cp ../../bin/main.data ../../buildadf/main.data
 	ln -sf ../../bin/main.data ./main.data
-	vamos ../../pp/RNC_ProPack/PPAMI.EXE p d main.data
-	cp main.RNC ../../bin/main.rnc
-	cp main.RNC ../../buildadf/main.rnc
+	../../Shrinkler --data main.data main.shr
+	cp main.shr ../../bin/main.shr
+	chmod +r ../../bin/main.shr
+	cp main.shr ../../buildadf/main.shr
+	chmod +r ../../buildadf/main.shr
 
 	cp ./Sfondo\ titoli\ Scuro.raw ../../bin/options.data
 	dd if=/dev/zero bs=1 count=10240 >> ../../bin/options.data
@@ -22,9 +24,11 @@ all:
 	chown 1000:1000 ../../bin/options.data
 	cp ../../bin/options.data ../../buildadf/options.data
 	ln -sf ../../bin/options.data ./options.data
-	vamos ../../pp/RNC_ProPack/PPAMI.EXE p d options.data
-	cp options.RNC ../../bin/options.rnc
-	cp options.RNC ../../buildadf/options.rnc
+	../../Shrinkler --data options.data options.shr
+	cp options.shr ../../bin/options.shr
+	chmod +r ../../bin/options.shr
+	cp options.shr ../../buildadf/options.shr
+	chmod +r ../../buildadf/options.shr
 
 	ilbm2raw -f testtitolo1.iff testtitolo1.raw -p testtitolo1.pal
 	cp ./testtitolo1.raw ../../bin/raceresult.data
@@ -35,9 +39,11 @@ all:
 	chown 1000:1000 ../../bin/raceresult.data
 	cp ../../bin/raceresult.data ../../buildadf/raceresult.data
 	ln -sf ../../bin/raceresult.data ./raceresult.data
-	vamos ../../pp/RNC_ProPack/PPAMI.EXE p d raceresult.data
-	cp raceresult.RNC ../../bin/raceresult.rnc
-	cp raceresult.RNC ../../buildadf/raceresult.rnc
+	../../Shrinkler --data raceresult.data raceresult.shr
+	cp raceresult.shr ../../bin/raceresult.shr
+	chmod +r ../../bin/raceresult.shr
+	cp raceresult.shr ../../buildadf/raceresult.shr
+	chmod +x ../../buildadf/raceresult.shr
 
 	ilbm2raw -f ./Sfondo\ Titolo\ Chiaro.iff ./Sfondo\ Titolo\ Chiaro.raw -p ./Sfondo\ Titolo\ Chiaro.pal
 	cp ././Sfondo\ Titolo\ Chiaro.raw ../../bin/carsetup.data
@@ -48,9 +54,11 @@ all:
 	chown 1000:1000 ../../bin/carsetup.data
 	cp ../../bin/carsetup.data ../../buildadf/carsetup.data
 	ln -sf ../../bin/carsetup.data ./carsetup.data
-	vamos ../../pp/RNC_ProPack/PPAMI.EXE p d carsetup.data
-	cp carsetup.RNC ../../bin/carsetup.rnc
-	cp carsetup.RNC ../../buildadf/carsetup.rnc
+	../../Shrinkler --data carsetup.data carsetup.shr
+	cp carsetup.shr ../../bin/carsetup.shr
+	chmod +r ../../bin/carsetup.shr
+	cp carsetup.shr ../../buildadf/carsetup.shr
+	chmod +r ../../buildadf/carsetup.shr
 
 	ilbm2raw -f ./Sfondo\ titolo\ Chiaro\ RC.iff ./Sfondo\ titolo\ Chiaro\ RC.raw -p ./Sfondo\ titolo\ Chiaro\ RC.pal
 	cp ././Sfondo\ titolo\ Chiaro\ RC.raw ../../bin/carstartrace.data
@@ -61,6 +69,8 @@ all:
 	chown 1000:1000 ../../bin/carstartrace.data
 	cp ../../bin/carstartrace.data ../../buildadf/carstartrace.data
 	ln -sf ../../bin/carstartrace.data ./carstartrace.data
-	vamos ../../pp/RNC_ProPack/PPAMI.EXE p d carstartrace.data
-	cp carstartrace.RNC ../../bin/carstartrace.rnc
-	cp carstartrace.RNC ../../buildadf/carstartrace.rnc
+	../../Shrinkler --data carstartrace.data carstartrace.shr
+	cp carstartrace.shr ../../bin/carstartrace.shr
+	chmod +r ../../bin/carstartrace.shr
+	cp carstartrace.shr ../../buildadf/carstartrace.shr
+	chmod +r ../../buildadf/carstartrace.shr

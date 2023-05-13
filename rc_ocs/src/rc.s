@@ -208,7 +208,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/vectors/trigtables.i"
 	include "AProcessing/libs/precalc/dec2txt.s"
 	include "AProcessing/libs/math/operations.s"
-	include "AProcessing/libs/packers/RNC_1.S"
+	include "AProcessing/libs/packers/ShrinklerDecompress.S"
 
 PLAY_SOUND: 	dc.w 1
 CARS_IN_PLAY: 	dc.w %0000000000001111
@@ -698,16 +698,6 @@ TRACK_DATA_3:
 DASHBOARD_DATA_3:
 	dcb.b   40*256,0
 	ENDC
-TRACK_DATA_COLORS:
-	IFD COLOR
-	;incbin "assets/tracks/track1/rc045_320X240X32.pal"
-	dcb.b 64,0
-	ELSE
-	incbin "assets/tracks/track1/rc045_320X240X8.pal"
-	ENDC
-TRACK_METADATA:
-	;incbin "assets/tracks/track1/rc045_320X240X8.data"
-	dcb.b 76800,0
 START_RACE_BANNER_ACC_1:
 	incbin "assets/banners/acctostart.raw.0"
 START_RACE_BANNER_ACC_2:
@@ -793,3 +783,13 @@ MAIN_PALETTE_28:    dc.w 0    ; color 28
 MAIN_PALETTE_29:    dc.w 0    ; color 29
 MAIN_PALETTE_30:    dc.w 0    ; color 30
 MAIN_PALETTE_31:    dc.w 0    ; color 31
+
+TRACK_METADATA:
+	dcb.b 76800,0
+
+TRACK_DATA_COLORS:
+	IFD COLOR
+	dcb.b 64,0
+	ELSE
+	incbin "assets/tracks/track1/rc045_320X240X8.pal"
+	ENDC
