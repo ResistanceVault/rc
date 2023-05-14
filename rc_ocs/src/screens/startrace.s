@@ -68,16 +68,6 @@ ACTION_START_RACE_NEW:
     move.w  #1,MAIN_EXIT
     clr.w   LOAD_NEXT_TRACK_FLAG
 
-    ; Cars init
-    jsr 	SET_CAR1_START_STATUS
-    jsr 	SET_CAR2_START_STATUS
-    jsr 	SET_CAR3_START_STATUS
-    jsr 	SET_CAR4_START_STATUS
-    jsr 	SET_CAR5_START_STATUS
-    jsr 	SET_CAR6_START_STATUS
-    jsr 	SET_CAR7_START_STATUS
-    jsr 	SET_CAR8_START_STATUS
-
     ;disable non playing car
     ; for each car
 	lea 				MOVERS,a0
@@ -189,6 +179,7 @@ START_RACE_SCREEN:
     tst.w               LOAD_NEXT_TRACK_FLAG
     beq.s               .no_load_next_track
     addi.w              #1,TRACK_NUMBER
+    clr.w               TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
 .no_load_next_track:
 

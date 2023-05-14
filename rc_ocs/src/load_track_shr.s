@@ -64,6 +64,9 @@ TRACK_FILENAME:
 TRACK_COUNTER:
     dc.w    0
 
+TRACK_OPEN_FILE:
+	dc.w	0
+
 LOAD_TRACK:
 
     move.l  execBase,a6
@@ -121,6 +124,10 @@ LOAD_TRACK:
     beq.s .endcopy
     bra.s .startcopy
 .endcopy:
+
+	tst.w	TRACK_OPEN_FILE
+	beq.s	.exit
+
     move.l  #1005,d2
     move.l	#TRACK_FILENAME,d1
     jsr     _LVOOpen(a6)

@@ -186,6 +186,7 @@ welcomescreen:
     tst.w               LOAD_NEXT_TRACK_FLAG
     beq.s               no_load_next_track
     addi.w              #1,TRACK_NUMBER
+    move.w              #1,TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
     bsr.w               PRINT_TRACK_NAME
 no_load_next_track:

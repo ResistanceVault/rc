@@ -120,7 +120,7 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 2
+MAX_LAPS							EQU 1
 MAX_CARS							EQU 8
 
                     rsset   0
@@ -271,6 +271,20 @@ welcomescreen_start:
 	; go back to mainscreen if back has been selected
 	cmp.l				#MAINSCREEN,NEXT_SCREEN
 	beq.s				print_screen
+
+	; load track data from disk
+	move.w              #1,TRACK_OPEN_FILE
+    jsr                 LOAD_TRACK
+
+	 ; Cars init
+    jsr 	SET_CAR1_START_STATUS
+    jsr 	SET_CAR2_START_STATUS
+    jsr 	SET_CAR3_START_STATUS
+    jsr 	SET_CAR4_START_STATUS
+    jsr 	SET_CAR5_START_STATUS
+    jsr 	SET_CAR6_START_STATUS
+    jsr 	SET_CAR7_START_STATUS
+    jsr 	SET_CAR8_START_STATUS
 
 	ELSE
 	jsr 				welcomescreen

@@ -37,6 +37,7 @@ load_next_track:
     bne.w               next_track_not_zero
     move.w              #1,TRACK_NUMBER
 next_track_not_zero:
+    move.w              #1,TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
     jsr                 PRINT_TRACK_NAME
 
