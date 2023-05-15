@@ -36,9 +36,13 @@ STANDINGSSCREEN:
 .countcarsarrivalorder_end:
     dbra                d6,.countcarsarrivalorder
 
+    cmp.w               #1,d7
+    beq.s               .skip_ordering
+
     lea                 ARRIVAL_ORDER,a0
     lea                 compare_function,a2
     jsr                 bubble_sort_4_bytes
+.skip_ordering:
 
     ; prepare txt according to the arrival order
     lea                 TXT_RESULT(PC),a0
