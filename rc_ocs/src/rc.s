@@ -120,7 +120,7 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 1
+MAX_LAPS							EQU 2
 MAX_CARS							EQU 8
 
                     rsset   0
@@ -333,14 +333,6 @@ TRACK_DATA_HEIGHT	EQU 240
 	move.w				COLORS_FONTS_SMALL+12,COPHUDCOLOR6+2
 	move.w				14(a0),COPCOLOR7+2
 	move.w				COLORS_FONTS_SMALL+14,COPHUDCOLOR7+2
-	lea					$dff180,a1
-	moveq				#32-1,d7
-looptrackcolors:
-	move.w				(a0)+,(a1)+
-	dbra				d7,looptrackcolors
-
-	; force black background
-	move.w              #0,COPCOLOR0+2
 
 	ELSE
 
@@ -403,6 +395,15 @@ nosound1:
 
 	IFND COLOR
 	ENABLE_CLIPPING
+	ELSE
+	lea 				TRACK_DATA_COLORS,a0
+	lea					$dff180,a1
+	moveq				#32-1,d7
+looptrackcolors2:
+	move.w				(a0)+,(a1)+
+	dbra				d7,looptrackcolors2
+	; force black background
+	move.w              #0,COPCOLOR0+2
 	ENDC
 
 	; Start of gameloop
