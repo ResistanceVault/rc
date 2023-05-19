@@ -483,12 +483,13 @@ restorebackground_small_end:
 
 
 restorebackground_tile_small:
-    movem.l             d0/d1/d6/a0-a5,-(sp)
+    movem.l             d0/d1/d6/a0-a6,-(sp)
     mulu.w              #40*7,d1
     add.w               d1,d0
     lea                 SCREEN_0,a0
     lea                 SCREEN_1,a1
     lea                 SCREEN_00,a2
+    lea                 SCREEN_11,a6
 
     lea                 PHAZELOGO,a3
     lea                 PHAZELOGO+10240,a4
@@ -497,6 +498,7 @@ restorebackground_tile_small:
     adda.l              d0,a0
     adda.l              d0,a1
     adda.l              d0,a2
+    adda.l              d0,a6
 
     adda.l              d0,a3
     adda.l              d0,a4
@@ -507,7 +509,8 @@ restorebackground_tile_small_start_loop:
     move.b              (a0),(a3)
     move.b              (a1),(a4)
     move.b              (a2),(a5)
-    clr.b               40*256(a5)
+    ;clr.b               40*256(a5)
+    move.b              (a6),40*256(a5)
     clr.b               40*256*2(a5)
 
     adda.l              #40,a0
@@ -516,8 +519,9 @@ restorebackground_tile_small_start_loop:
     adda.l              #40,a3
     adda.l              #40,a4
     adda.l              #40,a5
+    adda.l              #40,a6
 
     dbra                d6,restorebackground_tile_small_start_loop
 
-    movem.l             (sp)+,d0/d1/d6/a0-a5
+    movem.l             (sp)+,d0/d1/d6/a0-a6
     rts

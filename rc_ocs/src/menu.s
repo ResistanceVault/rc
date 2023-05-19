@@ -1,5 +1,6 @@
 FADE_SPEED                  EQU     3 ; how many frames do I wait before changing color?
 CURSOR_CLEARING             EQU     5 ; how many pixel between the cursor and the text?
+CURSOR_CLEARING_STR         EQU     1 ;
 
 ; Struct describing an entry
                             rsset   0
@@ -20,6 +21,10 @@ txt_DescPtr                 rs.l    1
 txt_FontWidthPx             rs.w    1
 txt_FontHeightPx            rs.w    1
 txt_SIZEOF                  rs.b    0
+
+CURSORSTR:                  dc.b    '>',$FF
+MENUSCREEN_OLD_SELECTED_ENTRY:
+                            dc.l    0
 
 MENUSCREEN_IMAGE:           dc.l    0
 MENUSCREEN_IMAGE_SIZE:      dc.l    0
@@ -62,6 +67,8 @@ MENU_INPUT_FUNCT_LIST:
 
 MENUSCREEN:
     movem.l             a0-a6/d0-d7,-(sp)
+
+    clr.l               MENUSCREEN_OLD_SELECTED_ENTRY
 
     ; Init tiles bitplanes
     move.l              #PHAZELOGO,d0
@@ -220,9 +227,9 @@ next_entry_please:
     bra.s                menuloop
 
 setcursormain:
-    move.l               #CURSOR,d0
-    lea       		     Sprite0Mainpointers,a1
-    jsr       		     POINTINCOPPERLIST_FUNCT
+    ;move.l               #CURSOR,d0
+    ;lea       		     Sprite0Mainpointers,a1
+    ;jsr       		     POINTINCOPPERLIST_FUNCT
 
 mousemain:
     cmpi.b  			#$ff,$dff006    ; Linea 255?
@@ -266,10 +273,12 @@ menu_input_list_loop_start:
     move.l              menu_FunctPtr(a1),a1
     bsr.w               input_cmd_key_release
 
-    move.l              a6,-(sp)
-    move.l              MENUSCREEN_SELECTED_ENTRY(PC),a6
-    bsr.w               set_cursor_sprite_position
-    move.l              (sp)+,a6
+    ;move.l              a6,-(sp)
+    ;move.l              MENUSCREEN_SELECTED_ENTRY(PC),a6
+    ;bsr.w               set_cursor_sprite_position
+    ;move.l              (sp)+,a6
+
+    bsr.w               set_cursor_string_position
 
     addq                #4,a3
     addq                #1,a6
@@ -534,6 +543,52 @@ bigfontcyclehigh:
     movem.l             (sp)+,a0/a1/a2/a3/d0/d1
     rts
 
+set_cursor_string_position:
+    movem.l             d0-d7/a0-a6,-(sp)
+    move.l              MENUSCREEN_SELECTED_ENTRY(PC),a6
+    cmp.l               MENUSCREEN_OLD_SELECTED_ENTRY,a6
+    bne.s               .updatecursor
+    movem.l             (sp)+,d0-d7/a0-a6
+    rts
+.updatecursor:
+
+    ; delete old cursor
+    tst.l               MENUSCREEN_OLD_SELECTED_ENTRY
+    beq.s               .nodeleteoldcursor
+    ;move.l              a6,a2
+    move.l              MENUSCREEN_OLD_SELECTED_ENTRY(PC),a6
+    move.w              menu_EntryX(a6),d0
+    subq                #CURSOR_CLEARING_STR,d0
+    move.w              menu_EntryY(a6),d1
+    lea                 CURSORSTR(PC),a1
+    cmp.w               #8,menu_FontWidthPx(a6)
+    bne.s               .clearbig
+    bsr.w               restorebackground_small
+    ;bsr.w               printstringhigh_small
+    ; move.l             a6,a2
+    bra.s               .nodeleteoldcursor
+.clearbig:
+    bsr.w               restorebackground_big
+    ;bsr.w               printstringhigh
+    ;move.l              a6,a2
+.nodeleteoldcursor:
+    move.l              MENUSCREEN_SELECTED_ENTRY(PC),a6
+    move.l              a6,MENUSCREEN_OLD_SELECTED_ENTRY
+    move.w              menu_EntryX(a6),d0
+    subq                #CURSOR_CLEARING_STR,d0
+    move.w              menu_EntryY(a6),d1
+    lea                 CURSORSTR(PC),a1
+    cmp.w               #8,menu_FontWidthPx(a6)
+    bne.s               set_cursor_string_position_no_small
+    bsr.w               restorebackground_small
+    bsr.w               printstringhigh_small
+    movem.l             (sp)+,d0-d7/a0-a6
+    rts
+set_cursor_string_position_no_small:
+    bsr.w                restorebackground_big
+    bsr.w                printstringhigh
+    movem.l              (sp)+,d0-d7/a0-a6
+    rts
 
 set_cursor_sprite_position:
     move.l d2,-(sp)

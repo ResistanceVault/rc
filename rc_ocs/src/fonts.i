@@ -27,9 +27,9 @@ BIGFONTS:
     incbin "assets/fonts/big/9.raw"
     dcb.b 2*16*3,$00 ; :
     dcb.b 2*16*3,$00 ; ;
-    dcb.b 2*16*3,$00 ; <
+    incbin "assets/cursors/cursor_left.raw" ; <
     dcb.b 2*16*3,$00 ; =
-    dcb.b 2*16*3,$00 ; >
+    incbin "assets/cursors/cursor_right.raw" ; >
     dcb.b 2*16*3,$00 ; ?
     dcb.b 2*16*3,$00 ; @
     incbin "assets/fonts/big/a.raw"
@@ -89,9 +89,9 @@ BIGFONTS_REVERSE_MASK:
     incbin "assets/fonts/big/9_mask_reversed.raw"
     dcb.b 2*16*1,$00 ; :
     dcb.b 2*16*1,$00 ; ;
-    dcb.b 2*16*1,$00 ; <
+    incbin "assets/cursors/cursor_left_mask_reversed.raw" ; <
     dcb.b 2*16*1,$00 ; =
-    dcb.b 2*16*1,$00 ; >
+    incbin "assets/cursors/cursor_right_mask_reversed.raw" ; >
     dcb.b 2*16*1,$00 ; ?
     dcb.b 2*16*1,$00 ; @
     incbin "assets/fonts/big/a_mask_reversed.raw"
@@ -152,9 +152,9 @@ SMALLFONTS:
     incbin "assets/fonts/small/9.raw"
     dcb.b 1*7*3,$00 ; :
     dcb.b 1*7*3,$00 ; ;
-    dcb.b 1*7*3,$00 ; <
+    incbin "assets/cursors/cursor_left_small.raw" ; <
     dcb.b 1*7*3,$00 ; =
-    dcb.b 1*7*3,$00 ; >
+    incbin "assets/cursors/cursor_right_small.raw" ; >
     dcb.b 1*7*3,$00 ; ?
     dcb.b 1*7*3,$00 ; @
     incbin "assets/fonts/small/a.raw"
@@ -215,9 +215,9 @@ SMALLFONTS_REVERSE_MASK:
     incbin "assets/fonts/small/9_mask_reversed.raw"
     dcb.b 1*7*1,$00 ; :
     dcb.b 1*7*1,$00 ; ;
-    dcb.b 1*7*1,$00 ; <
+    incbin "assets/cursors/cursor_left_small_mask_reversed.raw" ; <
     dcb.b 1*7*1,$00 ; =
-    dcb.b 1*7*1,$00 ; >
+    incbin "assets/cursors/cursor_right_small_mask_reversed.raw" ; >
     dcb.b 1*7*1,$00 ; ?
     dcb.b 1*7*1,$00 ; @
     incbin "assets/fonts/small/a_mask_reversed.raw"
