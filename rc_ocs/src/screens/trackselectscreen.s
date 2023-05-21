@@ -38,6 +38,7 @@ load_next_track:
     move.w              #1,TRACK_NUMBER
 next_track_not_zero:
     move.w              #1,TRACK_OPEN_FILE
+    clr.w               COPY_METADATA
     jsr                 LOAD_TRACK
     jsr                 PRINT_TRACK_NAME
 

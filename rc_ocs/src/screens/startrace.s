@@ -85,6 +85,10 @@ ACTION_START_RACE_NEW:
     rts
 
 ACTION_SELECT_TRACK_NEW:
+    move.l              #SELECT_TRACK_SCREEN,NEXT_SCREEN
+    move.w              #1,MAIN_EXIT
+    rts
+
     move.w              #1,SET_TRACK_SELECT_BITPLANE
     movem.l             a0-a6/d0/d7,-(sp)
 

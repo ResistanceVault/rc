@@ -25,3 +25,22 @@ NORMALIZEVECTOR MACRO
 	asr.w d6,d7
 	move.w d7,2\2
     ENDM
+
+MEMCPY4 MACRO
+	move.l #\3,d7
+	subq   #1,d7
+	lea \1,a0
+	lea \2,a1
+.1\@
+	move.l (a0)+,(a1)+
+	dbra d7,.1\@
+	ENDM
+
+BZERO4 MACRO
+	move.l #\2,d7
+	subq   #1,d7
+	lea \1,a0
+.1\@
+	clr.l (a0)+
+	dbra d7,.1\@
+	ENDM

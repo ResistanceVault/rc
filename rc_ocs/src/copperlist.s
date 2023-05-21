@@ -564,5 +564,71 @@ COPCOLOR_MAIN_30:
 	dc.w	$1bc,$000	; color30
 COPCOLOR_MAIN_31:
 	dc.w	$1be,$000	; color31
+
+	dc.w    $D401,$FFFE;  wait last line of thumbnail
+COPCOLOR2_MAIN_0:
+	dc.w	$0180,$000	; color0
+COPCOLOR2_MAIN_1:
+	dc.w	$0182,$000	; color1
+COPCOLOR2_MAIN_2:
+	dc.w	$0184,$000	; color2
+COPCOLOR2_MAIN_3:
+	dc.w	$0186,$000	; color3
+COPCOLOR2_MAIN_4:
+	dc.w	$0188,$000	; color4
+COPCOLOR2_MAIN_5:
+	dc.w	$018A,$000	; color5
+COPCOLOR2_MAIN_6:
+	dc.w	$018C,$000	; color6
+COPCOLOR2_MAIN_7:
+	dc.w	$018E,$000	; color7
+COPCOLOR2_MAIN_8:
+	dc.w	$0190,$000	; color8
+COPCOLOR2_MAIN_9:
+	dc.w	$0192,$000	; color9
+COPCOLOR2_MAIN_10:
+	dc.w	$0194,$000	; color10
+COPCOLOR2_MAIN_11:
+	dc.w	$0196,$000	; color11
+COPCOLOR2_MAIN_12:
+	dc.w	$0198,$000	; color12
+COPCOLOR2_MAIN_13:
+	dc.w	$019A,$000	; color13
+COPCOLOR2_MAIN_14:
+	dc.w	$019C,$000	; color14
+COPCOLOR2_MAIN_15:
+	dc.w	$019E,$000	; color15
+COPCOLOR2_MAIN_16:
+	dc.w	$01a0,$000	; color16
+COPCOLOR2_MAIN_17:
+	dc.w	$01a2,$000	; color17
+COPCOLOR2_MAIN_18:
+	dc.w	$01a4,$000	; color18
+COPCOLOR2_MAIN_19:
+	dc.w	$01a6,$000	; color19
+COPCOLOR2_MAIN_20:
+	dc.w	$01a8,$000	; color20
+COPCOLOR2_MAIN_21:
+	dc.w	$01aa,$000	; color21
+COPCOLOR2_MAIN_22:
+	dc.w	$01ac,$000	; color22
+COPCOLOR2_MAIN_23:
+	dc.w	$01ae,$000	; color23
+COPCOLOR2_MAIN_24:
+	dc.w	$1b0,$000	; color24
+COPCOLOR2_MAIN_25:
+	dc.w	$1b2,$000	; color25
+COPCOLOR2_MAIN_26:
+	dc.w	$1b4,$000	; color26
+COPCOLOR2_MAIN_27:
+	dc.w	$1b6,$000	; color27
+COPCOLOR2_MAIN_28:
+	dc.w	$1b8,$000	; color28
+COPCOLOR2_MAIN_29:
+	dc.w	$1ba,$000	; color29
+COPCOLOR2_MAIN_30:
+	dc.w	$1bc,$000	; color30
+COPCOLOR2_MAIN_31:
+	dc.w	$1be,$000	; color31
   dc.w	$FFFF,$FFFE	;
-; END OF COPPERLIST_TRACK_SELECTION
+; END OF COPPERLIST_MAIN

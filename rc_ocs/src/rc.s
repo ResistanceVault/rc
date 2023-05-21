@@ -266,13 +266,24 @@ welcomescreen_start:
 	; Reset race with banner
 	clr.b				KEY_ESC
 	jsr					RESET_RACE
+print_start_race_screen:
 	jsr					START_RACE_SCREEN
 
 	; go back to mainscreen if back has been selected
 	cmp.l				#MAINSCREEN,NEXT_SCREEN
 	beq.s				print_screen
 
+	cmp.l				#SELECT_TRACK_SCREEN,NEXT_SCREEN
+	bne.s				load_track_from_disk
+.load_select_track_screen:
+	jsr					SELECT_TRACK_SCREEN
+	cmp.l				#MENU_START_RACE_SCREEN,NEXT_SCREEN
+	beq.s				print_start_race_screen
+	cmp.l				#SELECT_TRACK_SCREEN,NEXT_SCREEN
+	beq.s				.load_select_track_screen
+
 	; load track data from disk
+load_track_from_disk:
 	move.w              #1,TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
 
@@ -594,7 +605,8 @@ exit:
 	include "screens/resultscreen.s"
 	include "screens/standingsscreen.s"
 	include "load_track_shr.s"
-	include "screens/trackselectscreen.s"
+	;include "screens/trackselectscreen.s"
+	include "screens/track_selection_screen.s"
 	include "screens/startrace.s"
 	include "screens/optionsscreen.s"
 	ENDC
@@ -813,3 +825,37 @@ TRACK_METADATA:
 TRACK_PADDING:
 	dcb.b 48,0
 TRACK_PADDING_END:
+
+MAIN_PALETTE2:
+MAIN_PALETTE2_0:     dc.w 0    ; color 0
+MAIN_PALETTE2_1:     dc.w 0    ; color 1
+MAIN_PALETTE2_2:     dc.w 0    ; color 2
+MAIN_PALETTE2_3:     dc.w 0    ; color 3
+MAIN_PALETTE2_4:     dc.w 0    ; color 4
+MAIN_PALETTE2_5:     dc.w 0    ; color 5
+MAIN_PALETTE2_6:     dc.w 0    ; color 6
+MAIN_PALETTE2_7:     dc.w 0    ; color 7
+MAIN_PALETTE2_8:     dc.w 0    ; color 8
+MAIN_PALETTE2_9:     dc.w 0    ; color 9
+MAIN_PALETTE2_10:    dc.w 0    ; color 10
+MAIN_PALETTE2_11:    dc.w 0    ; color 11
+MAIN_PALETTE2_12:    dc.w 0    ; color 12
+MAIN_PALETTE2_13:    dc.w 0    ; color 13
+MAIN_PALETTE2_14:    dc.w 0    ; color 14
+MAIN_PALETTE2_15:    dc.w 0    ; color 15
+MAIN_PALETTE2_16:    dc.w 0    ; color 16
+MAIN_PALETTE2_17:    dc.w 0    ; color 17
+MAIN_PALETTE2_18:    dc.w 0    ; color 18
+MAIN_PALETTE2_19:    dc.w 0    ; color 19
+MAIN_PALETTE2_20:    dc.w 0    ; color 20
+MAIN_PALETTE2_21:    dc.w 0    ; color 21
+MAIN_PALETTE2_22:    dc.w 0    ; color 22
+MAIN_PALETTE2_23:    dc.w 0    ; color 23
+MAIN_PALETTE2_24:    dc.w 0    ; color 24
+MAIN_PALETTE2_25:    dc.w 0    ; color 25
+MAIN_PALETTE2_26:    dc.w 0    ; color 26
+MAIN_PALETTE2_27:    dc.w 0    ; color 27
+MAIN_PALETTE2_28:    dc.w 0    ; color 28
+MAIN_PALETTE2_29:    dc.w 0    ; color 29
+MAIN_PALETTE2_30:    dc.w 0    ; color 30
+MAIN_PALETTE2_31:    dc.w 0    ; color 31

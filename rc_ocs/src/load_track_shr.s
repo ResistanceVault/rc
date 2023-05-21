@@ -18,15 +18,6 @@
 ; byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
 
-MEMCPY4 MACRO
-	move.l #\3,d7
-	subq   #1,d7
-	lea \1,a0
-	lea \2,a1
-.1\@
-	move.l (a0)+,(a1)+
-	dbra d7,.1\@
-	ENDM
 
 TRACKDIR_LENGTH 	equ 10
 TRK_FILE_SIZE		equ 124912
@@ -50,8 +41,6 @@ _LVOOpen	EQU	-30
 _LVOClose	EQU	-36
 _LVORead     EQU   -42
 
-
-
 pathString
     dc.b    "tracksshr/",0
     even
@@ -67,10 +56,11 @@ TRACK_COUNTER:
 TRACK_OPEN_FILE:
 	dc.w	0
 
+COPY_METADATA:
+	dc.w 1
+
 LOAD_TRACK:
-
     move.l  execBase,a6
-
     lea	    $dff000,a5
 	MOVE.L	#$7FFF7FFF,$9A(A5)	; INTERRUPTS & INTREQS DISABLE
 
@@ -115,7 +105,7 @@ LOAD_TRACK:
     bne.w  .next
 
     ; copy full path
-    lea TRACK_FILENAME+10,a0
+    lea TRACK_FILENAME+TRACKDIR_LENGTH,a0
     move.l a3,a4
 .startcopy:
     move.b (a4)+,(a0)+
@@ -192,13 +182,17 @@ LOAD_TRACK:
 	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_THIRD_BPL,TRACK_DATA_3,9600/4
 	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FOURTH_BPL,TRACK_DATA_4,9600/4
 	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FIFTH_BPL,TRACK_DATA_5,9600/4
+	tst.l				COPY_METADATA
+	beq.s				.donotcopymetadata
 	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_COLORS,TRACK_DATA_COLORS,64/4
+.donotcopymetadata:
 	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_POSITIONS,CAR_INFO_DATA,6*8/4
 
 .shr_no_decompress:
     clr.b               KEY_ESC
     clr.w               JOY1FIREPRESSED
     jsr                 SETPOT
+	move.w				#1,COPY_METADATA
     rts
 
 .endoflist

@@ -1,3 +1,7 @@
+MENU_SET_CALLBACK_BEFORE_LOOP MACRO
+    move.l \1,MENU_CALLBACK_BEFORE_LOOP_FUNCT
+    ENDM
+
 FADE_SPEED                  EQU     3 ; how many frames do I wait before changing color?
 CURSOR_CLEARING             EQU     5 ; how many pixel between the cursor and the text?
 CURSOR_CLEARING_STR         EQU     1 ;
@@ -58,6 +62,9 @@ MAIN_EXIT:                  dc.w    0
 
 FADE_SPEED_COUNTER:         dc.w    FADE_SPEED
 
+MENU_CALLBACK_BEFORE_LOOP_FUNCT:
+                            dc.l    0
+
 MENU_INPUT_FUNCT_LIST:
     dc.l READJOY1_WELCOME
     dc.l KEYBOARD_WASD_WELCOME
@@ -106,6 +113,9 @@ MENUSCREEN:
 
 	MOVE.L	            #$7FFF7FFF,$9A(A5)	; INTERRUPTS & INTREQS DISABLE
 
+    tst.l               MENUSCREEN_IMAGE_SIZE
+    beq.w               .menu_nofile
+
 	bsr.w               PreparaLoad
     moveq	            #50,d1		; wait 50 frames
 	bsr.w	            AspettaBlanks
@@ -143,16 +153,26 @@ MENUSCREEN:
     jsr                 ShrinklerDecompress
 
     ; set car cursor colors
-    move.w              #$d73,MAIN_PALETTE_16
-    move.w              #$333,MAIN_PALETTE_17
-    move.w              #$921,MAIN_PALETTE_18
-    move.w              #$ccc,MAIN_PALETTE_19
+    ;move.w              #$d73,MAIN_PALETTE_16
+    ;move.w              #$333,MAIN_PALETTE_17
+    ;move.w              #$921,MAIN_PALETTE_18
+    ;move.w              #$ccc,MAIN_PALETTE_19
+
+.menu_nofile:
+    tst.l               MENUSCREEN_IMAGE_SIZE
+    bne.s               .menu_noclear
+    BZERO4              PHAZELOGO,40*256*5/4
+.menu_noclear:
+
+    MEMCPY4				MAIN_PALETTE,MAIN_PALETTE2,64/4
 
     ; set font color into the colors table - START
     moveq               #7-1,d7
     lea                 COLORS_FONTS_SMALL+2,a0
     lea                 MAIN_PALETTE_25,a1
+    lea                 MAIN_PALETTE2_25,a2
 mainfontcolorloop:
+    move.w (a0),(a2)+
     move.w (a0)+,(a1)+
     dbra d7,mainfontcolorloop
     ; set font color into the colors table - END
@@ -231,6 +251,13 @@ setcursormain:
     ;lea       		     Sprite0Mainpointers,a1
     ;jsr       		     POINTINCOPPERLIST_FUNCT
 
+; execute callback before loop
+    tst.l               MENU_CALLBACK_BEFORE_LOOP_FUNCT
+    beq.s               .menu_no_callback_before_loop
+    move.l              MENU_CALLBACK_BEFORE_LOOP_FUNCT(PC),A0
+    jsr                 (a0)
+.menu_no_callback_before_loop
+
 mousemain:
     cmpi.b  			#$ff,$dff006    ; Linea 255?
     bne.s   			mousemain
@@ -241,6 +268,7 @@ waitmain:
 
     subi.w              #1,FADE_SPEED_COUNTER
     bne.s               nomainfadein
+    bsr.w               MAIN_FadeIn2
     bsr.w               MAIN_FadeIn
     move.w              #FADE_SPEED,FADE_SPEED_COUNTER
 nomainfadein:
@@ -302,6 +330,7 @@ waitmain2:
 
     subi.w              #1,FADE_SPEED_COUNTER
     bne.s               nomainfadeout
+    bsr.w               MAIN_FadeOut2
     bsr.w               MAIN_FadeOut
     move.w              #FADE_SPEED,FADE_SPEED_COUNTER
 nomainfadeout:
@@ -310,7 +339,8 @@ nomainfadeout:
     bra.s               mousemain2
 
 exitmainscreen:
-    movem.l (sp)+,a0-a6/d0-d7
+    clr.l               MENU_CALLBACK_BEFORE_LOOP_FUNCT
+    movem.l             (sp)+,a0-a6/d0-d7
     rts
 
 printstringhigh_small:
@@ -697,6 +727,23 @@ MAIN_FadeOut:
 MAIN_FinitoOut:
 	rts
 
+MAIN_FadeOut2:
+	tst.w	MAIN_FaseDelFade
+	beq.s	MAIN_FinitoOut2
+	;subq.w	#1,MAIN_FaseDelFade	; sistema per la prossima volta la fase da fare
+	moveq	#0,d0
+	move.w	MAIN_FaseDelFade(PC),d0
+    subq #1,d0
+	moveq	#32-1,d7		; D7 = Numero di colori
+	lea     MAIN_PALETTE2,a0	; A0 = indirizzo tabella dei colori
+					
+	lea	    COPCOLOR2_MAIN_0+2,a1		; A1 = indirizzo colori in copperlist
+				
+	bsr.s	MAIN_Fade
+	rts
+MAIN_FinitoOut2:
+	rts
+
 MAIN_FadeIn:
 	cmp.w	#17,MAIN_FaseDelFade
 	beq.s	MAIN_FinitoFadeIn
@@ -714,6 +761,21 @@ MAIN_FadeIn:
 	rts
 MAIN_FinitoFadeIn:
 	;move.l  #MAIN_FadeOut,MAIN_PHAZE_FUNCT_ADDR
+	rts
+
+MAIN_FadeIn2:
+	cmp.w	#17,MAIN_FaseDelFade
+	beq.s	MAIN_FinitoFadeIn2
+	moveq	#0,d0
+	move.w	MAIN_FaseDelFade(PC),d0
+	moveq	#32-1,d7		; D7 = Numero di colori
+	lea	    MAIN_PALETTE2,a0	; A0 = indirizzo tabella dei colori
+					
+	lea	    COPCOLOR2_MAIN_0+2,a1		; A1 = indirizzo colori in copperlist
+
+	bsr.s	MAIN_Fade
+	rts
+MAIN_FinitoFadeIn2:
 	rts
 
 *****************************************************************************
