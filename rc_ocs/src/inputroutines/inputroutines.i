@@ -5,6 +5,8 @@ input_routines_SIZEOF           rs.b    0
 
 READJOY1_DESC:          dc.b "JOY 1",$FF
                         even
+CPU_DESC:               dc.b "CPU   ",$FF
+                        even
 KEYBOARD_WASD_DESC:     dc.b "WASD  ",$FF
                         even
 KEYBOARD_IJKL_DESC:     dc.b "IJKL  ",$FF
@@ -23,6 +25,9 @@ OFF_DESC:               dc.b "OFF   ",$FF
 ROUTINES_INPUTLIST:
     dc.l  READJOY1
     dc.l  READJOY1_DESC
+
+    dc.l  CPUCONTROL
+    dc.l  CPU_DESC
 
     dc.l  KEYBOARD_WASD
     dc.l  KEYBOARD_WASD_DESC

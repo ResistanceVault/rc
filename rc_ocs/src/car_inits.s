@@ -79,7 +79,7 @@ CAR1_INIT:
 																			   ; on the last zone
 
 	; input routine
-	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CPUCONTROL,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR_0,CAR_SPRITES_LIST_OFFSET_0(a0)

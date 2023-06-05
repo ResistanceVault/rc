@@ -585,6 +585,7 @@ exit:
 	include "inputroutines/keyboard_arrows.s"
 	include "inputroutines/joystick2.s"
 	include "inputroutines/joystick3.s"
+	include "inputroutines/cpucontrol.s"
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"
@@ -859,3 +860,5 @@ MAIN_PALETTE2_28:    dc.w 0    ; color 28
 MAIN_PALETTE2_29:    dc.w 0    ; color 29
 MAIN_PALETTE2_30:    dc.w 0    ; color 30
 MAIN_PALETTE2_31:    dc.w 0    ; color 31
+
+	include "AProcessing/libs/math/sqrt_table_q16_0.i"
