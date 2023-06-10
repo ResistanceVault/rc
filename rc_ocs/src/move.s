@@ -10,12 +10,16 @@ MOVE:
     ; Copy velocity into heading vector
     move.l              MOVER_VELOCITY_OFFSET(a2),MOVER_HEADING_OFFSET(a2)
 
+    SETCARPROPERTYADDR  MOVER_HEADING_OFFSET,a0
+    GET2DMAGNITUDE_Q4_12_TABLE_LOOKUP
+    move.w              d0,MOVER_HEADING_MAGNITUDE(a2)
+
     ; Play sample at frequency relative to car speed
     IFD SOUND
     tst.w               PLAY_SOUND
 	beq.s               nosound2
-    SETCARPROPERTYADDR  MOVER_HEADING_OFFSET,a0
-    GET2DMAGNITUDE_Q4_12_TABLE_LOOKUP
+    ;SETCARPROPERTYADDR  MOVER_HEADING_OFFSET,a0
+    ;GET2DMAGNITUDE_Q4_12_TABLE_LOOKUP
     move.w              #$FFFF,d1
     lsl.w               #2,d0
     sub.w               d0,d1

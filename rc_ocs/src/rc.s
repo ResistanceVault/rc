@@ -113,7 +113,12 @@ HUD_POSITION_Y						EQU	240
 
 MOVER_POINTS						EQU 242
 
-MOVER_SIZE					 		EQU 244
+MOVER_HOTSPOT_CPU_PTR				EQU 244
+
+MOVER_HEADING_MAGNITUDE				EQU 248
+MOVER_CPU_CONSECUTIVE_COLLISIONS	EQU 250
+
+MOVER_SIZE					 		EQU 252
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -514,6 +519,10 @@ check_collisions_with_other_cars_loop:
 	; skip check collisions with cars not in play
 	btst.b 				d6,CARS_IN_PLAY+1
 	beq.s   			skip_check_collisions_with_other_cars
+
+	; skip check collisions with cars which have completed the race
+	tst.w				RACE_COMPLETED_OFFSET(a1)
+	beq.w				skip_check_collisions_with_other_cars
 
 	bsr.w 				CHECK_COLLISIONS_WITH_OTHER_CAR
 skip_check_collisions_with_other_cars:

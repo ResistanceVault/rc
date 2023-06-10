@@ -77,6 +77,8 @@ SET_CAR1_START_STATUS:
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
 
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
+
     rts
 
 
@@ -118,6 +120,8 @@ SET_CAR2_START_STATUS:
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
 
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
+
     rts
 
 SET_CAR3_START_STATUS:
@@ -157,6 +161,8 @@ SET_CAR3_START_STATUS:
     move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
+
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     rts
 
@@ -198,6 +204,8 @@ SET_CAR4_START_STATUS:
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
 
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
+
     rts
 
 SET_CAR5_START_STATUS:
@@ -237,6 +245,8 @@ SET_CAR5_START_STATUS:
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
+
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     rts
 
@@ -278,6 +288,8 @@ SET_CAR6_START_STATUS:
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
 
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
+
     rts
 
 SET_CAR7_START_STATUS:
@@ -318,6 +330,8 @@ SET_CAR7_START_STATUS:
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
 
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
+
     rts
 
 SET_CAR8_START_STATUS:
@@ -357,5 +371,7 @@ SET_CAR8_START_STATUS:
 	move.w  #$FFFF,BEST_TIME_OFFSET(a0) ; best time starts at max to allow first lap to be the best
 
     move.w  #$FFFF,RACE_COMPLETED_OFFSET(a0) ; race is not completed for this car
+
+    move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     rts

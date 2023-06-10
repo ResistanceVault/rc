@@ -1,3 +1,5 @@
+CPU_ANGLE_TRESHOLD EQU 15
+
 MOVER_POSITION_NORMALIZED:
 MOVER_POSITION_NORMALIZED_X:
     dc.w 0
@@ -6,9 +8,100 @@ MOVER_POSITION_NORMALIZED_Y:
 
 MOVER_DESTINATION:
 MOVER_DESTINATION_X:
-    dc.w 80
+    dc.w 122
 MOVER_DESTINATION_Y:
-    dc.w 50
+    dc.w 52
+
+    dc.w 90,37
+    dc.w 63,40
+    dc.w 52,46
+    dc.w 43,63
+    dc.w 35,82
+    dc.w 22,104
+    dc.w 23,126
+    dc.w 30,144
+    dc.w 43,150
+    dc.w 60,144
+    dc.w 75,128
+    dc.w 91,122
+    dc.w 107,127
+    dc.w 109,144
+    dc.w 108,159
+    dc.w 100,175
+    dc.w 93,190
+    dc.w 94,203
+    dc.w 105,213
+    dc.w 124,213
+    dc.w 137,203
+    dc.w 151,189
+    dc.w 158,173
+    dc.w 161,153
+    dc.w 162,133
+    dc.w 159,113
+    dc.w 165,92
+    dc.w 182,90
+    dc.w 202,98
+    dc.w 223,110
+    dc.w 242,121
+    dc.w 263,132
+    dc.w 276,143
+    dc.w 292,166
+    dc.w 301,184
+    dc.w 300,206
+    dc.w 282,220
+    dc.w 254,220
+    dc.w 228,215
+    dc.w 213,200
+    dc.w 202,184
+    dc.w 203,166
+    dc.w 213,151
+    dc.w 227,124
+    dc.w 256,102
+    dc.w 270,81
+    dc.w 281,61
+    dc.w 277,40
+    dc.w 255,33
+    dc.w 223,34
+    dc.w 198,40
+    dc.w 162,50
+    dc.w 142,52
+
+
+    
+    
+    
+    
+    
+    ;dc.w 30,70
+
+    ;dc.w 20,100
+
+    ;dc.w 20,120
+
+    ;dc.w 122,59
+    ;dc.w 91,42
+    ;dc.w 66,40
+    ;dc.w 29,84
+    ;dc.w 16,120
+    ;dc.w 35,137
+    ;dc.w 57,140
+    ;dc.w 93,126
+    ;dc.w 107,146
+    ;dc.w 101,182
+    ;dc.w 107,228
+    ;dc.w 132,228
+    ;dc.w 162,143
+    ;dc.w 165,97
+    ;dc.w 203,90
+    ;dc.w 300,174
+    ;dc.w 291,218
+    ;dc.w 229,209
+    ;dc.w 204,175
+    ;dc.w 214,153
+    ;dc.w 283,56
+    ;dc.w 249,36
+    ;dc.w 122,59
+    dc.l $FFFFFFFF
 
 MOVER_DIRECTION_TO_DESTINATION:
 MOVER_DIRECTION_TO_DESTINATION_X:
@@ -18,6 +111,8 @@ MOVER_DIRECTION_TO_DESTINATION_Y:
 
 CPUCONTROL:
     move.l a0,a2
+
+    SETCARPROPERTYADDR MOVER_HOTSPOT_CPU_PTR,a5
 
     lea MOVER_POSITION_NORMALIZED(PC),a3
 
@@ -35,7 +130,8 @@ CPUCONTROL:
     lsr.w             #DECIMAL_SHIFT,d0
     move.w            d0,2(a3)
 
-    lea               MOVER_DESTINATION(PC),a0
+    ;lea               MOVER_DESTINATION(PC),a0
+    move.l            (a5),a0
     lea               MOVER_POSITION_NORMALIZED(PC),a1
     SUB2DVECTORSTATIC MOVER_DIRECTION_TO_DESTINATION
 
@@ -58,14 +154,28 @@ CPUCONTROL:
     ;DEBUG 9997
     SQRT_Q16_0
     ; here d1.w holds the magnitude
-    
+
     ; if the magnitude is < to TRESHOLD then it means we are very close to the destination, we can assume
     ; we reached it and go to the next point
-    cmpi.w #10,d1
+    cmpi.w #12,d1
     bcc.s .destinationnotreached
-    DEBUG 8888
+    ;DEBUG 8888
     moveq #0,d0
-    bset #3,d0
+    ;bset #3,d0
+    move.l (a5),a0
+    cmpi.l #$FFFFFFFF,4(a0)
+    bne.s .notendoftrack
+    ;DEBUG 8889
+
+    ;bset #3,d0
+    move.l #MOVER_DESTINATION,(a5)
+
+    move.l            a2,a0
+    rts
+
+.notendoftrack:
+    ;DEBUG 8887
+    add.l #4,(a5)
     move.l            a2,a0
     rts
 
@@ -78,16 +188,11 @@ CPUCONTROL:
     moveq             #0,d0
     move.b            (a0,d6.w),d0
 
-    ; calculate the quadrant - start
-    ; calculate the quadrant - end
-    ; now d5.w  is the following:
-    ; 0: destination is on the top right if compared with car position
-    ; 1: destination is on the top left if compared with car position
-    ; 2: destination is on the bottom left if compared with car position
-    ; 3: destination is on the bottom right if compared with car position
 
     ; compare Y position, if destination is on the bottom invert angle
-    move.w            MOVER_DESTINATION_Y(PC),d6
+    ;move.w            MOVER_DESTINATION_Y(PC),d6
+    move.l            (a5),a0
+    move.w            2(a0),d6
     cmp.w             MOVER_POSITION_NORMALIZED_Y,d6
     bls.s             .noinverseangle
     move.w            d0,d5
@@ -95,7 +200,8 @@ CPUCONTROL:
     add.w             #360,d0
 
     ; compare X position, if destination is on the left decrease by 90
-    move.w            MOVER_DESTINATION_X(PC),d6
+    ;move.w            MOVER_DESTINATION_X(PC),d6
+    move.w            (a0),d6
     cmp.w             MOVER_POSITION_NORMALIZED_X,d6
     bgt.s             .nominus90
     ;DEBUG 5454
@@ -108,7 +214,8 @@ CPUCONTROL:
 
 .noinverseangle:
     ; compare X position, if destination is on the left increase by 180
-    move.w            MOVER_DESTINATION_X(PC),d6
+    ;move.w            MOVER_DESTINATION_X(PC),d6
+    move.w            (a0),d6
     cmp.w             MOVER_POSITION_NORMALIZED_X,d6
     bgt.s             .noadd90
     neg.w             d0
@@ -170,11 +277,50 @@ CPUCONTROL:
     ;DEBUG 4444
     bset              #2,d0 ; always accelerate
 
-    
-    move.l            a2,a0
+    ; brake if the angle is too steep
+    cmpi.w           #CPU_ANGLE_TRESHOLD,d2
+    bls.s           .donotbrake
+    DEBUG 7777
+    STORECARPROPERTY MOVER_HEADING_MAGNITUDE,d1
+    cmpi.w           #$04FF,d1
+    bls.s           .donotbrake
 
+    bset #3,d0
+    bclr #2,d0
+.donotbrake
+
+    tst.w             MOVER_IS_COLLIDING_OFFSET(a2)
+    beq.s             .notcolliding
+    
+    STORECARPROPERTY    MOVER_CPU_CONSECUTIVE_COLLISIONS,d1
+    addq #1,d1
+    cmpi.w              #100,d1
+    bls.s               .donotenterinrecovery
+    ;DEBUG 4321
+    move.l (a5),a0
+    move.w (a0),d1
+    lsl.w #DECIMAL_SHIFT,d1
+    move.w d1,MOVER_X_POSITION_OFFSET(a2)
+    move.w 2(a0),d1
+    lsl.w #DECIMAL_SHIFT,d1
+    move.w d1,MOVER_Y_POSITION_OFFSET(a2)
+
+    ;sub.l #4,(a5)
+    ;moveq #0,d1
+.donotenterinrecovery
+    move.w              d1,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
+
+    move.l            a2,a0
+    rts
+.notcolliding:
+    move.w            #0,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
+    move.l            a2,a0
     rts
 
+
+SETCPURECOVERYMODE:
+
+    rts
 
 ;#include <stdio.h>
 ;#include <math.h>"""

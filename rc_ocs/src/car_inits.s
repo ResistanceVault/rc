@@ -1,4 +1,12 @@
-; Init car 1
+; Init car controls
+CAR_CONTROL_1 EQU CPUCONTROL
+CAR_CONTROL_2 EQU CPUCONTROL
+CAR_CONTROL_3 EQU CPUCONTROL
+CAR_CONTROL_4 EQU CPUCONTROL
+CAR_CONTROL_5 EQU CPUCONTROL
+CAR_CONTROL_6 EQU CPUCONTROL
+CAR_CONTROL_7 EQU CPUCONTROL
+CAR_CONTROL_8 EQU CPUCONTROL
 
 CAR1_MAX_SPEED 		EQU %0001100000000000 ; 1.5 pixels per frame of max speed
 CAR1_ENGINE_POWER 	EQU 16
@@ -79,7 +87,7 @@ CAR1_INIT:
 																			   ; on the last zone
 
 	; input routine
-	move.l  #CPUCONTROL,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_1,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -115,6 +123,8 @@ CAR1_INIT:
 	move.l  #$dff0a0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000000001,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#0,HUD_POSITION_X(a0)
@@ -167,7 +177,7 @@ CAR2_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 	; input routine
-	move.l  #KEYBOARD_WASD,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_2,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR1_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -203,6 +213,9 @@ CAR2_INIT:
 	move.l  #$dff0b0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000000010,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#10,HUD_POSITION_X(a0)
@@ -254,7 +267,7 @@ CAR3_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 	; input routine
-	move.l  #KEYBOARD_IJKL,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_3,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR2_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -290,6 +303,9 @@ CAR3_INIT:
 	move.l  #$dff0c0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000000100,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#20,HUD_POSITION_X(a0)
@@ -342,7 +358,7 @@ CAR4_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 	; input routine
-	move.l  #KEYBOARD_ARROWS,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_4,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR3_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -378,6 +394,9 @@ CAR4_INIT:
 	move.l  #$dff0d0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000001000,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#30,HUD_POSITION_X(a0)
@@ -430,7 +449,7 @@ CAR5_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 	; input routine
-	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_5,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR4_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -466,6 +485,9 @@ CAR5_INIT:
 	move.l  #$dff0a0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000000001,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#0,HUD_POSITION_X(a0)
@@ -518,7 +540,7 @@ CAR6_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 	; input routine
-	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_6,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR5_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -554,6 +576,9 @@ CAR6_INIT:
 	move.l  #$dff0b0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000000010,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#10,HUD_POSITION_X(a0)
@@ -606,7 +631,7 @@ CAR7_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 	; input routine
-	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_7,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR6_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -642,6 +667,9 @@ CAR7_INIT:
 	move.l  #$dff0c0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000000100,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#20,HUD_POSITION_X(a0)
@@ -694,7 +722,7 @@ CAR8_INIT:
 																   			   ; because when the race starts, all car must be placed 
 																			   ; on the last zone
 	; input routine
-	move.l  #READJOY1,INPUT_ROUTINE_OFFSET(a0)
+	move.l  #CAR_CONTROL_8,INPUT_ROUTINE_OFFSET(a0)
 
 	; car sprites address list
 	move.l  #CAR7_0,CAR_SPRITES_LIST_OFFSET_0(a0)
@@ -730,6 +758,9 @@ CAR8_INIT:
 	move.l  #$dff0d0,AUDIO_CHANNEL_ADDRESS_OFFSET(a0)
 	move.w  #%0000000000001000,AUDIO_CHANNEL_DMA_BIT(a0)
 	ENDC
+
+	clr.w  MOVER_HEADING_MAGNITUDE(a0)
+	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
 
 	; hud position
 	move.w	#30,HUD_POSITION_X(a0)
