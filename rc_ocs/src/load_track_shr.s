@@ -17,10 +17,10 @@
 ; byte from 124894 to 124899 -> car 6 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
-
+; byte from 124912 to 125912 -> cpu points
 
 TRACKDIR_LENGTH 	equ 10
-TRK_FILE_SIZE		equ 124912
+TRK_FILE_SIZE		equ 125912
 TRK_FILE_FIRST_BPL 	equ 0
 TRK_FILE_SECOND_BPL equ 9600
 TRK_FILE_THIRD_BPL	equ 19200
@@ -28,6 +28,8 @@ TRK_FILE_FOURTH_BPL	equ 28800
 TRK_FILE_FIFTH_BPL  equ 38400
 TRK_FILE_COLORS		equ 48000
 TRK_FILE_POSITIONS	equ 124864
+TRK_CPUPOINTS_POSITIONS equ 124912
+
 execBase equ 4
 ACCESS_READ equ -2
 ;

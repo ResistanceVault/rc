@@ -125,7 +125,7 @@ DECIMAL_SHIFT						EQU 7
 
 SPRITES								EQU 1
 
-MAX_LAPS							EQU 2
+MAX_LAPS							EQU 9
 MAX_CARS							EQU 8
 
                     rsset   0
@@ -834,6 +834,13 @@ TRACK_METADATA:
 
 TRACK_PADDING:
 	dcb.b 48,0
+
+CPU_POINTS_UNCOMPRESSED:
+MOVER_DESTINATION:
+MOVER_DESTINATION_X:
+	dcb.b 2,0
+MOVER_DESTINATION_Y:
+	dcb.b 998,0 ; we support up to 249 points + 1 (terminator)
 TRACK_PADDING_END:
 
 MAIN_PALETTE2:
