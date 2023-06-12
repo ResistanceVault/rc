@@ -181,9 +181,12 @@ CPUCONTROL:
     bset              #2,d0 ; always accelerate
 
     ; brake if the angle is too steep
-    cmpi.w           #CPU_ANGLE_TRESHOLD,d2
-    bls.s           .donotbrake
-    DEBUG 7777
+    BETWEEN_UWORD   d2,#CPU_ANGLE_TRESHOLD,#360-CPU_ANGLE_TRESHOLD,d1
+    tst.b d1
+    bne.s .donotbrake
+    ;cmpi.w           #CPU_ANGLE_TRESHOLD,d2
+    ;bls.s           .donotbrake
+    ;DEBUG 7777
     STORECARPROPERTY MOVER_HEADING_MAGNITUDE,d1
     cmpi.w           #$04FF,d1
     bls.s           .donotbrake
