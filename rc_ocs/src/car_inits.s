@@ -19,17 +19,17 @@ CAR_HALF_WIDTH		EQU 6
 
 PLAYER_ONE_NAME: 	dc.b "A CROST    ",$FF ; perrari
 PLAYER_FIVE_NAME: 	dc.b "ALBERETTO  ",$FF ; perrari
-PLAYER_TWO_NAME: 	dc.b "JJ LENTO   ",$FF ; alfa marameo
-PLAYER_FOUR_NAME: 	dc.b "M PALLADIO ",$FF ; alfa maraneo
+PLAYER_TWO_NAME: 	dc.b "JJ LENTO   ",$FF ; mc lallen
+PLAYER_FOUR_NAME: 	dc.b "M PALLADIO ",$FF ; mc lallen
 PLAYER_SIX_NAME: 	dc.b "BAGNACAUDA ",$FF ; perault
 PLAYER_SEVEN_NAME: 	dc.b "FRITTICALDI",$FF ; perault
-PLAYER_EIGHT_NAME: 	dc.b "R PRETESE  ",$FF ; mc lallen
-PLAYER_THREE_NAME: 	dc.b "STARNOUX   ",$FF ; mc lallen
+PLAYER_EIGHT_NAME: 	dc.b "R PRETESE  ",$FF ; alfa marameo
+PLAYER_THREE_NAME: 	dc.b "STARNOUX   ",$FF ; alfa marameo
 
 PLAYER_ONE_FIVE_TEAM:		dc.b "PERRARI     ",$FF ; perrari for car 1 and 5
-PLAYER_TWO_SIX_TEAM:		dc.b "ALFA MARAMEO",$FF ; alfa marameo for car 2 and 6
+PLAYER_TWO_SIX_TEAM:		dc.b "MC LALLEN   ",$FF ; mc lallen for car 2 and 6
 PLAYER_THREE_SEVEN_TEAM:	dc.b "PERAULT     ",$FF ; perault for car 3 and 6
-PLAYER_FOUR_EIGHT_TEAM:		dc.b "MC LALLEN   ",$FF ; mc lallen for car 4 and 8
+PLAYER_FOUR_EIGHT_TEAM:		dc.b "ALFA MARAMEO",$FF ; alfa marameo for car 4 and 8
 
 PLAYER_1_TIMER_TXT: 		dcb.b 6,$00
 PLAYER_2_TIMER_TXT: 		dcb.b 6,$00

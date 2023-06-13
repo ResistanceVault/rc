@@ -1,4 +1,5 @@
 CPU_ANGLE_TRESHOLD EQU 15
+CPU_NEXT_POINT_TRESHOLD EQU 20
 
 MOVER_POSITION_NORMALIZED:
 MOVER_POSITION_NORMALIZED_X:
@@ -60,7 +61,7 @@ CPUCONTROL:
 
     ; if the magnitude is < to TRESHOLD then it means we are very close to the destination, we can assume
     ; we reached it and go to the next point
-    cmpi.w #12,d1
+    cmpi.w #CPU_NEXT_POINT_TRESHOLD,d1
     bcc.s .destinationnotreached
     ;DEBUG 8888
     moveq #0,d0
@@ -197,24 +198,26 @@ CPUCONTROL:
 
     tst.w             MOVER_IS_COLLIDING_OFFSET(a2)
     beq.s             .notcolliding
+        DEBUG 4321
+
     
-    STORECARPROPERTY    MOVER_CPU_CONSECUTIVE_COLLISIONS,d1
-    addq #1,d1
-    cmpi.w              #100,d1
-    bls.s               .donotenterinrecovery
-    ;DEBUG 4321
-    move.l (a5),a0
-    move.w (a0),d1
-    lsl.w #DECIMAL_SHIFT,d1
-    move.w d1,MOVER_X_POSITION_OFFSET(a2)
-    move.w 2(a0),d1
-    lsl.w #DECIMAL_SHIFT,d1
-    move.w d1,MOVER_Y_POSITION_OFFSET(a2)
+    STORECARPROPERTY  MOVER_CPU_CONSECUTIVE_COLLISIONS,d1
+    addq              #1,d1
+    cmpi.w            #100,d1
+    bls.s             .donotenterinrecovery
+    move.l            (a5),a0
+    move.w            (a0),d1
+    lsl.w             #DECIMAL_SHIFT,d1
+    move.w            d1,MOVER_X_POSITION_OFFSET(a2)
+    move.w            2(a0),d1
+    lsl.w             #DECIMAL_SHIFT,d1
+    move.w            d1,MOVER_Y_POSITION_OFFSET(a2)
 
     ;sub.l #4,(a5)
-    ;moveq #0,d1
+    moveq             #0,d1
 .donotenterinrecovery
-    move.w              d1,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
+    move.w            d1,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
+    moveq #4,d0
 
     move.l            a2,a0
     rts

@@ -19,28 +19,28 @@ all:
 	cat ./metadata/rc045_320X240X8.data >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 1 position
-	echo 00 64 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 74 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 2 position
-	echo 00 78 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 88 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 3 position
-	echo 00 50 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 60 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 4 position
-	echo 00 3c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 4c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 5 position
-	echo 00 2c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 3c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 6 position
-	echo 00 1f 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 2f 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 7 position
-	echo 00 1f 00 d2 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 2f 00 d2 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 8 position
-	echo 00 10 00 d2 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 20 00 d2 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	printf "%04x%04x\n" 206 195 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 226 202 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
@@ -53,13 +53,20 @@ all:
 	printf "%04x%04x\n" 284 103 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 265 102 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 256 109 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 239 110 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	# first curve
+	printf "%04x%04x\n" 239 123 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 228 114 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 220 112 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 216 105 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 217 89 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 223 74 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 212 98 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 212 75 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 222 57 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 216 40 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 203 32 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	# second curve
+	printf "%04x%04x\n" 226 39 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 213 30 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 197 26 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 190 28 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 184 33 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 169 41 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 157 58 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
@@ -67,7 +74,8 @@ all:
 	printf "%04x%04x\n" 160 90 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 167 114 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 161 131 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 147 141 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	# third curve
+	printf "%04x%04x\n" 150 147 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 128 139 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 111 132 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 89 121 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
@@ -84,17 +92,19 @@ all:
 	printf "%04x%04x\n" 104 79 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 93 94 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 77 116 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 55 140 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 39 159 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 39 174 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 45 192 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 59 201 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 83 208 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 114 206 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 135 199 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 61 130 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 59 140 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 55 152 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	# last curve
+	printf "%04x%04x\n" 53 165 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 49 190 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 72 196 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 83 203 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 114 196 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 135 195 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 156 194 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 177 193 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	for number in `seq 1 198`; do \
+	for number in `seq 1 192`; do \
         echo FF FF FF FF | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK ;\
     done
 
