@@ -192,13 +192,17 @@ CPUCONTROL:
     cmpi.w           #$04FF,d1
     bls.s           .donotbrake
 
+    ;BETWEEN_UWORD   d2,#9,#360-9,d1
+    ;beq.s           .donotbrakestrong
+
     bset #3,d0
+.donotbrakestrong
     bclr #2,d0
 .donotbrake
 
     tst.w             MOVER_IS_COLLIDING_OFFSET(a2)
     beq.s             .notcolliding
-        DEBUG 4321
+    ;    DEBUG 4321
 
     
     STORECARPROPERTY  MOVER_CPU_CONSECUTIVE_COLLISIONS,d1
@@ -224,11 +228,6 @@ CPUCONTROL:
 .notcolliding:
     move.w            #0,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
     move.l            a2,a0
-    rts
-
-
-SETCPURECOVERYMODE:
-
     rts
 
 ;#include <stdio.h>
