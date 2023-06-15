@@ -161,6 +161,14 @@ The file must hold the following data:
 * byte from 124894 to 124899 -> car 6 start position in this format: first word X position, second word Y position, third word degrees
 * byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
 * byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124912 to 125912 -> cpu points
+
+Note about cpu points:
+these are couples of XY coordinates in WORD format, each position is represented in 4 bytes and represents the "hotspot" where the cpu controlled cars
+should be heading.
+1000 bytes are reserved for this, for this reason you can store only 1000/4 (250) positions for each track BUT since the last 4 bytes must be
+hex FFFF, the maximum amount of position available is 249.
+You have to pad with FFFF each unused position , for example, if you want to express one position only, you have to fill the remaining 249 position with hex FFFF.
 
 @endnode
 

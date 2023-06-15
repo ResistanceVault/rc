@@ -1,5 +1,7 @@
-CPU_ANGLE_TRESHOLD EQU 15
-CPU_NEXT_POINT_TRESHOLD EQU 20
+CPU_ANGLE_TRESHOLD          EQU 15
+CPU_NEXT_POINT_TRESHOLD     EQU 20
+CPU_BRAKE_VELOCITY_TRESHOLD EQU $04FF
+CPU_STUCK_FRAMES_TRESHOLD   EQU 100
 
 MOVER_POSITION_NORMALIZED:
 MOVER_POSITION_NORMALIZED_X:
@@ -51,36 +53,30 @@ CPUCONTROL:
     beq.s .noneg
     neg.w d6
 .noneg:
-    muls.w            d0,d0
-    move.w            2(a4),d1
-    muls.w            d1,d1
-    add.l             d1,d0
+    muls.w           d0,d0
+    move.w           2(a4),d1
+    muls.w           d1,d1
+    add.l            d1,d0
     ;DEBUG 9997
     SQRT_Q16_0
     ; here d1.w holds the magnitude
 
     ; if the magnitude is < to TRESHOLD then it means we are very close to the destination, we can assume
     ; we reached it and go to the next point
-    cmpi.w #CPU_NEXT_POINT_TRESHOLD,d1
-    bcc.s .destinationnotreached
-    ;DEBUG 8888
-    moveq #0,d0
-    ;bset #3,d0
-    move.l (a5),a0
-    cmpi.l #$FFFFFFFF,4(a0)
-    bne.s .notendoftrack
-    ;DEBUG 8889
+    cmpi.w           #CPU_NEXT_POINT_TRESHOLD,d1
+    bcc.s            .destinationnotreached
+    moveq            #4,d0 ; continue accelerating
+    move.l           (a5),a0 ; copy address of current point into a0
+    cmpi.l           #$FFFFFFFF,4(a0) ; we are at the end of lap (list of points)?
+    bne.s            .notendoftrack
+    move.l           #MOVER_DESTINATION,(a5) ; go to first hot spot
 
-    ;bset #3,d0
-    move.l #MOVER_DESTINATION,(a5)
-
-    move.l            a2,a0
+    move.l           a2,a0; restore a0
     rts
 
 .notendoftrack:
-    ;DEBUG 8887
-    add.l #4,(a5)
-    move.l            a2,a0
+    add.l            #4,(a5)   ; point to next hotspot
+    move.l           a2,a0
     rts
 
 .destinationnotreached:
@@ -185,29 +181,23 @@ CPUCONTROL:
     BETWEEN_UWORD   d2,#CPU_ANGLE_TRESHOLD,#360-CPU_ANGLE_TRESHOLD,d1
     tst.b d1
     bne.s .donotbrake
-    ;cmpi.w           #CPU_ANGLE_TRESHOLD,d2
-    ;bls.s           .donotbrake
-    ;DEBUG 7777
     STORECARPROPERTY MOVER_HEADING_MAGNITUDE,d1
-    cmpi.w           #$04FF,d1
-    bls.s           .donotbrake
+    cmpi.w           #CPU_BRAKE_VELOCITY_TRESHOLD,d1
+    bls.s            .donotbrake
 
     ;BETWEEN_UWORD   d2,#9,#360-9,d1
     ;beq.s           .donotbrakestrong
 
     bset #3,d0
-.donotbrakestrong
+.donotbrakestrong:
     bclr #2,d0
-.donotbrake
+.donotbrake:
 
     tst.w             MOVER_IS_COLLIDING_OFFSET(a2)
-    beq.s             .notcolliding
-    ;    DEBUG 4321
-
-    
+    beq.s             .notcolliding    
     STORECARPROPERTY  MOVER_CPU_CONSECUTIVE_COLLISIONS,d1
     addq              #1,d1
-    cmpi.w            #100,d1
+    cmpi.w            #CPU_STUCK_FRAMES_TRESHOLD,d1
     bls.s             .donotenterinrecovery
     move.l            (a5),a0
     move.w            (a0),d1
@@ -219,9 +209,9 @@ CPUCONTROL:
 
     ;sub.l #4,(a5)
     moveq             #0,d1
-.donotenterinrecovery
+.donotenterinrecovery:
     move.w            d1,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
-    moveq #4,d0
+    moveq             #4,d0
 
     move.l            a2,a0
     rts
