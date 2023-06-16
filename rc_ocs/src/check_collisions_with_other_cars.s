@@ -36,12 +36,12 @@ CHECK_COLLISIONS_WITH_OTHER_CAR:
     ; I am sure they are not colliding, in this case just branch to car not collision
     ;move.w          #$0,$dff180
     cmp.w               DISTANCE_BETWEEN_CENTERS,d0
-    ble.w               nocarcollision
+    bls.w               nocarcollision
 
     ; if abs Y value of distance vector is < then sum of half height of the 2 cars 
     ; I am sure they are not colliding, in this case just branch to car not collision
     cmp.w               DISTANCE_BETWEEN_CENTERS+2,d2
-    ble.w               nocarcollision
+    bls.w               nocarcollision
 
     ; if we are here, it means car pointed in a0 is colliding with car in a1 (and car a1 is colliding with car in a0)
     ; we must now resove the collision
