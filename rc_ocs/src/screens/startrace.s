@@ -22,11 +22,26 @@ START_RACE_NEXT_TRACK_TXT:
     dc.b "NEXT TRACK",$FF
     even
 
+LAPS_TXT:
+    dc.b "LAP COUNT",$FF
+    even
+
+LAP_COUNTER_TXT:
+    dc.b "XX",$FF
+    even
+
 MENU_START_RACE_SCREEN:
 
-    dc.w 1,10
+    dc.w 1,8
     dc.l START_RACE_TXT
     dc.l ACTION_START_RACE_NEW
+    dc.l 0
+    dc.w 16
+    dc.w 16
+
+    dc.w 1,10
+    dc.l LAPS_TXT
+    dc.l ACTION_CHANGE_LAPS
     dc.l 0
     dc.w 16
     dc.w 16
@@ -49,15 +64,21 @@ MENU_START_RACE_SCREEN:
 
 TXT_START_RACE_SCREEN:
 
-    dc.w 1,5
+    dc.w 10,3
     dc.l START_RACE_NEXT_TRACK_TXT
     dc.w 16
     dc.w 16
 
-    dc.w 2,15
+    dc.w 20,11
     dc.l START_RACE_TRACK_NAME_TXT
     dc.w 8
     dc.w 7
+
+LAP_COUNTER_TXT_PTR:
+    dc.w 12,10
+    dc.l LAP_COUNTER_TXT
+    dc.w 16
+    dc.w 16
 
     dcb.b  txt_SIZEOF,$00
 
@@ -152,6 +173,22 @@ ACTION_SELECT_TRACK_NEW:
 	move.w				d0,$dff088			; Copperlist start
     rts
 
+ACTION_CHANGE_LAPS:
+    move.w              LAP_RACE,d0
+    cmpi.w              #MAX_LAPS,d0
+    bne.s               .lap_no_max
+    ; handle max
+    moveq               #2,d0
+    bra.s               .change_lap
+.lap_no_max:
+    addq                #1,d0
+.change_lap:
+    move.w              d0,LAP_RACE
+    bsr.w               REFRESH_LAP_RACE_COUNTER
+    lea                 LAP_COUNTER_TXT_PTR(PC),a1
+    jsr                 REFRESH_TXT_ENTRY
+    rts
+
 START_RACE_SCREEN:
 
     ; clear sprites pointers
@@ -189,6 +226,8 @@ START_RACE_SCREEN:
 
     bsr.w               PRINT_TRACK_NAME_NEW
 
+    bsr.w               REFRESH_LAP_RACE_COUNTER
+
     ; print screen
     move.l              #START_RACE_SCREEN_FILENAME,MENUSCREEN_IMAGE
     move.l              #12586,MENUSCREEN_IMAGE_SIZE
@@ -225,4 +264,12 @@ PRINT_TRACK_NAME_NEW:
     cmp.b               #46,-1(a1)
     bne.s               .copytrackfilename
     move.b              #$FF,-1(a1)
+    rts
+
+REFRESH_LAP_RACE_COUNTER:
+    move.w              LAP_RACE,d0
+    addi.w              #$2F,d0
+    lsl.w               #8,d0
+    ori.w               #$FF,d0
+    move.w              d0,LAP_COUNTER_TXT
     rts

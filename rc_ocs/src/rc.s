@@ -128,6 +128,8 @@ SPRITES								EQU 1
 MAX_LAPS							EQU 9
 MAX_CARS							EQU 8
 
+LAPS_COUNT_DEFAULT					EQU 2
+
                     rsset   0
 fib_DiskKey         rs.l    1
 fib_DirEntryType    rs.l    1
@@ -219,6 +221,7 @@ PLAY_SOUND: 	dc.w 1
 CARS_IN_PLAY: 	dc.w %0000000000001111
 ARRIVAL_ORDER:	dcb.b MAX_CARS*4,$00
 ARRIVAL_ORDER_PTR: dc.l ARRIVAL_ORDER
+LAP_RACE: dc.w LAPS_COUNT_DEFAULT
 
 	IFD COLOR
 NEXT_SCREEN: dc.l MAINSCREEN
