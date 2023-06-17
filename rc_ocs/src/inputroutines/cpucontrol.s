@@ -1,7 +1,7 @@
-CPU_ANGLE_TRESHOLD          EQU 15
-CPU_NEXT_POINT_TRESHOLD     EQU 20
-CPU_BRAKE_VELOCITY_TRESHOLD EQU $04FF
-CPU_STUCK_FRAMES_TRESHOLD   EQU 100
+CPU_ANGLE_THRESHOLD          EQU 15
+CPU_NEXT_POINT_THRESHOLD     EQU 20
+CPU_BRAKE_VELOCITY_THRESHOLD EQU $04FF
+CPU_STUCK_FRAMES_THRESHOLD   EQU 100
 
 MOVER_POSITION_NORMALIZED:
 MOVER_POSITION_NORMALIZED_X:
@@ -61,9 +61,9 @@ CPUCONTROL:
     SQRT_Q16_0
     ; here d1.w holds the magnitude
 
-    ; if the magnitude is < to TRESHOLD then it means we are very close to the destination, we can assume
+    ; if the magnitude is < to THRESHOLD then it means we are very close to the destination, we can assume
     ; we reached it and go to the next point
-    cmpi.w           #CPU_NEXT_POINT_TRESHOLD,d1
+    cmpi.w           #CPU_NEXT_POINT_THRESHOLD,d1
     bcc.s            .destinationnotreached
     moveq            #4,d0 ; continue accelerating
     move.l           (a5),a0 ; copy address of current point into a0
@@ -178,11 +178,11 @@ CPUCONTROL:
     bset              #2,d0 ; always accelerate
 
     ; brake if the angle is too steep
-    BETWEEN_UWORD   d2,#CPU_ANGLE_TRESHOLD,#360-CPU_ANGLE_TRESHOLD,d1
+    BETWEEN_UWORD   d2,#CPU_ANGLE_THRESHOLD,#360-CPU_ANGLE_THRESHOLD,d1
     tst.b d1
     bne.s .donotbrake
     STORECARPROPERTY MOVER_HEADING_MAGNITUDE,d1
-    cmpi.w           #CPU_BRAKE_VELOCITY_TRESHOLD,d1
+    cmpi.w           #CPU_BRAKE_VELOCITY_THRESHOLD,d1
     bls.s            .donotbrake
 
     ;BETWEEN_UWORD   d2,#9,#360-9,d1
@@ -194,10 +194,10 @@ CPUCONTROL:
 .donotbrake:
 
     tst.w             MOVER_IS_COLLIDING_OFFSET(a2)
-    beq.s             .notcolliding    
+    beq.s             .notcolliding
     STORECARPROPERTY  MOVER_CPU_CONSECUTIVE_COLLISIONS,d1
     addq              #1,d1
-    cmpi.w            #CPU_STUCK_FRAMES_TRESHOLD,d1
+    cmpi.w            #CPU_STUCK_FRAMES_THRESHOLD,d1
     bls.s             .donotenterinrecovery
     move.l            (a5),a0
     move.w            (a0),d1
