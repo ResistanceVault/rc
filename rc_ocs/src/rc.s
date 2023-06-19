@@ -641,6 +641,8 @@ MOVERS7:
 MOVERS8:
 	MOVER_INIT_MEM 8
 
+
+	IFND COLOR
 CLEARTOP:
             WAITBLITTER
             move.w           #$0100,$dff040
@@ -655,6 +657,7 @@ CLEARTOP:
             move.w          #$4014,$dff058
 
             rts
+	ENDC
 
 POINTINCOPPERLIST_FUNCT:
   	POINTINCOPPERLIST
