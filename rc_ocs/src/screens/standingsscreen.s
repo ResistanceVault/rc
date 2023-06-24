@@ -24,6 +24,27 @@ STANDINGSSCREEN:
     clr.l               (a0)+
     dbra                d7,.resultscreen_cleanloop
 
+    ; clear best lap row
+    ; first col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; second col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; third col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; fourth col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
     ;reorder ARRIVAL ORDER POINTER
     lea                 ARRIVAL_ORDER,a0
     move.w 				#MAX_CARS-1,d6

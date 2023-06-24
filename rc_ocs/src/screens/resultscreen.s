@@ -11,6 +11,9 @@ RESULT_COLUMN_4_Y   EQU 10
 RESULT_COLUMN_5_Y   EQU 12
 RESULT_COLUMN_6_Y   EQU 14
 RESULT_COLUMN_7_Y   EQU 16
+RESULT_COLUMN_8_Y   EQU 20
+
+BEST_LAPPER_POINTS  EQU 3
 
 RESULT_FILENAME:
     dc.b "raceresult.shr",0
@@ -38,6 +41,8 @@ TXT_RESULT_SEVENTH_PLACE:
     dc.b "7TH",$FF
 TXT_RESULT_EIGHTH_PLACE:
     dc.b "8TH",$FF
+TXT_RESULT_BEST_LAP_PLACE:
+    dc.b "LAP",$FF
 
 TXT_CAR_1_TIME_TXT:
     dc.b "000000",$FF
@@ -63,6 +68,9 @@ TXT_CAR_7_TIME_TXT:
 TXT_CAR_8_TIME_TXT:
     dc.b "000000",$FF
     even
+TXT_CAR_BEST_LAP_TIME_TXT:
+    dc.b "000000",$FF
+    even
 
 EXIT_TO_NEXT_RACE_FUNCTION:
     move.w  #1,MAIN_EXIT
@@ -70,7 +78,7 @@ EXIT_TO_NEXT_RACE_FUNCTION:
 
 RESULT_MENU_MAIN:
 
-    dc.w 5,11
+    dc.w 5,13
     dc.l EXIT_TO_NEXT_RACE
     dc.l EXIT_TO_NEXT_RACE_FUNCTION
     dc.l 0
@@ -213,6 +221,23 @@ TXT_RESULT:
     dc.l TXT_CAR_8_TIME_TXT
     dc.w 8,7
 
+BEST_LAPPER_RESULT:
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_8_Y
+    dc.l TXT_RESULT_BEST_LAP_PLACE
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_8_Y
+    dc.l TXT_RESULT_EMPTY
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_8_Y
+    dc.l TXT_RESULT_EMPTY
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_8_Y
+    dc.l TXT_CAR_8_TIME_TXT
+    dc.w 8,7
+
     dc.w 0,0
     dc.l 0
     dc.w 0,7
@@ -253,6 +278,70 @@ resultscreen_cleanloop:
     clr.l               (a0)+
 
     dbra                d7,resultscreen_cleanloop
+
+    ; clear best lap row
+    ; first col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; second col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; third col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; fourth col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; best lapper
+    move.l              RACE_BEST_LAP_CAR_PTR,a1
+    addi.w              #BEST_LAPPER_POINTS,MOVER_POINTS(a1)
+    lea                 BEST_LAPPER_RESULT(PC),a0
+
+    move.w              #RESULT_COLUMN_0_X,(a0)+
+    move.w              #RESULT_COLUMN_8_Y,(a0)+
+    move.l              #TXT_RESULT_BEST_LAP_PLACE,(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_1_X,(a0)+
+    move.w              #RESULT_COLUMN_8_Y,(a0)+
+    move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_2_X,(a0)+
+    move.w              #RESULT_COLUMN_8_Y,(a0)+
+    move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_8_Y,(a0)+
+    move.l              a0,a2
+    lea                 1+TXT_CAR_BEST_LAP_TIME_TXT(PC),a0
+    move.w              BEST_TIME_OFFSET(a1),d1
+    jsr                 dec2txt
+
+    move.b              #$30,TXT_CAR_BEST_LAP_TIME_TXT
+    addi.b              #$30,TXT_CAR_BEST_LAP_TIME_TXT+1
+    addi.b              #$30,TXT_CAR_BEST_LAP_TIME_TXT+2
+    addi.b              #$30,TXT_CAR_BEST_LAP_TIME_TXT+3
+    addi.b              #$30,TXT_CAR_BEST_LAP_TIME_TXT+4
+    addi.b              #$30,TXT_CAR_BEST_LAP_TIME_TXT+5
+    move.b              #$FF,TXT_CAR_BEST_LAP_TIME_TXT+6
+    move.l              a2,a0
+
+    move.l              #TXT_CAR_BEST_LAP_TIME_TXT,(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
 
     ; prepare txt according to the arrival order
     lea                 TXT_RESULT(PC),a0
@@ -480,7 +569,7 @@ resultscreen_cleanloop:
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
-     ; eight place
+    ; eight place
     move.l              ARRIVAL_ORDER+28,a1
     tst.l               (a1)
     beq.w               result_draw_menu

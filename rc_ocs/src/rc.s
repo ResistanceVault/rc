@@ -225,6 +225,10 @@ ARRIVAL_ORDER:	dcb.b MAX_CARS*4,$00
 ARRIVAL_ORDER_PTR: dc.l ARRIVAL_ORDER
 LAP_RACE: dc.w LAPS_COUNT_DEFAULT
 
+; race best lap global variables
+RACE_BEST_LAP: dc.w $FFFF; frames of the best lap for all cars in whole race
+RACE_BEST_LAP_CAR_PTR: dc.l 0 ; pointer to the car who did it
+
 	IFD COLOR
 NEXT_SCREEN: dc.l MAINSCREEN
 	ENDIF

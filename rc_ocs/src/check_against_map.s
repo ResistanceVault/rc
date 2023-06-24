@@ -71,7 +71,7 @@ end_check_track:
     andi.w #$00F0,d1
     lsr.w #4,d1
     cmp.w CAR_NEXT_ZONE_OFFSET(a2),d1
-    bne.s no_next_zone_update
+    bne.w no_next_zone_update
     move.w CAR_NEXT_ZONE_OFFSET(a2),d2
 
     ; here manage next zone update
@@ -88,7 +88,17 @@ end_check_track:
     cmp.w BEST_TIME_OFFSET(a2),d0
     bcc.s noupdatebesttime
     move.w d0,BEST_TIME_OFFSET(a2)
+    
+    ; check if best time of the whole race
+    cmp.w RACE_BEST_LAP,d0
+    bcc.s noupdatebestracetime
     jsr UPDATE_BEST_TIMER
+
+    move.w d0,RACE_BEST_LAP
+    move.l a2,RACE_BEST_LAP_CAR_PTR
+
+noupdatebestracetime:
+
 noupdatebesttime:
     ; reset timer
     move.w #0,TIME_OFFSET(a2)

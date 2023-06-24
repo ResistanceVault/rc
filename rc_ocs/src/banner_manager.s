@@ -123,6 +123,7 @@ PRINT_HUD_ICONS:
   bne.s                 print_hud_active
   rts
 print_hud_active:
+  move.l                a2,a6
   STORECARPROPERTY      HUD_POSITION_X,d7
   lea                   INDICATOR,a1
   lea                   DASHBOARD_DATA_1,a2
@@ -161,4 +162,15 @@ print_hud_icons_no_a4_2:
 print_hud_icons_no_a5_2:
 
   dbra                  d7,printgamebannerloop
+  
+  lea                   DASHBOARD_DATA_3,a0
+  move.l                a6,a2
+  STORECARPROPERTY      HUD_POSITION_X,d7
+  adda.w                 d7,a0
+  move.w                #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
+  move.w                #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
+  move.w                #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
+  move.w                #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
+  move.w                #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
+
   rts

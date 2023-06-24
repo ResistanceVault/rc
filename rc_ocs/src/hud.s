@@ -1,3 +1,9 @@
+HUD_BEST_TIME_ROW_1 equ %0000111000000000
+HUD_BEST_TIME_ROW_2 equ %0001111100000000
+HUD_BEST_TIME_ROW_3 equ %0001111100000000
+HUD_BEST_TIME_ROW_4 equ %0001111100000000
+HUD_BEST_TIME_ROW_5 equ %0000111000000000
+
 SIZE_OF_CHAR_BITMAP     EQU 7
 TIMER_FONTS_SMALL:
     incbin "assets/fonts/small/0.raw"
@@ -88,6 +94,34 @@ update_timer_end:
     rts
 
 UPDATE_BEST_TIMER:
+    movem.l             a0/a1/d0/d1/d2/d7,-(sp)
+
+    ; delete former best lap car
+    move.l              RACE_BEST_LAP_CAR_PTR,a1
+    cmp.l               #0,a1
+    beq.s               noformerbestlapleader
+    exg                 a1,a2
+    STORECARPROPERTY    HUD_POSITION_X,d1
+    lea                 DASHBOARD_DATA_2,a0
+    add.w               d1,a0
+    eori.w              #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
+    eori.w              #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
+    eori.w              #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
+    eori.w              #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
+    eori.w              #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
+    exg                 a1,a2
+noformerbestlapleader:
+
+
+    STORECARPROPERTY    HUD_POSITION_X,d1
+    lea                 DASHBOARD_DATA_2,a0
+    add.w               d1,a0
+    ori.w               #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
+    movem.l             (sp)+,a0/a1/d0/d1/d2/d7                 
     rts ; disable to make space to more car
     movem.l             a0/a1/d0/d1/d2/d7,-(sp)
     move.l              a0,a2

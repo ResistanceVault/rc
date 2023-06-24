@@ -29,6 +29,11 @@ reset_arrival:
     clr.l               (a0)+
     dbra                d7,reset_arrival
     move.l              #ARRIVAL_ORDER,ARRIVAL_ORDER_PTR
+
+    ; reset best time
+    move.w              #$FFFF,RACE_BEST_LAP
+    clr.l               RACE_BEST_LAP_CAR_PTR
+
     rts
 
 MANAGE_PAUSE:
