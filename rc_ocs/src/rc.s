@@ -130,6 +130,8 @@ MAX_CARS							EQU 8
 
 LAPS_COUNT_DEFAULT					EQU 2
 
+BACKGROUNDCOLOR						EQU $0889
+
                     rsset   0
 fib_DiskKey         rs.l    1
 fib_DirEntryType    rs.l    1
@@ -421,8 +423,9 @@ nosound1:
 looptrackcolors2:
 	move.w				(a0)+,(a1)+
 	dbra				d7,looptrackcolors2
-	; force black background
-	move.w              #0,COPCOLOR0+2
+	; force background COLOR
+	move.w              #BACKGROUNDCOLOR,COPCOLOR0+2
+	move.w              #BACKGROUNDCOLOR,COPHUDCOLOR0+2
 	ENDC
 
 	; Start of gameloop
@@ -678,6 +681,8 @@ POINTINCOPPERLIST_FUNCT:
 
 	SECTION	SPRITES,DATA_C
 	include "carsprites.i"
+INDICATOR:
+	incbin "assets/hud/indicator_empty_1_bpl.raw"
 
 CURSOR:
 	dc.b $3b,$40,$4b,$00

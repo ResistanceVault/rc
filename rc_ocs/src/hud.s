@@ -114,6 +114,7 @@ UPDATE_BEST_TIMER:
 
 LAPTXT: dc.b 0,0,0,0,0,0
 UPDATE_LAP_COUNTER_HUD:
+    rts
     movem.l             a0/a1/d0/d1/d2/d7,-(sp)
     move.l              a0,a2
 
@@ -206,6 +207,9 @@ INCREMENT_AND_PRINT_CAR_TIMER:
     abcd -(a3),-(a1)
     abcd -(a3),-(a1)
     abcd -(a3),-(a1)
+
+    movem.l                (sp)+,a1/a3/a4/a5/d0/d4
+    rts
 
     ;fetch result into d0
     move.l (a0),d0
@@ -524,4 +528,8 @@ INCREMENT_AND_PRINT_CAR_TIMER:
     move.b                 (a1),(a3) ; write seventh raw first bitplane
 
     movem.l                (sp)+,a1/a3/a4/a5/d0/d4
+    rts
+
+HUD_INIT:
+    
     rts
