@@ -151,6 +151,12 @@ COPHUDCOLOR6:
 	dc.w	$018C,$0000
 COPHUDCOLOR7:
 	dc.w	$018E,$0000
+
+	dc.w 	$2a07,$fffe ; wait for HUD final
+	dc.w	$0182,$0555 ; dark color 2
+
+	dc.w 	$2b07,$fffe ; wait for HUD final
+	dc.w	$0182,$0000 ; dark color 2
 	ENDC
 
 	dc.w	$FFFF,$FFFE	; Fine della copperlist

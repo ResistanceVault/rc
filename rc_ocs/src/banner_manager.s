@@ -107,18 +107,53 @@ startcleandashboard:
   lea                   DASHBOARD_DATA_1,a5
   bsr.w                 PRINT_HUD_ICONS
 
+; print horizontal lines
+  lea                   DASHBOARD_DATA_1,a0
+  lea                   DASHBOARD_DATA_1+40*15,a1
+  lea                   DASHBOARD_DATA_3+40,a2
+  moveq                 #10-1,d7
+loophudfirstline:
+  move.l                #$FFFFFFFF,(a0)+
+  move.l                #$FFFFFFFF,-40(a1)
+  move.l                #$FFFFFFFF,(a1)+
+
+  move.l                #$7FFFFFFF,(a2)+ ; second horizontal line
+  dbra                  d7,loophudfirstline
+
   IFD COLOR
   move.w #0,COPHUDCOLOR1+2
   move.w #$921,COPHUDCOLOR2+2
-   move.w #$25b,COPHUDCOLOR3+2
-    move.w #$fff,COPHUDCOLOR4+2
-     move.w #$fff,COPHUDCOLOR5+2
-      move.w #$dd4,COPHUDCOLOR6+2 ; color 26
-       move.w #$4a4,COPHUDCOLOR7+2
+  move.w #$25b,COPHUDCOLOR3+2
+  move.w #$aaa,COPHUDCOLOR4+2 ; border light 1
+  move.w #$999,COPHUDCOLOR5+2 ; border dark 1
+  move.w #$dd4,COPHUDCOLOR6+2 ; color 26
+  move.w #$4a4,COPHUDCOLOR7+2
+
+  ;move.w #bbb,COPHUDCOLOR4+2 ; border light 2
+  ;move.w #$555,COPHUDCOLOR5_BIS+2 ; border dark 2
   ENDC
   rts
 
 PRINT_HUD_ICONS:
+  STORECARPROPERTY      HUD_POSITION_X,d7
+  lea                   DASHBOARD_DATA_1,a3
+  lea                   DASHBOARD_DATA_3,a6
+  adda.w                d7,a3
+  adda.w                d7,a6
+  moveq                 #16-2-1,d7
+hudprintleftborder:
+  adda.w                #40,a3
+  adda.w                #40,a6
+
+  ; left border
+  bset                  #7,(a3)
+  bset                  #6,(a6)
+
+  ; right border
+  bset                  #0,3(a6)
+  bset                  #0,3(a3)
+  dbra                  d7,hudprintleftborder
+
   tst.l                 INPUT_ROUTINE_OFFSET(a2)
   bne.s                 print_hud_active
   rts
@@ -141,11 +176,17 @@ print_hud_icons_no_a4:
   adda.w                d7,a5
 print_hud_icons_no_a5:
 
-  moveq                 #16-1,d7
+  moveq                 #16-2-1,d7 ; dont copy last 2 rows
 printgamebannerloop:
-  move.w                (a0)+,(a2) ; car frame
-  move.w                (a0)+,(a3) ; car inner data
-  move.w                (a1)+,2(a2) ; write indicator
+  move.w                (a0)+,d6
+  or.w                  d6,(a2) ; car frame
+
+  move.w                (a0)+,d6
+  or.w                  d6,(a3) ; car inner data
+
+  move.w                (a1)+,d6
+  or.w                  d6,2(a2) ; write indicator
+
   add.l                 #40,a2
   add.l                 #40,a3
   cmp.l                 #0,a4
@@ -162,15 +203,14 @@ print_hud_icons_no_a4_2:
 print_hud_icons_no_a5_2:
 
   dbra                  d7,printgamebannerloop
-  
+
   lea                   DASHBOARD_DATA_3,a0
   move.l                a6,a2
   STORECARPROPERTY      HUD_POSITION_X,d7
-  adda.w                 d7,a0
-  move.w                #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
-  move.w                #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
-  move.w                #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
-  move.w                #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
-  move.w                #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
-
+  adda.w                d7,a0
+  ori.w                 #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
+  ori.w                 #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
+  ori.w                 #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
+  ori.w                 #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
+  ori.w                 #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
   rts
