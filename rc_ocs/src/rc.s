@@ -686,7 +686,47 @@ POINTINCOPPERLIST_FUNCT:
 	SECTION	SPRITES,DATA_C
 	include "carsprites.i"
 INDICATOR:
-	incbin "assets/hud/indicator_empty_1_bpl.raw"
+	dc.w 0
+	dc.w 0
+	dc.w 0
+	dc.w %0001111100000000
+	dc.w %0011000110000000
+	dc.w %0110000011000000
+
+	dc.w %0100000001000000
+	dc.w %0100000001000000
+	dc.w %0100000001000000
+
+	dc.w %0110000011000000
+	dc.w %0011000110000000
+	dc.w %0001111100000000
+
+	dc.w 0
+	dc.w 0
+	dc.w 0
+	dc.w 0
+
+INDICATOR_FILLED:
+	dc.w 0
+	dc.w 0
+	dc.w 0
+	dc.w %0000000000000000
+	dc.w %0000111000000000
+
+	dc.w %0001111100000000
+
+	dc.w %0011111110000000
+	dc.w %0011111110000000
+	dc.w %0011111110000000
+
+	dc.w %0001111100000000
+	dc.w %0000111000000000
+	dc.w %0000000000000000
+
+	dc.w 0
+	dc.w 0
+	dc.w 0
+	dc.w 0
 
 CURSOR:
 	dc.b $3b,$40,$4b,$00

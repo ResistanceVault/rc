@@ -125,7 +125,7 @@ loophudfirstline:
   move.w #$921,COPHUDCOLOR2+2
   move.w #$25b,COPHUDCOLOR3+2
   move.w #$aaa,COPHUDCOLOR4+2 ; border light 1
-  move.w #$999,COPHUDCOLOR5+2 ; border dark 1
+  move.w #$333,COPHUDCOLOR5+2 ; border dark 1
   move.w #$dd4,COPHUDCOLOR6+2 ; color 26
   move.w #$4a4,COPHUDCOLOR7+2
 
@@ -184,6 +184,9 @@ printgamebannerloop:
   move.w                (a0)+,d6
   or.w                  d6,(a3) ; car inner data
 
+  move.w                32(a1),d6
+  or.w                  d6,2+40*256*2(a2) ; write indicator inner
+
   move.w                (a1)+,d6
   or.w                  d6,2(a2) ; write indicator
 
@@ -204,13 +207,13 @@ print_hud_icons_no_a5_2:
 
   dbra                  d7,printgamebannerloop
 
-  lea                   DASHBOARD_DATA_3,a0
-  move.l                a6,a2
-  STORECARPROPERTY      HUD_POSITION_X,d7
-  adda.w                d7,a0
-  ori.w                 #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
-  ori.w                 #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
-  ori.w                 #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
-  ori.w                 #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
-  ori.w                 #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
+  ;lea                   DASHBOARD_DATA_3,a0
+  ;move.l                a6,a2
+  ;STORECARPROPERTY      HUD_POSITION_X,d7
+  ;adda.w                d7,a0
+  ;ori.w                 #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
+  ;ori.w                 #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
+  ;ori.w                 #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
+  ;ori.w                 #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
+  ;ori.w                 #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
   rts

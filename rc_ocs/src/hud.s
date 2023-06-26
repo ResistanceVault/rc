@@ -1,8 +1,8 @@
-HUD_BEST_TIME_ROW_1 equ %0000111000000000
-HUD_BEST_TIME_ROW_2 equ %0001111100000000
-HUD_BEST_TIME_ROW_3 equ %0001111100000000
-HUD_BEST_TIME_ROW_4 equ %0001111100000000
-HUD_BEST_TIME_ROW_5 equ %0000111000000000
+HUD_BEST_TIME_ROW_1 equ %0000010000000000
+HUD_BEST_TIME_ROW_2 equ %0000111000000000
+HUD_BEST_TIME_ROW_3 equ %0000010000000000
+HUD_BEST_TIME_ROW_4 equ %0000000000000000
+HUD_BEST_TIME_ROW_5 equ %0000000000000000
 
 SIZE_OF_CHAR_BITMAP     EQU 7
 TIMER_FONTS_SMALL:
@@ -109,6 +109,12 @@ UPDATE_BEST_TIMER:
     eori.w              #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
     eori.w              #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
     eori.w              #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
+
+    ori.w               #HUD_BEST_TIME_ROW_1,256*40+2+(40*6)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_2,256*40+2+(40*7)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_3,256*40+2+(40*8)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_4,256*40+2+(40*9)(a0)
+    ori.w               #HUD_BEST_TIME_ROW_5,256*40+2+(40*10)(a0)
     exg                 a1,a2
 noformerbestlapleader:
 
@@ -121,6 +127,13 @@ noformerbestlapleader:
     ori.w               #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
     ori.w               #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
     ori.w               #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
+
+    eori.w               #HUD_BEST_TIME_ROW_1,256*40+2+(40*6)(a0)
+    eori.w               #HUD_BEST_TIME_ROW_2,256*40+2+(40*7)(a0)
+    eori.w               #HUD_BEST_TIME_ROW_3,256*40+2+(40*8)(a0)
+    eori.w               #HUD_BEST_TIME_ROW_4,256*40+2+(40*9)(a0)
+    eori.w               #HUD_BEST_TIME_ROW_5,256*40+2+(40*10)(a0)
+
     movem.l             (sp)+,a0/a1/d0/d1/d2/d7                 
     rts ; disable to make space to more car
     movem.l             a0/a1/d0/d1/d2/d7,-(sp)
