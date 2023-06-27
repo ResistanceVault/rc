@@ -129,6 +129,15 @@ loophudfirstline:
   move.w #$dd4,COPHUDCOLOR6+2 ; color 26
   move.w #$4a4,COPHUDCOLOR7+2
 
+  ; Print vertical bar for lap indicator
+  moveq                 #13-1,d7
+  lea                   DASHBOARD_DATA_1+40*2-1,a0
+rightborderlaphudloop:
+  bset                  #0,(a0)
+  bset                  #0,40*256*2(a0)
+  add.w                 #40,a0
+  dbra                  d7,rightborderlaphudloop
+
   ;move.w #bbb,COPHUDCOLOR4+2 ; border light 2
   ;move.w #$555,COPHUDCOLOR5_BIS+2 ; border dark 2
   ENDC

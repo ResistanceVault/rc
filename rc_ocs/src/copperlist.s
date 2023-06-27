@@ -152,6 +152,21 @@ COPHUDCOLOR6:
 COPHUDCOLOR7:
 	dc.w	$018E,$0000
 
+	dc.w 	$22bf,$fffe ; wait for lap indicator row 1 start
+	dc.w 	$182,HUD_INDICATOR_ROW_1_COLOR
+	dc.w 	$22df,$fffe ; wait for lap indicator row 1 start
+	dc.w 	$182,0000
+
+	dc.w 	$23bf,$fffe ; wait for lap indicator row 2 start
+	dc.w 	$182,HUD_INDICATOR_ROW_2_COLOR
+	dc.w 	$23df,$fffe ; wait for lap indicator row 2 start
+	dc.w 	$182,0000
+
+	dc.w 	$24bf,$fffe ; wait for lap indicator row 3 start
+	dc.w 	$182,HUD_INDICATOR_ROW_3_COLOR
+	dc.w 	$24df,$fffe ; wait for lap indicator row 3 start
+	dc.w 	$182,0000
+
 	dc.w 	$2a07,$fffe ; wait for HUD final
 	dc.w	$0182,$0555 ; dark color 2
 

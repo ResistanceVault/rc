@@ -197,6 +197,7 @@ DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 WaitDisk	EQU	30
 
 	include "AProcessing/libs/precalc/half_word.s"
+	include "AProcessing/libs/precalc/map.s"
 	include "AProcessing/libs/precalc/bubble_sort_4_bytes.s"
 	include "AProcessing/libs/vectors/sqrt_q4_12_lookup_table.i"
 	include "AProcessing/libs/rasterizers/globaloptions.s"

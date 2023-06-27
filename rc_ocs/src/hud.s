@@ -1,8 +1,17 @@
+IF_1_LESS_2_U_S MACRO
+    cmp.w               \1,\2
+    bhi.s               \3
+    ENDM
+
 HUD_BEST_TIME_ROW_1 equ %0000010000000000
 HUD_BEST_TIME_ROW_2 equ %0000111000000000
 HUD_BEST_TIME_ROW_3 equ %0000010000000000
 HUD_BEST_TIME_ROW_4 equ %0000000000000000
 HUD_BEST_TIME_ROW_5 equ %0000000000000000
+
+HUD_INDICATOR_ROW_1_COLOR equ $FFF
+HUD_INDICATOR_ROW_2_COLOR equ $FFF
+HUD_INDICATOR_ROW_3_COLOR equ $FFF
 
 SIZE_OF_CHAR_BITMAP     EQU 7
 TIMER_FONTS_SMALL:
@@ -160,45 +169,113 @@ noformerbestlapleader:
     rts
 
 LAPTXT: dc.b 0,0,0,0,0,0
+MAX_LAP: dc.w 0
+LAPS_TABLE:
+    dc.l 0                                  ; 0
+    dc.l %10000000000000000000000000000000  ; 1
+    dc.l %11000000000000000000000000000000  ; 2
+    dc.l %11100000000000000000000000000000  ; 3
+    dc.l %11110000000000000000000000000000  ; 4
+    dc.l %11111000000000000000000000000000  ; 5
+    dc.l %11111100000000000000000000000000  ; 6
+    dc.l %11111110000000000000000000000000  ; 7
+    dc.l %11111111000000000000000000000000  ; 8
+    dc.l %11111111100000000000000000000000  ; 9
+    dc.l %11111111110000000000000000000000  ; 10
+    dc.l %11111111111000000000000000000000  ; 11
+    dc.l %11111111111100000000000000000000  ; 12
+    dc.l %11111111111110000000000000000000  ; 13
+    dc.l %11111111111111000000000000000000  ; 14
+    dc.l %11111111111111100000000000000000  ; 15
+    dc.l %11111111111111110000000000000000  ; 16
+    dc.l %11111111111111111000000000000000  ; 17
+    dc.l %11111111111111111100000000000000  ; 18
+    dc.l %11111111111111111110000000000000  ; 19
+    dc.l %11111111111111111111000000000000  ; 20
+    dc.l %11111111111111111111100000000000  ; 21
+    dc.l %11111111111111111111110000000000  ; 22
+    dc.l %11111111111111111111111000000000  ; 23
+    dc.l %11111111111111111111111100000000  ; 24
+    dc.l %11111111111111111111111110000000  ; 25
+    dc.l %11111111111111111111111111000000  ; 26
+    dc.l %11111111111111111111111111100000  ; 27
+    dc.l %11111111111111111111111111110000  ; 28
+    dc.l %11111111111111111111111111111000  ; 29
+    dc.l %11111111111111111111111111111100  ; 30
+    dc.l %11111111111111111111111111111110  ; 31
+    dc.l %11111111111111111111111111111111  ; 32
+
 UPDATE_LAP_COUNTER_HUD:
+    movem.l             a0/a1/d0/d1/d2/d3/d4,-(sp)
+    STORECARPROPERTY    LAP_COUNTER_OFFSET,d0
+    cmp.w               MAX_LAP,d0
+    bls.s               noupdatemaxlap
+    move.w              d0,MAX_LAP
+
+    move.w              MAX_LAP(PC),d0
+    subq                #1,d0
+    moveq               #0,d1
+    move.w              LAP_RACE,d2
+    subq                #1,d2
+    moveq               #0,d3
+    moveq               #64,d4
+
+    jsr                 MAP
+    lsl                 #2,d4
+
+    IF_1_LESS_2_U_S      #32*4,d4,lapindicatorrightpart
+
+    lea                 LAPS_TABLE(PC),a0
+
+    move.l              0(a0,d4.w),d0
+    andi.l              #$7FFFFFFF,d0
+
+    ;lea                 DASHBOARD_DATA_1+40*6-8,a1
+    ;move.l              0(a0,d4.w),(a1)
+
+    lea                 DASHBOARD_DATA_1+40*7-8,a1
+    move.l              d0,(a1)
+
+    lea                 DASHBOARD_DATA_1+40*8-8,a1
+    move.l              d0,(a1)
+
+    lea                 DASHBOARD_DATA_1+40*9-8,a1
+    move.l              d0,(a1)
+
+    ;lea                 DASHBOARD_DATA_1+40*10-8,a1
+    ;move.l              0(a0,d4.w),(a1)
+noupdatemaxlap:
+    movem.l             (sp)+,a0/a1/d0/d1/d2/d3/d4
     rts
-    movem.l             a0/a1/d0/d1/d2/d7,-(sp)
-    move.l              a0,a2
 
-    ; convert to text
-    STORECARPROPERTY    LAP_COUNTER_OFFSET,d1
-    lea                 LAPTXT(pc),a0
-    jsr                 dec2txt
+lapindicatorrightpart:
+    subi.w              #32*4,d4
+    lea                 LAPS_TABLE(PC),a0
 
-    ; Print the car lap number - start
-    lea                 4+LAPTXT(pc),a0 ; string to print
-    moveq               #1,d7 ; length of the string
+    move.l              0(a0,d4.w),d0
+    ori.l              #$1,d0
 
-    ; x offset in bytes of where to print
-    ;add offset on x according to car id
-    moveq.l             #0,d1
-    STORECARPROPERTY    CAR_ID_OFFSET,d1
-    ; skip car 5
-    cmp.w #4,d1
-    bne.s no_car_5_2
-    move.w #7,d1
-    move.l              #(1+8)*40,d2 ; y offset in bytes of where to print
-    bra.s               print_string_exception2
-no_car_5_2:
+    ;lea                 DASHBOARD_DATA_1+40*6-8,a1
+    ;move.l              #$FFFFFFFF,(a1)+
+    ;move.l              0(a0,d4.w),(a1)
 
-    moveq #0,d1
-    moveq #0,d2
-    STORECARPROPERTY    HUD_POSITION_X,d1
-    STORECARPROPERTY    HUD_POSITION_Y,d2
+    lea                 DASHBOARD_DATA_1+40*7-8,a1
+    move.l              #$7FFFFFFF,(a1)+
+    move.l              d0,(a1)
 
-    ;muls.w              #80/8,d1
-    addq.w              #7,d1
-    ;move.l              #(1+0)*40,d2 ; y offset in bytes of where to print
-print_string_exception2:
-    jsr                 PRINT_STRING_ON_HUD
-    ; Print the car lap number - end
+    lea                 DASHBOARD_DATA_1+40*8-8,a1
+    move.l              #$7FFFFFFF,(a1)+
+    move.l              d0,(a1)
 
-    movem.l             (sp)+,a0/a1/d0/d1/d2/d7
+    lea                 DASHBOARD_DATA_1+40*9-8,a1
+    move.l              #$7FFFFFFF,(a1)+
+    move.l              d0,(a1)
+
+    ;lea                 DASHBOARD_DATA_1+40*10-8,a1
+    ;move.l              #$FFFFFFFF,(a1)+
+    ;move.l              0(a0,d4.w),(a1)
+
+    movem.l             (sp)+,a0/a1/d0/d1/d2/d3/d4
     rts
 
 TXT_INCR2:
@@ -575,8 +652,4 @@ INCREMENT_AND_PRINT_CAR_TIMER:
     move.b                 (a1),(a3) ; write seventh raw first bitplane
 
     movem.l                (sp)+,a1/a3/a4/a5/d0/d4
-    rts
-
-HUD_INIT:
-    
     rts

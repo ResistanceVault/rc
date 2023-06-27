@@ -34,6 +34,9 @@ reset_arrival:
     move.w              #$FFFF,RACE_BEST_LAP
     clr.l               RACE_BEST_LAP_CAR_PTR
 
+    ; reset lap counter
+    clr.w               MAX_LAP
+
     rts
 
 MANAGE_PAUSE:
