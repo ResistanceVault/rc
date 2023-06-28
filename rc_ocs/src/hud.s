@@ -3,11 +3,23 @@ IF_1_LESS_2_U_S MACRO
     bhi.s               \3
     ENDM
 
+IF_1_GREATER_2_U_S MACRO
+    cmp.w               \1,\2
+    bcc.s               \3
+    ENDM
+
 HUD_BEST_TIME_ROW_1 equ %0000010000000000
 HUD_BEST_TIME_ROW_2 equ %0000111000000000
 HUD_BEST_TIME_ROW_3 equ %0000010000000000
 HUD_BEST_TIME_ROW_4 equ %0000000000000000
 HUD_BEST_TIME_ROW_5 equ %0000000000000000
+
+HUD_BEST_LEADER_ROW_0 equ %0000010000000000
+HUD_BEST_LEADER_ROW_1 equ %0001101100000000
+HUD_BEST_LEADER_ROW_2 equ %0011000110000000
+HUD_BEST_LEADER_ROW_3 equ %0001101100000000
+HUD_BEST_LEADER_ROW_4 equ %0000010000000000
+HUD_BEST_LEADER_ROW_5 equ %0000000000000000
 
 HUD_INDICATOR_ROW_1_COLOR equ $FFF
 HUD_INDICATOR_ROW_2_COLOR equ $FFF
@@ -210,10 +222,13 @@ UPDATE_LAP_COUNTER_HUD:
     STORECARPROPERTY    LAP_COUNTER_OFFSET,d0
     cmp.w               MAX_LAP,d0
     bls.s               noupdatemaxlap
+    
     move.w              d0,MAX_LAP
-
     move.w              MAX_LAP(PC),d0
     subq                #1,d0
+    beq.s               skip_update_leading_leader
+    bsr.w               UPDATE_LEADING_LEADER
+skip_update_leading_leader:
     moveq               #0,d1
     move.w              LAP_RACE,d2
     subq                #1,d2
@@ -253,7 +268,8 @@ lapindicatorrightpart:
     lea                 LAPS_TABLE(PC),a0
 
     move.l              0(a0,d4.w),d0
-    ori.l              #$1,d0
+    ori.l               #$1,d0
+    bclr                #1,d0
 
     ;lea                 DASHBOARD_DATA_1+40*6-8,a1
     ;move.l              #$FFFFFFFF,(a1)+
@@ -278,22 +294,60 @@ lapindicatorrightpart:
     movem.l             (sp)+,a0/a1/d0/d1/d2/d3/d4
     rts
 
-TXT_INCR2:
-    move.l a1,-(sp)
-    move.l a0,a1
-    addq #5,a1
+UPDATE_LEADING_LEADER:
+                        DEBUG 5555
 
-txt_incr_start:
-    cmpi.b #$9,(a1) ; is it 9?
-    beq txt_incr_change_scale
+    movem.l             a0/a1/d0/d1/d2/d3/d4,-(sp)
+    addi.w              #1,MOVER_LEADING_LAPS(a2)
+    tst.l               RACE_LEADING_LEADER_PTR
+    beq.s               draw_leading_leader_icon ; first lap
+    move.l              RACE_LEADING_LEADER_PTR,a0
 
-    addi.b #1,(a1)
-    move.l (sp)+,a1
+    ; same car, we dont need to update the already existing leading leder
+    cmpa.l              a0,a2
+    beq.s               hud_do_not_update_leading_leader
+    STORECARPROPERTY    MOVER_LEADING_LAPS,d0
+    move.w              MOVER_LEADING_LAPS(a0),d1
+
+    IF_1_GREATER_2_U_S d0,d1,hud_do_not_update_leading_leader
+    move.w              HUD_POSITION_X(a0),d1
+    lea                 DASHBOARD_DATA_1,a0
+    add.w               d1,a0
+    eori.w              #HUD_BEST_LEADER_ROW_0,256*40+2+(40*5)(a0)
+    eori.w              #HUD_BEST_LEADER_ROW_1,256*40+2+(40*6)(a0)
+    eori.w              #HUD_BEST_LEADER_ROW_2,256*40+2+(40*7)(a0)
+    eori.w              #HUD_BEST_LEADER_ROW_3,256*40+2+(40*8)(a0)
+    eori.w              #HUD_BEST_LEADER_ROW_4,256*40+2+(40*9)(a0)
+    eori.w              #HUD_BEST_LEADER_ROW_5,256*40+2+(40*10)(a0)
+
+    bra.s               draw_leading_leader_icon
+
+hud_do_not_update_leading_leader:
+    movem.l             (sp)+,a0/a1/d0/d1/d2/d3/d4
     rts
-txt_incr_change_scale:
-    move.b #$0,(a1)
-    subq   #1,a1
-    bra  txt_incr_start
+draw_leading_leader_icon:
+    move.l              a2,RACE_LEADING_LEADER_PTR
+    STORECARPROPERTY    HUD_POSITION_X,d1
+    lea                 DASHBOARD_DATA_1,a0
+    add.w               d1,a0
+    ;eori.w              #HUD_BEST_TIME_ROW_1,2+(40*6)(a0)
+    ;eori.w              #HUD_BEST_TIME_ROW_2,2+(40*7)(a0)
+    ;eori.w              #HUD_BEST_TIME_ROW_3,2+(40*8)(a0)
+    ;eori.w              #HUD_BEST_TIME_ROW_4,2+(40*9)(a0)
+    ;eori.w              #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
+
+
+    ori.w               #HUD_BEST_LEADER_ROW_0,256*40+2+(40*5)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_1,256*40+2+(40*6)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_2,256*40+2+(40*7)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_3,256*40+2+(40*8)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_4,256*40+2+(40*9)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_5,256*40+2+(40*10)(a0)
+    
+    movem.l             (sp)+,a0/a1/d0/d1/d2/d3/d4
+    rts
+
+
 
 ; increment and prints the string part of the timer for a car
 ; d1 - x position where to print

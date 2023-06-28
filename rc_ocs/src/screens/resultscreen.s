@@ -12,8 +12,10 @@ RESULT_COLUMN_5_Y   EQU 12
 RESULT_COLUMN_6_Y   EQU 14
 RESULT_COLUMN_7_Y   EQU 16
 RESULT_COLUMN_8_Y   EQU 20
+RESULT_COLUMN_9_Y   EQU 22
 
 BEST_LAPPER_POINTS  EQU 3
+BEST_LEADER_POINTS  EQU 1
 
 RESULT_FILENAME:
     dc.b "raceresult.shr",0
@@ -43,6 +45,8 @@ TXT_RESULT_EIGHTH_PLACE:
     dc.b "8TH",$FF
 TXT_RESULT_BEST_LAP_PLACE:
     dc.b "LAP",$FF
+TXT_RESULT_BEST_LEADER_PLACE:
+    dc.b "LDR",$FF
 
 TXT_CAR_1_TIME_TXT:
     dc.b "000000",$FF
@@ -71,6 +75,9 @@ TXT_CAR_8_TIME_TXT:
 TXT_CAR_BEST_LAP_TIME_TXT:
     dc.b "000000",$FF
     even
+TXT_CAR_BEST_LEADER_POINTS_TXT:
+    dc.b "000000",$FF
+    even
 
 EXIT_TO_NEXT_RACE_FUNCTION:
     move.w  #1,MAIN_EXIT
@@ -91,6 +98,41 @@ RESULT_MENU_MAIN:
     dc.l 0
     dc.w 0
     dc.w 0
+
+
+BEST_LAPPER_RESULT:
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_8_Y
+    dc.l TXT_RESULT_BEST_LAP_PLACE
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_8_Y
+    dc.l TXT_RESULT_EMPTY
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_8_Y
+    dc.l TXT_RESULT_EMPTY
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_8_Y
+    dc.l TXT_CAR_8_TIME_TXT
+    dc.w 8,7
+
+BEST_LEADER_RESULT:
+    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_9_Y
+    dc.l TXT_RESULT_BEST_LEADER_PLACE
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_9_Y
+    dc.l TXT_RESULT_EMPTY
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_9_Y
+    dc.l TXT_RESULT_EMPTY
+    dc.w 8,7
+
+    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_9_Y
+    dc.l TXT_CAR_8_TIME_TXT
+    dc.w 8,7
 
 TXT_RESULT:
     dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_0_Y
@@ -221,23 +263,6 @@ TXT_RESULT:
     dc.l TXT_CAR_8_TIME_TXT
     dc.w 8,7
 
-BEST_LAPPER_RESULT:
-    dc.w RESULT_COLUMN_0_X,RESULT_COLUMN_8_Y
-    dc.l TXT_RESULT_BEST_LAP_PLACE
-    dc.w 8,7
-
-    dc.w RESULT_COLUMN_1_X,RESULT_COLUMN_8_Y
-    dc.l TXT_RESULT_EMPTY
-    dc.w 8,7
-
-    dc.w RESULT_COLUMN_2_X,RESULT_COLUMN_8_Y
-    dc.l TXT_RESULT_EMPTY
-    dc.w 8,7
-
-    dc.w RESULT_COLUMN_3_X,RESULT_COLUMN_8_Y
-    dc.l TXT_CAR_8_TIME_TXT
-    dc.w 8,7
-
     dc.w 0,0
     dc.l 0
     dc.w 0,7
@@ -252,6 +277,49 @@ RESULTSCREEN:
     ;reset race flag in case we are returning here after the race
     move.w              #0,START_RACE_FLAG
     move.w              #1,LOAD_NEXT_TRACK_FLAG
+
+    ; clear best lap row
+    lea                 BEST_LAPPER_RESULT,a0
+    ; first col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; second col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; third col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; fourth col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; clear best leader row
+    ; first col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; second col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; third col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; fourth col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
 
     ; clean all txt first
     moveq               #MAX_CARS-1,d7
@@ -278,27 +346,6 @@ resultscreen_cleanloop:
     clr.l               (a0)+
 
     dbra                d7,resultscreen_cleanloop
-
-    ; clear best lap row
-    ; first col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
-
-    ; second col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
-
-    ; third col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
-
-    ; fourth col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
 
     ; best lapper
     move.l              RACE_BEST_LAP_CAR_PTR,a1
@@ -340,6 +387,49 @@ resultscreen_cleanloop:
     move.l              a2,a0
 
     move.l              #TXT_CAR_BEST_LAP_TIME_TXT,(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    ; best leader
+    move.l              RACE_LEADING_LEADER_PTR,a1
+    addi.w              #BEST_LEADER_POINTS,MOVER_POINTS(a1)
+    lea                 BEST_LEADER_RESULT(PC),a0
+
+    move.w              #RESULT_COLUMN_0_X,(a0)+
+    move.w              #RESULT_COLUMN_9_Y,(a0)+
+    move.l              #TXT_RESULT_BEST_LEADER_PLACE,(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_1_X,(a0)+
+    move.w              #RESULT_COLUMN_9_Y,(a0)+
+    move.l              MOVER_PLAYER_NAME_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_2_X,(a0)+
+    move.w              #RESULT_COLUMN_9_Y,(a0)+
+    move.l              MOVER_PLAYER_TEAM_ADDR(a1),(a0)+
+    move.w              #8,(a0)+
+    move.w              #7,(a0)+
+
+    move.w              #RESULT_COLUMN_3_X,(a0)+
+    move.w              #RESULT_COLUMN_9_Y,(a0)+
+    move.l              a0,a2
+    lea                 1+TXT_CAR_BEST_LEADER_POINTS_TXT(PC),a0
+    move.w              MOVER_LEADING_LAPS(a1),d1
+    jsr                 dec2txt
+
+    move.b              #$30,TXT_CAR_BEST_LEADER_POINTS_TXT
+    addi.b              #$30,TXT_CAR_BEST_LEADER_POINTS_TXT+1
+    addi.b              #$30,TXT_CAR_BEST_LEADER_POINTS_TXT+2
+    addi.b              #$30,TXT_CAR_BEST_LEADER_POINTS_TXT+3
+    addi.b              #$30,TXT_CAR_BEST_LEADER_POINTS_TXT+4
+    addi.b              #$30,TXT_CAR_BEST_LEADER_POINTS_TXT+5
+    move.b              #$FF,TXT_CAR_BEST_LEADER_POINTS_TXT+6
+    move.l              a2,a0
+
+    move.l              #TXT_CAR_BEST_LEADER_POINTS_TXT,(a0)+
     move.w              #8,(a0)+
     move.w              #7,(a0)+
 
@@ -606,7 +696,7 @@ result_draw_menu:
     move.l              #RESULT_FILENAME,MENUSCREEN_IMAGE        ; set background image file here
     move.l              #18325,MENUSCREEN_IMAGE_SIZE
     move.l              #RESULT_MENU_MAIN,MENUSCREEN_ENTRIES     ; point "entry" data structure
-    move.l              #TXT_RESULT,TXTSCREEN_ENTRIES            ; point "txt" data structure
+    move.l              #BEST_LAPPER_RESULT,TXTSCREEN_ENTRIES            ; point "txt" data structure
     move.l              MENU_RESULTS_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY ; where the cursor is at the beginning?
     jsr                 MENUSCREEN
     rts

@@ -37,6 +37,9 @@ reset_arrival:
     ; reset lap counter
     clr.w               MAX_LAP
 
+    ; reset ptr to leading leader
+    clr.l               RACE_LEADING_LEADER_PTR
+
     rts
 
 MANAGE_PAUSE:

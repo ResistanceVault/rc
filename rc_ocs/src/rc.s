@@ -118,7 +118,9 @@ MOVER_HOTSPOT_CPU_PTR				EQU 244
 MOVER_HEADING_MAGNITUDE				EQU 248
 MOVER_CPU_CONSECUTIVE_COLLISIONS	EQU 250
 
-MOVER_SIZE					 		EQU 252
+MOVER_LEADING_LAPS					EQU 252
+
+MOVER_SIZE					 		EQU 254
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -229,6 +231,9 @@ LAP_RACE: dc.w LAPS_COUNT_DEFAULT
 ; race best lap global variables
 RACE_BEST_LAP: dc.w $FFFF; frames of the best lap for all cars in whole race
 RACE_BEST_LAP_CAR_PTR: dc.l 0 ; pointer to the car who did it
+
+; race leading leader
+RACE_LEADING_LEADER_PTR: dc.l 0 ; pointer to the car with the most leading laps
 
 	IFD COLOR
 NEXT_SCREEN: dc.l MAINSCREEN

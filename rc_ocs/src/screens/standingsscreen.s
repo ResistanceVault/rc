@@ -1,5 +1,49 @@
 STANDINGSSCREEN:
     ; clean all txt first
+
+    ; clear best lap row
+    lea                 BEST_LAPPER_RESULT,a0
+    ; first col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; second col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; third col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; fourth col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; clear best leader row
+    ; first col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; second col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; third col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
+    ; fourth col
+    clr.l               (a0)+
+    clr.l               (a0)+
+    clr.l               (a0)+
+
     moveq               #MAX_CARS-1,d7
     lea                 TXT_RESULT(PC),a0
 .resultscreen_cleanloop:
@@ -24,26 +68,6 @@ STANDINGSSCREEN:
     clr.l               (a0)+
     dbra                d7,.resultscreen_cleanloop
 
-    ; clear best lap row
-    ; first col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
-
-    ; second col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
-
-    ; third col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
-
-    ; fourth col
-    clr.l               (a0)+
-    clr.l               (a0)+
-    clr.l               (a0)+
 
     ;reorder ARRIVAL ORDER POINTER
     lea                 ARRIVAL_ORDER,a0
@@ -53,7 +77,7 @@ STANDINGSSCREEN:
     tst.l               (a0)
     beq.s               .countcarsarrivalorder_end
     addq                #1,d7
-    addq                #4,a0    
+    addq                #4,a0
 .countcarsarrivalorder_end:
     dbra                d6,.countcarsarrivalorder
 
