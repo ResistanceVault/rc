@@ -17,10 +17,11 @@
 ; byte from 124894 to 124899 -> car 6 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
 ; byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
-; byte from 124912 to 125912 -> cpu points
+; byte from 124912 to 125911 -> cpu points
+; byte from 125912 to 125913 -> number of sections inside track
 
 TRACKDIR_LENGTH 	equ 10
-TRK_FILE_SIZE		equ 125912
+TRK_FILE_SIZE		equ 125914
 TRK_FILE_FIRST_BPL 	equ 0
 TRK_FILE_SECOND_BPL equ 9600
 TRK_FILE_THIRD_BPL	equ 19200
@@ -170,7 +171,7 @@ LOAD_TRACK:
 	; decompress stage start
     moveq               #0,d0
     lea                 TRACK_DATA_1,a0
-    lea                 TRACK_PADDING_END-TRK_FILE_SIZE,a1
+    lea                 TRK_FILE_END-TRK_FILE_SIZE,a1
     move.l              #0,a2
     move.l              #0,a3
     moveq               #0,d2
@@ -179,16 +180,16 @@ LOAD_TRACK:
 	clr.w				SHR_DECOMPRESS
 
 	; start copying Bitplanes
-	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FIRST_BPL,TRACK_DATA_1,9600/4
-	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_SECOND_BPL,TRACK_DATA_2,9600/4
-	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_THIRD_BPL,TRACK_DATA_3,9600/4
-	MEMCPY4 			TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FOURTH_BPL,TRACK_DATA_4,9600/4
-	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_FIFTH_BPL,TRACK_DATA_5,9600/4
+	MEMCPY4				TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_FIRST_BPL,TRACK_DATA_1,9600/4
+	MEMCPY4 			TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_SECOND_BPL,TRACK_DATA_2,9600/4
+	MEMCPY4 			TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_THIRD_BPL,TRACK_DATA_3,9600/4
+	MEMCPY4 			TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_FOURTH_BPL,TRACK_DATA_4,9600/4
+	MEMCPY4				TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_FIFTH_BPL,TRACK_DATA_5,9600/4
 	tst.l				COPY_METADATA
 	beq.s				.donotcopymetadata
-	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_COLORS,TRACK_DATA_COLORS,64/4
+	MEMCPY4				TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_COLORS,TRACK_DATA_COLORS,64/4
 .donotcopymetadata:
-	MEMCPY4				TRACK_PADDING_END-TRK_FILE_SIZE+TRK_FILE_POSITIONS,CAR_INFO_DATA,6*8/4
+	MEMCPY4				TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_POSITIONS,CAR_INFO_DATA,6*8/4
 
 .shr_no_decompress:
     clr.b               KEY_ESC

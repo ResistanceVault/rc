@@ -49,9 +49,6 @@ PLAYER_6_TIMER_TXT: 		dcb.b 6,$00
 PLAYER_7_TIMER_TXT: 		dcb.b 6,$00
 PLAYER_8_TIMER_TXT: 		dcb.b 6,$00
 
-TRACK_START_PIXEL_DATA:
-	dc.w %10110000
-
 CAR1_INIT:
 	jsr 	SET_CAR1_START_STATUS
 	lea 	MOVER1,a0
@@ -89,11 +86,6 @@ CAR1_INIT:
 	move.w  #CAR_BOUNCE_WALL_FORCE,d0
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
-
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 
 	; input routine
 	move.l  #CAR_CONTROL_1,INPUT_ROUTINE_OFFSET(a0)
@@ -181,10 +173,6 @@ CAR2_INIT:
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
 
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 	; input routine
 	move.l  #CAR_CONTROL_2,INPUT_ROUTINE_OFFSET(a0)
 
@@ -271,10 +259,6 @@ CAR3_INIT:
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
 
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 	; input routine
 	move.l  #CAR_CONTROL_3,INPUT_ROUTINE_OFFSET(a0)
 
@@ -362,10 +346,6 @@ CAR4_INIT:
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
 
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 	; input routine
 	move.l  #CAR_CONTROL_4,INPUT_ROUTINE_OFFSET(a0)
 
@@ -453,10 +433,6 @@ CAR5_INIT:
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
 
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 	; input routine
 	move.l  #CAR_CONTROL_5,INPUT_ROUTINE_OFFSET(a0)
 
@@ -544,10 +520,6 @@ CAR6_INIT:
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
 
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 	; input routine
 	move.l  #CAR_CONTROL_6,INPUT_ROUTINE_OFFSET(a0)
 
@@ -635,10 +607,6 @@ CAR7_INIT:
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
 
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 	; input routine
 	move.l  #CAR_CONTROL_7,INPUT_ROUTINE_OFFSET(a0)
 
@@ -726,10 +694,6 @@ CAR8_INIT:
 	neg.w   d0
 	move.w  d0,MOVER_BOUNCE_WALL_OFFSET(a0)
 
-	move.w  TRACK_START_PIXEL_DATA,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
-																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
-																   			   ; because when the race starts, all car must be placed 
-																			   ; on the last zone
 	; input routine
 	move.l  #CAR_CONTROL_8,INPUT_ROUTINE_OFFSET(a0)
 

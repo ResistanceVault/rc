@@ -116,9 +116,12 @@ all:
 	printf "%04x%04x\n" 162 56 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 142 61 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
-	for number in `seq 1 197`; do \
+	for number in `seq 1 198`; do \
         echo FF FF FF FF | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK ;\
     done
+
+	# number of zones of the track
+	echo 00 0B | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	cp ../../../buildadf/tracks/$(TRACKNAME).TRK ../../../bin/tracks/$(TRACKNAME).TRK
 	chmod 777 ../../../bin/tracks/$(TRACKNAME).TRK

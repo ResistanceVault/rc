@@ -81,6 +81,11 @@ SET_CAR1_START_STATUS:
 
     clr.w   MOVER_LEADING_LAPS(a0)
 
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   			   ; because when the race starts, all car must be placed 
+																			   ; on the last zone
+
     rts
 
 
@@ -126,6 +131,12 @@ SET_CAR2_START_STATUS:
 
     clr.w   MOVER_LEADING_LAPS(a0)
 
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   		; because when the race starts, all car must be placed 
+																		; on the last zone
+
+
     rts
 
 SET_CAR3_START_STATUS:
@@ -169,6 +180,11 @@ SET_CAR3_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   		; because when the race starts, all car must be placed 
+																		; on the last zone
 
     rts
 
@@ -214,6 +230,11 @@ SET_CAR4_START_STATUS:
 
     clr.w   MOVER_LEADING_LAPS(a0)
 
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   		; because when the race starts, all car must be placed 
+																		; on the last zone
+
     rts
 
 SET_CAR5_START_STATUS:
@@ -257,6 +278,11 @@ SET_CAR5_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   		; because when the race starts, all car must be placed 
+																		; on the last zone
 
     rts
 
@@ -302,6 +328,11 @@ SET_CAR6_START_STATUS:
 
     clr.w   MOVER_LEADING_LAPS(a0)
 
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   		; because when the race starts, all car must be placed 
+																		; on the last zone
+
     rts
 
 SET_CAR7_START_STATUS:
@@ -346,6 +377,11 @@ SET_CAR7_START_STATUS:
 
     clr.w   MOVER_LEADING_LAPS(a0)
 
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   		; because when the race starts, all car must be placed 
+																		; on the last zone
+
     rts
 
 SET_CAR8_START_STATUS:
@@ -389,5 +425,10 @@ SET_CAR8_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+
+    move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
+																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
+																   		; because when the race starts, all car must be placed 
+																		; on the last zone
 
     rts

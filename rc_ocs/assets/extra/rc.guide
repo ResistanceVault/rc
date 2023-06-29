@@ -161,6 +161,8 @@ The file must hold the following data:
 * byte from 124894 to 124899 -> car 6 start position in this format: first word X position, second word Y position, third word degrees
 * byte from 124900 to 124905 -> car 7 start position in this format: first word X position, second word Y position, third word degrees
 * byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
+* byte from 124912 to 125911 -> cpu points
+* byte from 125912 to 125913 -> number of sections inside track
 
 @endnode
 

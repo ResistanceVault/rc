@@ -61,9 +61,9 @@ end_check_track:
     STORECARPROPERTY CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET,d0
 
     ; put red intensity according to this value for debug
-    move.w d0,d1
-    andi.w #$00F0,d1
-    lsl.w #4,d1
+    ;move.w d0,d1
+    ;andi.w #$00F0,d1
+    ;lsl.w #4,d1
     ;move.w d1,$dff180
 
     ; check if next zone has been reached
@@ -72,7 +72,7 @@ end_check_track:
     lsr.w #4,d1
     cmp.w CAR_NEXT_ZONE_OFFSET(a2),d1
     bne.w no_next_zone_update
-    move.w CAR_NEXT_ZONE_OFFSET(a2),d2
+    ;move.w CAR_NEXT_ZONE_OFFSET(a2),d2
 
     ; here manage next zone update
     addi.w #1,CAR_NEXT_ZONE_OFFSET(a2)
@@ -113,10 +113,11 @@ noupdatebesttime:
 lap_not_completed:
 
     ; if next zone is last zone reset to 1 to start another lap
-    moveq #0,d1
-    move.w TRACK_START_PIXEL_DATA,d1
-    lsr.w #4,d1
-    move.w CAR_NEXT_ZONE_OFFSET(a2),d2
+    ;moveq #0,d1
+    ;move.w TRACK_START_PIXEL_DATA,d1
+    ;lsr.w #4,d1
+    ;move.w CAR_NEXT_ZONE_OFFSET(a2),d2
+    move.w TRACK_NUM_ZONES,d1
     cmp.w CAR_NEXT_ZONE_OFFSET(a2),d1
     bne.s no_next_zone_update
     ; I reach this part only when entering LAST zone
@@ -203,7 +204,7 @@ set_terrain_flags_no_grass:
     rts
 set_terrain_flags_no_ice:
 
-    ; is we are here it mens no grass an no ice , the default is road
+    ; is we are here it means no grass an no ice , the default is road
     move.w           #0,MOVER_IS_ON_ICE(a2)
     move.w           #0,MOVER_IS_ON_GRASS(a2)
     ;move.w #$0000,$dff180

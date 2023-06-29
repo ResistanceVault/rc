@@ -904,6 +904,9 @@ MOVER_DESTINATION_Y:
 	dcb.b 998,0 ; we support up to 249 points + 1 (terminator)
 TRACK_PADDING_END:
 
+TRACK_NUM_ZONES: 	 dc.w 0
+TRK_FILE_END:
+
 MAIN_PALETTE2:
 MAIN_PALETTE2_0:     dc.w 0    ; color 0
 MAIN_PALETTE2_1:     dc.w 0    ; color 1

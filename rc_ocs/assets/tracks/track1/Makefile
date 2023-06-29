@@ -127,6 +127,9 @@ all:
         echo FF FF FF FF | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK ;\
     done
 
+	# number of zones of the track
+	echo 00 0B | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
 	cp ../../../buildadf/tracks/TRACK1.TRK ../../../bin/tracks/TRACK1.TRK
 	chmod -R 777  ../../../bin/tracks
 
