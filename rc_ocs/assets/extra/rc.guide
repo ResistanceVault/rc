@@ -146,7 +146,7 @@ Files must have the .TRK extension, no other files must be stored in this drawer
 File name must be uppercase and letter + space character only.
 The file must hold the following data:
 
-* byte from to 9599         -> raw planar image first bitplane (320X240)
+* byte from 0 to 9599       -> raw planar image first bitplane (320X240)
 * byte from 9600 to 19199   -> raw planar image second bitplane (320X240)
 * byte from 19200 to 28799  -> raw planar image third bitplane (320X240)
 * byte from 28800 to 38399  -> raw planar image fourth bitplane (320X240)
@@ -163,6 +163,87 @@ The file must hold the following data:
 * byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
 * byte from 124912 to 125911 -> cpu points
 * byte from 125912 to 125913 -> number of sections inside track
+
+@{u}Raw planar image@{uu}
+    From byte 0 up to byte 47999 an image file is expected.
+    Image size is expected to be 320X240 px and must be in planar format.
+    Image must have 5 bitplanes, this means it can have up to 32 colors, however,
+    since the Amiga shares the same palette with hardware sprites,
+    you have to use some pre-defined values in order to do not change the colors of the cars.
+    Here's the list of colors you should not change:
+
+    * $DFF1A2 COLOR17 $0000
+    * $DFF1A4 COLOR18	$0921
+
+    * $DFF1AA COLOR21	$0000
+    * $DFF1AC COLOR22	$025B
+
+    * $DFF1B0 COLOR25	$0000
+    * $DFF1B4 COLOR26	$0DD4
+
+    * $DFF1BA COLOR29	$0000
+    * $DFF1BC COLOR30	$04A4
+
+    Color 17, 21, 25, 29 are used for the outline of the car, in order to stick out from the background,
+    usually they are set to black or to a very dark color.
+
+    Color 18,22,26 and 30 are used to paint the inner part of the car and they cannot be changed, this color
+    are important to characterize/define/distingush the car team (red for Perrari or green for Alfa Marameo),
+    in other words you should never change this values and the track image should use this colors as less as possibile
+    in order to do avoid the track image to blend with the cars.
+
+  @{u}Color palette@{uu}
+    Bytes from 48000 to 48063 are reserved to define the track color palette.
+    Each color must be stored in 2 bytes and 24 bit format according to the Amiga hardware specifications, for example
+
+    * to define a RED color store this binary data: $0F00
+    * to define a GREEN color store this binary data: $00F0
+    * to define a BLUE color store this binary data: $000F
+
+    First nibble is ignored, by convention should be zero.
+    Final size of palette data must be 64 bytes (2 bytes for each of the 32 colors).
+    Again, when creating the palette keep in mind the suggestions described on the "Raw planar image" paragraph.
+
+  @{u}Track metadata@{uu}
+    Byte from 48064 to 124863 is refered to track metadata.
+    Track metadata is crucial to let the program calculate:
+    * the type of terrain where each car is on (grass, asphalt, ice, ecc...)
+    * if the location is walkable or there is an obstacle
+    * the car zone
+    * where the finish line is to count a lap
+
+    A wrong track metadata could lead to the game be unplayable or glitchy, so pay attention when creating it.
+
+    The "Track metadata" is another image that mirrors the previous image discussed on the "Raw planar image" paragraph.
+    The "Track metadata" image is stored in chunky format, each byte represents one pixel on the screen.
+    The first byte represent the first pixel starting from the upper left corner of the image, the second byte is the second pixel of the first row
+    and so on.
+    Each byte reports 2 information, the first nibble is reserved to describe a zone, the second one to describe the terrain.
+
+    A byte equal zero (all 8 bits set to zero) means the pixel is "not walkable",
+    in other words the car cant reach this location and it will bounce back,
+    this is useful to describe track borders, walls and obstacles.
+
+    Upper nibble of the byte is used to describe a zone number, zones are crucial to force the car to follow a very specific
+    path, this ensures players to do not cheat and take shortcuts because each car is force to reach all the zone sequentially
+    before reaching the finish line.
+    Make sure to have a quite big last zone since all cars must be placed within this zone before the race starts.
+    Usually the end of the last zone is marked with a finish line painted on the track, this is not mandatory but it's good
+    to make the player realize when the lap (or the race) is over.
+
+    Lower nibble of the byte is used to change car behaviour according to the terrain they are on, for example if the car is above
+    a pixel describing a grass, the maximum allowed velocity is halved, if the car is on ice, the friction is decreased.
+
+    Here is a list of nibbles recognized by the game:
+
+    * 0000 : asphalt
+    * 0001 : grass
+    * 0010 : ice
+
+    More terrain types could be implemented in the future for example 0011 mud or 0100 water.
+
+
+
 
 @endnode
 
