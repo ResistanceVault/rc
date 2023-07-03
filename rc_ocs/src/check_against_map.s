@@ -217,6 +217,12 @@ MANAGE_END_OF_RACE:
 
     ; update arrival order
     move.l              ARRIVAL_ORDER_PTR,a1
+
+    cmpa.l              #ARRIVAL_ORDER,a1
+    bne.s               wedonthaveawinner
+    jsr                 UPDATE_WINNER
+wedonthaveawinner:
+
     move.l              a0,(a1)+
     move.l              a1,ARRIVAL_ORDER_PTR
 

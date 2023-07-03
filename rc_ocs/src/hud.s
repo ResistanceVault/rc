@@ -21,6 +21,14 @@ HUD_BEST_LEADER_ROW_3 equ %0001101100000000
 HUD_BEST_LEADER_ROW_4 equ %0000010000000000
 HUD_BEST_LEADER_ROW_5 equ %0000000000000000
 
+HUD_WINNER_ROW_M_1 equ %0000111000000000
+HUD_WINNER_ROW_0 equ %0001100110000000
+HUD_WINNER_ROW_1 equ %0010000010000000
+HUD_WINNER_ROW_2 equ %0000000000000000
+HUD_WINNER_ROW_3 equ %0010000010000000
+HUD_WINNER_ROW_4 equ %0001101100000000
+HUD_WINNER_ROW_5 equ %0000111000000000
+
 HUD_INDICATOR_ROW_1_COLOR equ $FFF
 HUD_INDICATOR_ROW_2_COLOR equ $FFF
 HUD_INDICATOR_ROW_3_COLOR equ $FFF
@@ -295,8 +303,6 @@ lapindicatorrightpart:
     rts
 
 UPDATE_LEADING_LEADER:
-                        DEBUG 5555
-
     movem.l             a0/a1/d0/d1/d2/d3/d4,-(sp)
     addi.w              #1,MOVER_LEADING_LAPS(a2)
     tst.l               RACE_LEADING_LEADER_PTR
@@ -347,6 +353,28 @@ draw_leading_leader_icon:
     movem.l             (sp)+,a0/a1/d0/d1/d2/d3/d4
     rts
 
+UPDATE_WINNER:
+    movem.l             a0/d1,-(sp)
+    move.w              HUD_POSITION_X(a0),d1
+    lea                 DASHBOARD_DATA_1,a0
+    add.w               d1,a0
+    ori                 #HUD_WINNER_ROW_M_1,2+(40*4)(a0)
+    ori.w               #HUD_WINNER_ROW_0,2+(40*5)(a0)
+    ori.w               #HUD_WINNER_ROW_1,2+(40*6)(a0)
+    ori.w               #HUD_WINNER_ROW_2,2+(40*7)(a0)
+    ori.w               #HUD_WINNER_ROW_3,2+(40*8)(a0)
+    ori.w               #HUD_WINNER_ROW_4,2+(40*9)(a0)
+    ori.w               #HUD_WINNER_ROW_5,2+(40*10)(a0)
+
+    ori                 #HUD_WINNER_ROW_M_1,256*40+2+(40*4)(a0)
+    ori.w               #HUD_WINNER_ROW_0,256*40+2+(40*5)(a0)
+    ori.w               #HUD_WINNER_ROW_1,256*40+2+(40*6)(a0)
+    ori.w               #HUD_WINNER_ROW_2,256*40+2+(40*7)(a0)
+    ori.w               #HUD_WINNER_ROW_3,256*40+2+(40*8)(a0)
+    ori.w               #HUD_WINNER_ROW_4,256*40+2+(40*9)(a0)
+    ori.w               #HUD_WINNER_ROW_5,256*40+2+(40*10)(a0)
+    movem.l             (sp)+,a0/d1
+    rts
 
 
 ; increment and prints the string part of the timer for a car
