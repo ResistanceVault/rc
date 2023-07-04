@@ -29,6 +29,7 @@
     @{" Installing RC             " link "installation" 0}    installing RC on your system
     @{" Starting RC               " link "startingup" 0}    starting the game
     @{" Track files specs         " link "tracksspecs" 0}    Build your own tracks
+    @{" How to play               " link "howtoplay" 0}    How to play
 
     @{" How to contact the author " link "author" 0}    for bug reports and contributions
     @{" License                   " link "license" 0}    license info
@@ -135,6 +136,39 @@ just ensure you have enough CHIP ram available when you run it.
 
 Running the game from CLI is also possible, just go into the directory where you installed the game
 and type "RC".
+@endnode
+
+@node "howtoplay" "How to play"
+RC is a multiplayer game, it's meant to be played with friends, however, it is possible to setup also some
+CPU driven cars.
+Before starting the game I suggest to access the "Car setup screen" to set proper controls and CPU cars.
+Supported Input modes for humans are the following:
+* Joy on port 1
+* Joy on port 0 (mouse port)
+* Joy 2 and Joy 3 on parallel port (to use this you must have the hardware adapter)
+* Keyboard arrows
+* Keyboard WASD combination
+* Keyboard IJKL combination
+
+Once car setup is complete you can proceed starting the races.
+For each race some points are awarded in this way:
+
+* 10 points for the first place
+*  8 points for the second place
+*  7 points for the third place
+*  6 points for the fourth place
+*  5 points for the fifth place
+*  4 points for the sixth place
+*  3 points for the seventh place
+*  1 points for the eigth place
+
+Additionally, 3 extra points are awarded to the car able to perform the best lap.
+Finally an extra point is awarded to the best leader (the car able to perform most laps as a leader of the race).
+
+An circle shape indicator on the HUD screen, next to each car, will report the car currently holding the best lap (red inner circle)
+and the best leader (blu circle).
+The winner of the race is reported with a green circle.
+
 @endnode
 
 @node "tracksspecs" "Track files specification"

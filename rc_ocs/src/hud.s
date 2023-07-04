@@ -16,22 +16,22 @@ HUD_BEST_TIME_ROW_5 equ %0000000000000000
 
 HUD_BEST_LEADER_ROW_0 equ %0000010000000000
 HUD_BEST_LEADER_ROW_1 equ %0001101100000000
-HUD_BEST_LEADER_ROW_2 equ %0011000110000000
+HUD_BEST_LEADER_ROW_2 equ %0001000100000000
 HUD_BEST_LEADER_ROW_3 equ %0001101100000000
 HUD_BEST_LEADER_ROW_4 equ %0000010000000000
 HUD_BEST_LEADER_ROW_5 equ %0000000000000000
 
 HUD_WINNER_ROW_M_1 equ %0000111000000000
-HUD_WINNER_ROW_0 equ %0001100110000000
-HUD_WINNER_ROW_1 equ %0010000010000000
-HUD_WINNER_ROW_2 equ %0000000000000000
-HUD_WINNER_ROW_3 equ %0010000010000000
-HUD_WINNER_ROW_4 equ %0001101100000000
-HUD_WINNER_ROW_5 equ %0000111000000000
+HUD_WINNER_ROW_0 equ   %0001101100000000
+HUD_WINNER_ROW_1 equ   %0010000010000000
+HUD_WINNER_ROW_2 equ   %0010000010000000
+HUD_WINNER_ROW_3 equ   %0010000010000000
+HUD_WINNER_ROW_4 equ   %0001101100000000
+HUD_WINNER_ROW_5 equ   %0000111000000000
 
-HUD_INDICATOR_ROW_1_COLOR equ $FFF
+HUD_INDICATOR_ROW_1_COLOR equ $666
 HUD_INDICATOR_ROW_2_COLOR equ $FFF
-HUD_INDICATOR_ROW_3_COLOR equ $FFF
+HUD_INDICATOR_ROW_3_COLOR equ $666
 
 SIZE_OF_CHAR_BITMAP     EQU 7
 TIMER_FONTS_SMALL:
@@ -53,7 +53,7 @@ TIMETXT:                dc.b 0,0,0,0,0,0
 
 ; Routine to print some text on HUD
 ; - a0.l address of the string to print
-; - d1.l x offset on hid where to print
+; - d1.l x offset on hud where to print
 ; - d2.l y offset of hud where to print
 ; - d7.w length of the screen
 PRINT_STRING_ON_HUD:
@@ -306,12 +306,12 @@ UPDATE_LEADING_LEADER:
     movem.l             a0/a1/d0/d1/d2/d3/d4,-(sp)
     addi.w              #1,MOVER_LEADING_LAPS(a2)
     tst.l               RACE_LEADING_LEADER_PTR
-    beq.s               draw_leading_leader_icon ; first lap
+    beq.w               draw_leading_leader_icon ; first lap
     move.l              RACE_LEADING_LEADER_PTR,a0
 
     ; same car, we dont need to update the already existing leading leder
     cmpa.l              a0,a2
-    beq.s               hud_do_not_update_leading_leader
+    beq.w               hud_do_not_update_leading_leader
     STORECARPROPERTY    MOVER_LEADING_LAPS,d0
     move.w              MOVER_LEADING_LAPS(a0),d1
 
@@ -319,12 +319,27 @@ UPDATE_LEADING_LEADER:
     move.w              HUD_POSITION_X(a0),d1
     lea                 DASHBOARD_DATA_1,a0
     add.w               d1,a0
-    eori.w              #HUD_BEST_LEADER_ROW_0,256*40+2+(40*5)(a0)
-    eori.w              #HUD_BEST_LEADER_ROW_1,256*40+2+(40*6)(a0)
-    eori.w              #HUD_BEST_LEADER_ROW_2,256*40+2+(40*7)(a0)
-    eori.w              #HUD_BEST_LEADER_ROW_3,256*40+2+(40*8)(a0)
-    eori.w              #HUD_BEST_LEADER_ROW_4,256*40+2+(40*9)(a0)
-    eori.w              #HUD_BEST_LEADER_ROW_5,256*40+2+(40*10)(a0)
+
+    ori.w               #HUD_BEST_LEADER_ROW_0,2*256*40+2+(40*5)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_1,2*256*40+2+(40*6)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_2,2*256*40+2+(40*7)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_3,2*256*40+2+(40*8)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_4,2*256*40+2+(40*9)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_5,2*256*40+2+(40*10)(a0)
+
+    eori.w               #HUD_BEST_LEADER_ROW_0,1*256*40+2+(40*5)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_1,1*256*40+2+(40*6)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_2,1*256*40+2+(40*7)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_3,1*256*40+2+(40*8)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_4,1*256*40+2+(40*9)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_5,1*256*40+2+(40*10)(a0)
+
+    eori.w               #HUD_BEST_LEADER_ROW_0,0*256*40+2+(40*5)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_1,0*256*40+2+(40*6)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_2,0*256*40+2+(40*7)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_3,0*256*40+2+(40*8)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_4,0*256*40+2+(40*9)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_5,0*256*40+2+(40*10)(a0)
 
     bra.s               draw_leading_leader_icon
 
@@ -343,13 +358,27 @@ draw_leading_leader_icon:
     ;eori.w              #HUD_BEST_TIME_ROW_5,2+(40*10)(a0)
 
 
-    ori.w               #HUD_BEST_LEADER_ROW_0,256*40+2+(40*5)(a0)
-    ori.w               #HUD_BEST_LEADER_ROW_1,256*40+2+(40*6)(a0)
-    ori.w               #HUD_BEST_LEADER_ROW_2,256*40+2+(40*7)(a0)
-    ori.w               #HUD_BEST_LEADER_ROW_3,256*40+2+(40*8)(a0)
-    ori.w               #HUD_BEST_LEADER_ROW_4,256*40+2+(40*9)(a0)
-    ori.w               #HUD_BEST_LEADER_ROW_5,256*40+2+(40*10)(a0)
-    
+    eori.w               #HUD_BEST_LEADER_ROW_0,2*256*40+2+(40*5)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_1,2*256*40+2+(40*6)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_2,2*256*40+2+(40*7)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_3,2*256*40+2+(40*8)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_4,2*256*40+2+(40*9)(a0)
+    eori.w               #HUD_BEST_LEADER_ROW_5,2*256*40+2+(40*10)(a0)
+
+    ori.w               #HUD_BEST_LEADER_ROW_0,1*256*40+2+(40*5)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_1,1*256*40+2+(40*6)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_2,1*256*40+2+(40*7)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_3,1*256*40+2+(40*8)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_4,1*256*40+2+(40*9)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_5,1*256*40+2+(40*10)(a0)
+
+    ori.w               #HUD_BEST_LEADER_ROW_0,0*256*40+2+(40*5)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_1,0*256*40+2+(40*6)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_2,0*256*40+2+(40*7)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_3,0*256*40+2+(40*8)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_4,0*256*40+2+(40*9)(a0)
+    ori.w               #HUD_BEST_LEADER_ROW_5,0*256*40+2+(40*10)(a0)
+
     movem.l             (sp)+,a0/a1/d0/d1/d2/d3/d4
     rts
 
