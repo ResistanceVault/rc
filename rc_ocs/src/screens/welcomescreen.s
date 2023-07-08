@@ -84,6 +84,7 @@ INPUTLIST:
     dc.l READJOY0
     dc.l READJOY2
     dc.l READJOY3
+    dc.l KEYBOARD_NUMPAD
     dc.l OFF
     dc.l 0
 INPUTLIST_END:
@@ -96,10 +97,12 @@ INPUTLIST_DESCRIPTION:
     dc.l TXT5
     dc.l TXT6
     dc.l TXT7
+    dc.l TXT8
     dc.l TXT_OFF
     dc.l 0
 
 INPUTLIST_ONOFF:
+    dc.l 1
     dc.l 1
     dc.l 1
     dc.l 1
@@ -443,6 +446,10 @@ TXT6:
 
 TXT7:
     dc.b                "JOY PORT 3",255
+    even
+
+TXT8:
+    dc.b                "KEY NUMPAD",255
     even
 
 TXT_OFF:

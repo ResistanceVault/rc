@@ -1,13 +1,3 @@
-IF_1_LESS_2_U_S MACRO
-    cmp.w               \1,\2
-    bhi.s               \3
-    ENDM
-
-IF_1_GREATER_2_U_S MACRO
-    cmp.w               \1,\2
-    bcc.s               \3
-    ENDM
-
 HUD_BEST_TIME_ROW_1 equ %0000010000000000
 HUD_BEST_TIME_ROW_2 equ %0000111000000000
 HUD_BEST_TIME_ROW_3 equ %0000010000000000
@@ -246,7 +236,9 @@ skip_update_leading_leader:
     jsr                 MAP
     lsl                 #2,d4
 
-    IF_1_LESS_2_U_S      #32*4,d4,lapindicatorrightpart
+    ;IF_1_LESS_2_U_S      #32*4,d4,lapindicatorrightpart
+    cmp.w                #32*4,d4
+    bhi.s                lapindicatorrightpart
 
     lea                 LAPS_TABLE(PC),a0
 
@@ -315,7 +307,7 @@ UPDATE_LEADING_LEADER:
     STORECARPROPERTY    MOVER_LEADING_LAPS,d0
     move.w              MOVER_LEADING_LAPS(a0),d1
 
-    IF_1_GREATER_2_U_S d0,d1,hud_do_not_update_leading_leader
+    IF_1_GREATER_2_W_U  d0,d1,hud_do_not_update_leading_leader,s
     move.w              HUD_POSITION_X(a0),d1
     lea                 DASHBOARD_DATA_1,a0
     add.w               d1,a0

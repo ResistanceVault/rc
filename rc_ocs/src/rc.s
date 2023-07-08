@@ -608,17 +608,20 @@ exit:
 	include "inputroutines/keyboard_wasd_welcome.s"
 	include "inputroutines/keyboard_ijkl.s"
 	include "inputroutines/keyboard_arrows.s"
+	include "inputroutines/keyboard_numpad.s"
 	include "inputroutines/joystick2.s"
 	include "inputroutines/joystick3.s"
 	include "inputroutines/cpucontrol.s"
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"
+	;IFND COLOR
 	include "screens/welcomescreen.s"
+	;ENDC
 	include "banner_manager.s"
 	include "race_manager.s"
 	include "track_info_manager.s"
-	IFND COLOE
+	IFND COLOR
 	include "screens/race_results.s"
 	ENDC
 	IFD INTRO

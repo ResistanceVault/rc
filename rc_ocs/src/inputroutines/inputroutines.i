@@ -19,6 +19,8 @@ READJOY2_DESC:          dc.b "JOY 2 ",$FF
                         even
 READJOY3_DESC:          dc.b "JOY 3 ",$FF
                         even
+READJOY4_DESC:          dc.b "NPAD  ",$FF
+                        even
 OFF_DESC:               dc.b "OFF   ",$FF
                         even
 
@@ -46,6 +48,9 @@ ROUTINES_INPUTLIST:
 
     dc.l  READJOY3
     dc.l  READJOY3_DESC
+
+    dc.l  KEYBOARD_NUMPAD
+    dc.l  READJOY4_DESC
 
     dc.l  0
     dc.l  OFF_DESC
