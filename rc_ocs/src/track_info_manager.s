@@ -63,6 +63,7 @@ SET_CAR1_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
@@ -113,6 +114,7 @@ SET_CAR2_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
@@ -163,6 +165,7 @@ SET_CAR3_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
@@ -212,6 +215,7 @@ SET_CAR4_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
@@ -261,6 +265,7 @@ SET_CAR5_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
@@ -310,6 +315,7 @@ SET_CAR6_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
@@ -359,6 +365,7 @@ SET_CAR7_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 
@@ -408,6 +415,7 @@ SET_CAR8_START_STATUS:
     move.w  #0,MOVER_IS_ACCELERATING_OFFSET(a0) 	 	; if 0 means the car is not accellerating (is_accellerating) (private)
 	move.w  #0,MOVER_IS_BRAKING_OFFSET(a0) 	  		 	; if 0 means the car is not braking (is_braking) (private)
 	move.w  #0,MOVER_IS_COLLIDING_OFFSET(a0) 	  	 	; if 0 means the car is not colliding (is_colliding) (private)
+    clr.w   MOVER_HEADING_MAGNITUDE(a0)
 
     move.w	#1,CAR_NEXT_ZONE_OFFSET(a0)
 

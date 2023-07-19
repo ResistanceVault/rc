@@ -120,7 +120,10 @@ MOVER_CPU_CONSECUTIVE_COLLISIONS	EQU 250
 
 MOVER_LEADING_LAPS					EQU 252
 
-MOVER_SIZE					 		EQU 254
+MOVER_TEAMMATE_CAR_PTR				EQU	254
+MOVER_SAMPLE_RATE					EQU 258
+
+MOVER_SIZE					 		EQU 260
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -403,8 +406,10 @@ carsaudioloop:
 	beq.s 				carsaudionextloop
 	move.l 				AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
 	move.l 				MOTOR_SAMPLE_OFFSET(a0),(a1)+
-	move.w 				#8,(a1)+; size
-	move.w 				#680,(a1)+
+	;move.w 				#8,(a1)+; size
+	move.w #3932/2,(a1)+
+	;move.w 				#680,(a1)+
+	move.w #447,(a1)+
 	move.w 				#64,(a1)+
 	or.w 				AUDIO_CHANNEL_DMA_BIT(a0),d1
 carsaudionextloop:
@@ -640,15 +645,15 @@ exit:
 	include "screens/optionsscreen.s"
 	ENDC
 
-MOVERS:
+MOVERS: ; car 1 - ferrari 1
 	MOVER_INIT_MEM 1
-MOVERS2:
+MOVERS2: ; car 2
 	MOVER_INIT_MEM 2
-MOVERS3:
+MOVERS3: ; car 3
 	MOVER_INIT_MEM 3
-MOVERS4:
+MOVERS4: ; car 4 alfa marameo 1
 	MOVER_INIT_MEM 4
-MOVERS5:
+MOVERS5: ; car 5 - ferrari car 2
 	MOVER_INIT_MEM 5
 MOVERS6:
 	MOVER_INIT_MEM 6
@@ -685,8 +690,9 @@ POINTINCOPPERLIST_FUNCT:
 	IFD SOUND
 	SECTION SOUNDS,DATA_C
 MOTOR1_SND:
-	dc.b	0,40,90,110,127,110,90,40,0,-40,-90,-110,-127,-110,-90,-40
-	;incbin "assets/sounds/Squares.wav.asd"
+	;dc.b	0,40,90,110,127,110,90,40,0,-40,-90,-110,-127,-110,-90,-40
+	;incbin "assets/sounds/out.raw"
+	incbin "assets/sounds/kef1rave.raw"
 	ENDC
 
 	SECTION FONTS,DATA_C
