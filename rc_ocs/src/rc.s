@@ -122,8 +122,9 @@ MOVER_LEADING_LAPS					EQU 252
 
 MOVER_TEAMMATE_CAR_PTR				EQU	254
 MOVER_SAMPLE_RATE					EQU 258
+MOVER_SOUNDWAVE_SIZE_WORDS			EQU 260
 
-MOVER_SIZE					 		EQU 260
+MOVER_SIZE					 		EQU 262
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -406,11 +407,9 @@ carsaudioloop:
 	beq.s 				carsaudionextloop
 	move.l 				AUDIO_CHANNEL_ADDRESS_OFFSET(a0),a1
 	move.l 				MOTOR_SAMPLE_OFFSET(a0),(a1)+
-	;move.w 				#8,(a1)+; size
-	move.w #3932/2,(a1)+
-	;move.w 				#680,(a1)+
-	move.w #447,(a1)+
-	move.w 				#64,(a1)+
+	move.w				MOVER_SOUNDWAVE_SIZE_WORDS(a0),(a1)+ ; size
+	move.w 				MOVER_SAMPLE_RATE(a0),(a1)+ ; sample rate
+	move.w 				#10,(a1)+ ; volume
 	or.w 				AUDIO_CHANNEL_DMA_BIT(a0),d1
 carsaudionextloop:
 	adda.w  			#MOVER_SIZE,a0
@@ -690,9 +689,12 @@ POINTINCOPPERLIST_FUNCT:
 	IFD SOUND
 	SECTION SOUNDS,DATA_C
 MOTOR1_SND:
-	;dc.b	0,40,90,110,127,110,90,40,0,-40,-90,-110,-127,-110,-90,-40
 	;incbin "assets/sounds/out.raw"
 	incbin "assets/sounds/kef1rave.raw"
+FERRARI_SND:
+	incbin "assets/sounds/ferrari.sox.raw"
+	;dc.b	0,40,90,110,127,110,90,40,0,-40,-90,-110,-127,-110,-90,-40
+
 	ENDC
 
 	SECTION FONTS,DATA_C

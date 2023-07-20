@@ -46,7 +46,7 @@ MOVE:
     STORECARPROPERTY    MOVER_SAMPLE_RATE,d1
     sub.w               d4,d1
     move.l 		        AUDIO_CHANNEL_ADDRESS_OFFSET(a2),a1
-    move.w              d1,6(a1)
+    move.w              d1,6(a1) ; set sample rate
 
     ; set volume
     move.w              MOVER_HEADING_MAGNITUDE(a2),d0
@@ -60,7 +60,7 @@ MOVE:
 
      DEBUG 1111
 
-    move.w              d4,8(a1)
+    move.w              d4,8(a1) ; set volume
 
 
 
