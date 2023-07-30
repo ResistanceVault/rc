@@ -192,6 +192,14 @@ DISABLE_AUDIO_DMA MACRO
     move.w              #$000F,$dff096
 	ENDM
 
+MY_P61_END MACRO
+	;;    ---  Call P61_End  ---
+	tst.w 				PLAY_MUSIC
+	beq.s				\@.noplaymusicend
+	jsr 				P61_End
+\@.noplaymusicend:
+	ENDM
+
 	;include	"daworkbench.s"	; togliere il ; prima di salvare con "WO"
 
 *****************************************************************************
@@ -227,6 +235,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/packers/ShrinklerDecompress.S"
 
 PLAY_SOUND: 	dc.w 1
+PLAY_MUSIC:		dc.w 0
 CARS_IN_PLAY: 	dc.w %0000000000001111
 ARRIVAL_ORDER:	dcb.b MAX_CARS*4,$00
 ARRIVAL_ORDER_PTR: dc.l ARRIVAL_ORDER
@@ -442,6 +451,18 @@ looptrackcolors2:
 	move.w              #BACKGROUNDCOLOR,COPHUDCOLOR0+2
 	ENDC
 
+				;;    ---  Call P61_Init  ---
+	tst.w				PLAY_MUSIC
+	beq.s				.nomusicinit
+	lea 				Module1,a0
+	sub.l 				a1,a1
+	sub.l 				a2,a2
+	moveq 				#0,d0
+	;lea 				p61coppoke+3,a4		;only used in P61mode >=3
+	jsr P61_Init
+.nomusicinit
+
+
 	; Start of gameloop
 mouse:
     cmpi.b  			#$ff,$dff006    ; Linea 255?
@@ -587,6 +608,7 @@ Aspetta:
 
 	bra.w 				mouse
 exit:
+	MY_P61_END
 	rts			; esci
 
 	IFD DEBUG
@@ -684,8 +706,12 @@ POINTINCOPPERLIST_FUNCT:
   	rts
 
 	include "AProcessing/libs/rasterizers/processing_bitplanes_fast.s"
-
 	include "copperlist.s"
+
+	include	"music.s"
+Playrtn:
+	include "P6112-Play.i"
+
 	IFD SOUND
 	SECTION SOUNDS,DATA_C
 MOTOR1_SND:
@@ -957,3 +983,7 @@ MAIN_PALETTE2_30:    dc.w 0    ; color 30
 MAIN_PALETTE2_31:    dc.w 0    ; color 31
 
 	include "AProcessing/libs/math/sqrt_table_q16_0.i"
+Module1:
+	;incbin "src/assets/music/P61.new_ditty"				;CIA, usecode $c00b43b
+
+	incbin "src/assets/music/P61.alfetta"				;CIA, usecode $80009D7E

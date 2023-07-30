@@ -40,6 +40,9 @@ reset_arrival:
     ; reset ptr to leading leader
     clr.l               RACE_LEADING_LEADER_PTR
 
+    ; reset music if set
+    MY_P61_END
+
     rts
 
 MANAGE_PAUSE:

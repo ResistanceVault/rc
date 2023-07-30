@@ -1,3 +1,43 @@
+OPTIONS_SCREEN_SOUNDS_OPTIONS:
+    dc.l MENU_OPTIONS_SOUND_STATUS_SFX_TXT
+    dc.l MENU_OPTIONS_SOUND_STATUS_SFX_ACTION
+
+    dc.l MENU_OPTIONS_SOUND_STATUS_MUSIC_TXT
+    dc.l MENU_OPTIONS_SOUND_STATUS_MUSIC_ACTION
+
+    dc.l MENU_OPTIONS_SOUND_STATUS_NOSOUND_TXT
+    dc.l MENU_OPTIONS_SOUND_STATUS_NOSOUND_ACTION
+OPTIONS_SCREEN_SOUNDS_OPTIONS_END:
+
+OPTIONS_SCREEN_SOUNDS_OPTIONS_PTR:  dc.l OPTIONS_SCREEN_SOUNDS_OPTIONS
+
+MENU_OPTIONS_SOUND_STATUS_SFX_TXT:
+    dc.b "SFX   ",$FF
+    even
+
+MENU_OPTIONS_SOUND_STATUS_MUSIC_TXT:
+    dc.b "MUSIC ",$FF
+    even
+
+MENU_OPTIONS_SOUND_STATUS_NOSOUND_TXT:
+    dc.b "OFF   ",$FF
+    even
+
+MENU_OPTIONS_SOUND_STATUS_SFX_ACTION:
+    clr.w       PLAY_MUSIC
+    move.w      #1,PLAY_SOUND
+    rts
+
+MENU_OPTIONS_SOUND_STATUS_MUSIC_ACTION:
+    clr.w       PLAY_SOUND
+    move.w      #1,PLAY_MUSIC
+    rts
+
+MENU_OPTIONS_SOUND_STATUS_NOSOUND_ACTION:
+    clr.w       PLAY_SOUND
+    clr.w       PLAY_MUSIC
+    rts
+
 OPTIONS_SCREEN_FILENAME:
     dc.b "options.shr",0
     even
@@ -10,13 +50,9 @@ MENU_OPTIONS_SOUND_STATUS_TXT:
     dc.b "SFX   ",$FF
     even
 
-MENU_OPTIONS_SOUND_STATUS_SFX_TXT:
-    dc.b "SFX   ",$FF
-    even
-
-MENU_OPTIONS_SOUND_STATUS_OFF_TXT:
-    dc.b "OFF   ",$FF
-    even
+;MENU_OPTIONS_SOUND_STATUS_OFF_TXT:
+ ;   dc.b "OFF   ",$FF
+ ;   even
 
 MENU_OPTIONS_SCREEN:
 
@@ -49,7 +85,7 @@ TXT_OPTIONS_SOUND_STATUS:
 
 OPTIONS_SCREEN:
 
-    jsr     OPTIONS_SCREEN_SET_SOUND_DESC
+    ;jsr     OPTIONS_SCREEN_SET_SOUND_DESC
 
     ; print screen
     move.l  #OPTIONS_SCREEN_FILENAME,MENUSCREEN_IMAGE
@@ -61,19 +97,47 @@ OPTIONS_SCREEN:
     rts
 
 OPTIONS_CHANGE_SOUND_FUNCT:
-    tst.w               PLAY_SOUND
-    beq.s               .turn_sound_on
-    move.w              #0,PLAY_SOUND
-    jsr                 OPTIONS_SCREEN_SET_SOUND_DESC
+    ; read pointer to sound options into a1
+    move.l              OPTIONS_SCREEN_SOUNDS_OPTIONS_PTR,a1
+
+    ; find next , to do this add 8
+    addq                #8,a1
+
+    ; check if we are at the end, if this is the case reset
+    cmpa.l              #OPTIONS_SCREEN_SOUNDS_OPTIONS_END,a1
+    bne.s               .soundoption_noreset
+    lea                 OPTIONS_SCREEN_SOUNDS_OPTIONS,a1
+.soundoption_noreset:
+
+    ; save new pointer
+    move.l              a1,OPTIONS_SCREEN_SOUNDS_OPTIONS_PTR
+
+    ; execute action
+    move.l              4(a1),a0
+    jsr                 (a0)
+
+    ; refresh text
+    lea                 TXT_OPTIONS_SOUND_STATUS(PC),a0
+    move.l              0(a1),txt_DescPtr(a0)
     lea                 TXT_OPTIONS_SOUND_STATUS(PC),a1
+
     jsr                 REFRESH_TXT_ENTRY
     rts
-.turn_sound_on
-    move.w              #1,PLAY_SOUND
-    jsr                 OPTIONS_SCREEN_SET_SOUND_DESC
-    lea                 TXT_OPTIONS_SOUND_STATUS(PC),a1
-    jsr                 REFRESH_TXT_ENTRY
-    rts
+
+;OPTIONS_CHANGE_SOUND_FUNCT:
+;    tst.w               PLAY_SOUND
+;    beq.s               .turn_sound_on
+;    move.w              #0,PLAY_SOUND
+;    jsr                 OPTIONS_SCREEN_SET_SOUND_DESC
+;    lea                 TXT_OPTIONS_SOUND_STATUS(PC),a1
+;    jsr                 REFRESH_TXT_ENTRY
+;    rts
+;.turn_sound_on
+;    move.w              #1,PLAY_SOUND
+;    jsr                 OPTIONS_SCREEN_SET_SOUND_DESC
+;    lea                 TXT_OPTIONS_SOUND_STATUS(PC),a1
+;    jsr                 REFRESH_TXT_ENTRY
+;    rts
 
 REFRESH_TXT_ENTRY:
     movem.l              d0-d7/a0-a6,-(sp)
@@ -151,14 +215,29 @@ restorebackground_tile_big_start_loop:
     movem.l             (sp)+,d0/d1/d6/a0-a6
     rts
 
-OPTIONS_SCREEN_SET_SOUND_DESC:
+;OPTIONS_SCREEN_SET_SOUND_DESC:
     ; read sound status
-    lea     TXT_OPTIONS_SOUND_STATUS(PC),a0
-    tst.w   PLAY_SOUND
-    beq.s   .option_screen_no_sound
-    move.l  #MENU_OPTIONS_SOUND_STATUS_SFX_TXT,txt_DescPtr(a0)
-    bra.s   .option_screen_sound_end
-.option_screen_no_sound
-     move.l  #MENU_OPTIONS_SOUND_STATUS_OFF_TXT,txt_DescPtr(a0)
-.option_screen_sound_end:
+;    lea     TXT_OPTIONS_SOUND_STATUS(PC),a0
+;    tst.w   PLAY_SOUND
+;    beq.s   .option_screen_no_sound
+;    move.l  #MENU_OPTIONS_SOUND_STATUS_SFX_TXT,txt_DescPtr(a0)
+;    bra.s   .option_screen_sound_end
+;.option_screen_no_sound
+;     move.l  #MENU_OPTIONS_SOUND_STATUS_OFF_TXT,txt_DescPtr(a0)
+;.option_screen_sound_end:
+;    rts
+
+OPTIONS_SCREEN_SET_SOUND_DESC:
+    ; read pointer to sound options into a1
+    move.l              OPTIONS_SCREEN_SOUNDS_OPTIONS_PTR,a1
+
+    ; at this address and offset zero we have the address of the string to print
+    move.l              (a1),a1
+
+    ; slap this address into TXT_OPTIONS_SOUND_STATUS
+    lea                 TXT_OPTIONS_SOUND_STATUS(PC),a0
+    move.l              (a1),txt_DescPtr(a0)
+
     rts
+
+
