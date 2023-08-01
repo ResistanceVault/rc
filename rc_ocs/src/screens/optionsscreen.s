@@ -50,11 +50,26 @@ MENU_OPTIONS_SOUND_STATUS_TXT:
     dc.b "SFX   ",$FF
     even
 
+CHAMPIONSHIP_RACES_TXT:
+    dc.b "RACES",$FF
+    even
+
+MENU_OPTIONS_RACE_COUNTER_TXT:
+    dc.b "2",$FF
+    even
+
 ;MENU_OPTIONS_SOUND_STATUS_OFF_TXT:
  ;   dc.b "OFF   ",$FF
  ;   even
 
 MENU_OPTIONS_SCREEN:
+
+    dc.w 1,9
+    dc.l CHAMPIONSHIP_RACES_TXT
+    dc.l ACTION_CHANGE_RACE_COUNT
+    dc.l 0
+    dc.w 16
+    dc.w 16
 
     dc.w 1,11
     dc.l MENU_OPTIONS_SOUND_TXT
@@ -74,6 +89,12 @@ MENU_OPTIONS_SCREEN:
 
 TXT_OPTIONS_SCREEN:
 
+TXT_OPTION_RACE_COUNTER:
+    dc.w 7,9
+    dc.l MENU_OPTIONS_RACE_COUNTER_TXT
+    dc.w 16
+    dc.w 16
+
 TXT_OPTIONS_SOUND_STATUS:
     dc.w 7,11
     dc.l MENU_OPTIONS_SOUND_STATUS_TXT
@@ -85,7 +106,12 @@ TXT_OPTIONS_SOUND_STATUS:
 
 OPTIONS_SCREEN:
 
-    ;jsr     OPTIONS_SCREEN_SET_SOUND_DESC
+    ; prepare race number with default value
+    move.w  MAX_RACES,d0
+    addi.w  #$30,d0
+    lsl.w   #8,d0
+    move.b  #$FF,d0
+    move.w  d0,MENU_OPTIONS_RACE_COUNTER_TXT
 
     ; print screen
     move.l  #OPTIONS_SCREEN_FILENAME,MENUSCREEN_IMAGE
@@ -94,6 +120,23 @@ OPTIONS_SCREEN:
     move.l  #TXT_OPTIONS_SCREEN,TXTSCREEN_ENTRIES
     move.l  #MENU_OPTIONS_SCREEN,MENUSCREEN_SELECTED_ENTRY
     jsr     MENUSCREEN
+    rts
+
+ACTION_CHANGE_RACE_COUNT:
+    addi.w  #1,MAX_RACES
+    IF_1_LESS_EQ_2_W_U #10,MAX_RACES,.donotresetracescounter,s
+    move.w  #1,MAX_RACES
+.donotresetracescounter:
+
+    move.w  MAX_RACES,d0
+    addi.w  #$30,d0
+    lsl.w   #8,d0
+    move.b  #$FF,d0
+    move.w  d0,MENU_OPTIONS_RACE_COUNTER_TXT
+
+    lea                 TXT_OPTION_RACE_COUNTER(PC),a1
+    jsr                 REFRESH_TXT_ENTRY
+
     rts
 
 OPTIONS_CHANGE_SOUND_FUNCT:

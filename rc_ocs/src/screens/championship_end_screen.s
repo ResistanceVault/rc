@@ -1,22 +1,32 @@
+END_OF_CHAMPIONSHIP_X_POS equ 1
+END_OF_CHAMPIONSHIP_Y_POS equ 27
 
 CHAMPIONSHIP_MENU_FILENAME:
     dc.b "0.shr",0
     even
 
 RESET_CHAMPIONSHIP_TXT:
-    dc.b "NEW CHAMPIONSHIP",$FF
+    dc.b "END OF CHAMPIONSHIP",$FF
+    even
+
+CHAMPIONSHIP_WINNER_SENTENCE_1:
+    dc.b "CONGRATULATIONS ABCDEFGHIJKL",$FF
+    even
+
+CHAMPIONSHIP_WINNER_SENTENCE_2:
+    dc.b "YOU ARE THE RALLY CROSS 1984 CHAMPION",$FF
     even
 
 CAR_WINNER: dc.l 0
 
 CHAMPIONSHIP_MENU_MAIN:
 
-    dc.w 2,13
+    dc.w END_OF_CHAMPIONSHIP_X_POS,END_OF_CHAMPIONSHIP_Y_POS+7
     dc.l RESET_CHAMPIONSHIP_TXT
     dc.l RESET_GAME_FUNCTION
     dc.l 0
-    dc.w 16
-    dc.w 16
+    dc.w 8
+    dc.w 7
 
     dc.w 0,0
     dc.l 0
@@ -26,6 +36,17 @@ CHAMPIONSHIP_MENU_MAIN:
     dc.w 0
 
 CHAMPIONSHIP_MENU_MAIN_TXT:
+
+    dc.w END_OF_CHAMPIONSHIP_X_POS,END_OF_CHAMPIONSHIP_Y_POS
+    dc.l CHAMPIONSHIP_WINNER_SENTENCE_1
+    dc.w 8
+    dc.w 7
+
+    dc.w END_OF_CHAMPIONSHIP_X_POS,END_OF_CHAMPIONSHIP_Y_POS+2
+    dc.l CHAMPIONSHIP_WINNER_SENTENCE_2
+    dc.w 8
+    dc.w 7
+
     dc.w 0,0
     dc.l 0
     dc.w 0,7
@@ -40,8 +61,20 @@ RESET_GAME_FUNCTION:
     rts
 
 championsip_end_screen:
+    ; get name of the winner
+    lea                 CHAMPIONSHIP_WINNER_SENTENCE_1+16,a1
+    move.l              CAR_WINNER,a0
+    adda.w              #MOVER_PLAYER_NAME_ADDR,a0
+    move.l              (a0),a0
+.printnamestartloop:
+    move.b              (a0)+,d0
+    move.b              d0,(a1)+
+    cmp.b               #$FF,d0
+    beq.s               .printnameendloop
+    bra.s               .printnamestartloop
+.printnameendloop:
+
     ; draw menu
-    DEBUG 8765
     move.l              CAR_WINNER,a0
     adda.w              #CAR_ID_OFFSET,a0
     move.w              (a0),d0

@@ -94,6 +94,9 @@ loopresetstandings:
     adda.w  #MOVER_SIZE,a0
     dbra d7,loopresetstandings
 
+    ; reset championship
+    clr.w   RACES_COUNTER
+
     move.l  #MAIN_FILENAME,MENUSCREEN_IMAGE
     move.l  #MAIN_FILENAME_SIZE,MENUSCREEN_IMAGE_SIZE
     move.l  #MENU_MAIN,MENUSCREEN_ENTRIES

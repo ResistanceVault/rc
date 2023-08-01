@@ -1,5 +1,6 @@
 FILENAME_MAIN := ./Sfondo\ titoli\ Scuro\ RC
 FILENAME_START_RACE := Sfondo\ Titolo\ Chiaro
+FILENAME_OPTIONS := Sfondo\ titolo\ Chiaro\ RC
 FILENAME_0 := 0
 FILENAME_1 := 1
 FILENAME_2 := 2
@@ -33,9 +34,10 @@ all:
 	cp main.shr ../../buildadf/main.shr
 	chmod +r ../../buildadf/main.shr
 
-	cp ./Sfondo\ titoli\ Scuro.raw ../../bin/options.data
+	@echo "Setting $(FILENAME_OPTIONS) for options.data"
+	cp $(FILENAME_OPTIONS).raw ../../bin/options.data
 	dd if=/dev/zero bs=1 count=10240 >> ../../bin/options.data
-	cat ./Sfondo\ titoli\ Scuro.pal >> ../../bin/options.data
+	cat $(FILENAME_OPTIONS).pal >> ../../bin/options.data
 	dd if=/dev/zero bs=1 count=32 >> ../../bin/options.data
 	chmod 666 ../../bin/options.data
 	chown 1000:1000 ../../bin/options.data

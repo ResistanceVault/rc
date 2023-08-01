@@ -237,7 +237,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/packers/ShrinklerDecompress.S"
 
 RACES_COUNTER:  dc.w 0
-MAX_RACES:		dc.w 1
+MAX_RACES:		dc.w 2
 PLAY_SOUND: 	dc.w 1
 PLAY_MUSIC:		dc.w 0
 CARS_IN_PLAY: 	dc.w %0000000000001111
