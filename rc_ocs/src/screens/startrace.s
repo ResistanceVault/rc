@@ -2,6 +2,11 @@ START_RACE_SCREEN_FILENAME:
     dc.b "carstartrace.shr",0
     even
 
+START_RACE_SCREEN_FILENAME_SIZE EQU 12347
+
+START_RACE_PROGRESS_TXT:
+    dc.b "RACE 1 OF 1",$FF
+
 START_RACE_TXT:
     dc.b "START RACE",$FF
     even
@@ -29,6 +34,8 @@ LAPS_TXT:
 LAP_COUNTER_TXT:
     dc.b "XX",$FF
     even
+
+RACES_COUNTER_STR: dc.b 0,0,0,0
 
 MENU_START_RACE_SCREEN:
 
@@ -64,15 +71,20 @@ MENU_START_RACE_SCREEN:
 
 TXT_START_RACE_SCREEN:
 
-    dc.w 10,3
+    dc.w 2,9
     dc.l START_RACE_NEXT_TRACK_TXT
-    dc.w 16
-    dc.w 16
+    dc.w 8
+    dc.w 7
 
-    dc.w 20,11
+    dc.w 15,9
     dc.l START_RACE_TRACK_NAME_TXT
     dc.w 8
     dc.w 7
+
+    dc.w 1,1
+    dc.l START_RACE_PROGRESS_TXT
+    dc.w 16
+    dc.w 16
 
 LAP_COUNTER_TXT_PTR:
     dc.w 12,10
@@ -220,6 +232,15 @@ START_RACE_SCREEN:
     tst.w               LOAD_NEXT_TRACK_FLAG
     beq.s               .no_load_next_track
     addi.w              #1,TRACK_NUMBER
+    addi.w              #1,RACES_COUNTER
+    move.w MAX_RACES,d1
+    IF_1_GREATER_2_W_U  RACES_COUNTER,d1,.racesnotfinish,s
+    jsr                 championsip_end_screen
+    move.l              #MAINSCREEN,NEXT_SCREEN
+    rts
+
+    DEBUG 5555
+.racesnotfinish
     clr.w               TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
 .no_load_next_track:
@@ -228,9 +249,17 @@ START_RACE_SCREEN:
 
     bsr.w               REFRESH_LAP_RACE_COUNTER
 
+    ; prepare race counter string
+    move.w              RACES_COUNTER,RACES_COUNTER_STR
+    addi.w              #$30,RACES_COUNTER_STR
+    move.b              RACES_COUNTER_STR+1,START_RACE_PROGRESS_TXT+5
+    move.w              MAX_RACES,RACES_COUNTER_STR+2
+    addi.w              #$30,RACES_COUNTER_STR+2
+    move.b              RACES_COUNTER_STR+3,START_RACE_PROGRESS_TXT+10
+
     ; print screen
     move.l              #START_RACE_SCREEN_FILENAME,MENUSCREEN_IMAGE
-    move.l              #12586,MENUSCREEN_IMAGE_SIZE
+    move.l              #START_RACE_SCREEN_FILENAME_SIZE,MENUSCREEN_IMAGE_SIZE
     move.l              #MENU_START_RACE_SCREEN,MENUSCREEN_ENTRIES
     move.l              #TXT_START_RACE_SCREEN,TXTSCREEN_ENTRIES
     move.l              MENU_START_RACE_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY

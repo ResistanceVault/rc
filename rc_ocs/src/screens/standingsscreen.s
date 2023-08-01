@@ -89,6 +89,9 @@ STANDINGSSCREEN:
     jsr                 bubble_sort_4_bytes
 .skip_ordering:
 
+        DEBUG 9898
+    move.l              ARRIVAL_ORDER,CAR_WINNER
+
     ; prepare txt according to the arrival order
     lea                 TXT_RESULT(PC),a0
 

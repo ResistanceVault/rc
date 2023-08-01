@@ -2,6 +2,8 @@ MAIN_FILENAME:
     dc.b "main.shr",0
     even
 
+MAIN_FILENAME_SIZE EQU 13560
+
 START_GAME_TXT:
     dc.b "START GAME",$FF
     even
@@ -26,9 +28,6 @@ START_RACE_FUNCTION:
 EXIT_TO_OS_FUNCTION:
     move.w  #1,EXIT_TO_OS_FLAG
     move.w  #1,MAIN_EXIT
-    rts
-
-DRAFT_FUNCTION:
     rts
 
 CARS_SETUP_SCREEN_FUNCTION:
@@ -86,8 +85,17 @@ MENU_MAIN_CURRENTLY_SELECTED:
     dc.l    MENU_MAIN;+menu_SIZEOF
 
 MAINSCREEN:
+
+    ; reset points in case we are coming here after a championship end
+    moveq   #MAX_CARS-1,d7
+    lea     MOVERS,a0
+loopresetstandings:
+    clr.w   MOVER_POINTS(a0)
+    adda.w  #MOVER_SIZE,a0
+    dbra d7,loopresetstandings
+
     move.l  #MAIN_FILENAME,MENUSCREEN_IMAGE
-    move.l  #13560,MENUSCREEN_IMAGE_SIZE
+    move.l  #MAIN_FILENAME_SIZE,MENUSCREEN_IMAGE_SIZE
     move.l  #MENU_MAIN,MENUSCREEN_ENTRIES
     move.l  #TXT_MAIN,TXTSCREEN_ENTRIES
     move.l  MENU_MAIN_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY

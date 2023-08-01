@@ -124,7 +124,9 @@ MOVER_TEAMMATE_CAR_PTR				EQU	254
 MOVER_SAMPLE_RATE					EQU 258
 MOVER_SOUNDWAVE_SIZE_WORDS			EQU 260
 
-MOVER_SIZE					 		EQU 262
+MOVER_IMG_SIZE						EQU 262
+
+MOVER_SIZE					 		EQU 264
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -234,6 +236,8 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/math/operations.s"
 	include "AProcessing/libs/packers/ShrinklerDecompress.S"
 
+RACES_COUNTER:  dc.w 0
+MAX_RACES:		dc.w 1
 PLAY_SOUND: 	dc.w 1
 PLAY_MUSIC:		dc.w 0
 CARS_IN_PLAY: 	dc.w %0000000000001111
@@ -664,6 +668,7 @@ exit:
 	include "screens/track_selection_screen.s"
 	include "screens/startrace.s"
 	include "screens/optionsscreen.s"
+	include "screens/championship_end_screen.s"
 	ENDC
 
 MOVERS: ; car 1 - ferrari 1

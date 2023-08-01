@@ -41,14 +41,21 @@ CAR6_HUD_X_POSITION EQU 20
 CAR7_HUD_X_POSITION EQU 24
 CAR8_HUD_X_POSITION EQU 28
 
-PLAYER_ONE_NAME: 	dc.b "A CROST    ",$FF ; perrari
+PLAYER_ONE_NAME: 	dc.b "STARNOUX   ",$FF ; perrari
 PLAYER_FIVE_NAME: 	dc.b "ALBERETTO  ",$FF ; perrari
-PLAYER_TWO_NAME: 	dc.b "JJ LENTO   ",$FF ; mc lallen
-PLAYER_FOUR_NAME: 	dc.b "M PALLADIO ",$FF ; mc lallen
-PLAYER_SIX_NAME: 	dc.b "BAGNACAUDA ",$FF ; perault
+
+PLAYER_TWO_NAME: 	dc.b "A CROST    ",$FF ; mc lallen
+PLAYER_SIX_NAME: 	dc.b "BAGNACAUDA ",$FF ; mc lallen
+
+
+PLAYER_THREE_NAME: 	dc.b "TAMBURAY   ",$FF ; perault
 PLAYER_SEVEN_NAME: 	dc.b "FRITTICALDI",$FF ; perault
-PLAYER_EIGHT_NAME: 	dc.b "R PRETESE  ",$FF ; alfa marameo
-PLAYER_THREE_NAME: 	dc.b "STARNOUX   ",$FF ; alfa marameo
+
+
+PLAYER_FOUR_NAME: 	dc.b "R PRETESE  ",$FF ; alfa marameo
+PLAYER_EIGHT_NAME: 	dc.b "JJ LENTO   ",$FF ; alfa marameo
+
+
 
 PLAYER_ONE_FIVE_TEAM:		dc.b "PERRARI     ",$FF ; perrari for car 1 and 5
 PLAYER_TWO_SIX_TEAM:		dc.b "MC LALLEN   ",$FF ; mc lallen for car 2 and 6
@@ -144,6 +151,7 @@ CAR1_INIT:
 	move.l #MOVERS5,MOVER_TEAMMATE_CAR_PTR(a0)
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #23291,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR1_HUD_X_POSITION,HUD_POSITION_X(a0)
@@ -234,6 +242,7 @@ CAR2_INIT:
 
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #25784,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR2_HUD_X_POSITION,HUD_POSITION_X(a0)
@@ -323,6 +332,7 @@ CAR3_INIT:
 
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #27775,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR3_HUD_X_POSITION,HUD_POSITION_X(a0)
@@ -413,6 +423,7 @@ CAR4_INIT:
 
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #20589,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR4_HUD_X_POSITION,HUD_POSITION_X(a0)
@@ -503,6 +514,7 @@ CAR5_INIT:
 
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #21499,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR5_HUD_X_POSITION,HUD_POSITION_X(a0)
@@ -593,6 +605,7 @@ CAR6_INIT:
 
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #26390,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR6_HUD_X_POSITION,HUD_POSITION_X(a0)
@@ -683,6 +696,7 @@ CAR7_INIT:
 
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #19231,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR7_HUD_X_POSITION,HUD_POSITION_X(a0)
@@ -773,6 +787,7 @@ CAR8_INIT:
 
 	clr.w  MOVER_HEADING_MAGNITUDE(a0)
 	clr.w  MOVER_CPU_CONSECUTIVE_COLLISIONS(a0)
+	move.w #18817,MOVER_IMG_SIZE(a0)
 
 	; hud position
 	move.w	#CAR8_HUD_X_POSITION,HUD_POSITION_X(a0)

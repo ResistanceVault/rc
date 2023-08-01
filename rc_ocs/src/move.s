@@ -31,9 +31,6 @@ MOVE:
     ; now whe have heading magnitude of the processing car into d0 and the same value for the teammate into d1
     ; process only if d0 >= d1
     IF_1_GREATER_EQ_2_W_U d0,d1,nosound2,s
-                DEBUG 8888
-
-
 
     ; scale to the audio range
     moveq #0,d1
@@ -41,7 +38,6 @@ MOVE:
     move.w #0,d3
     move.w #200,d4
     jsr MAP
-        DEBUG 9999
            
     STORECARPROPERTY    MOVER_SAMPLE_RATE,d1
     sub.w               d4,d1
@@ -58,12 +54,7 @@ MOVE:
     move.w #64,d4
     jsr MAP
 
-     DEBUG 1111
-
     move.w              d4,8(a1) ; set volume
-
-
-
 
 nosound2:
     ENDC
