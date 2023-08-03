@@ -118,11 +118,12 @@ lap_not_completed:
     ;lsr.w #4,d1
     ;move.w CAR_NEXT_ZONE_OFFSET(a2),d2
     move.w TRACK_NUM_ZONES,d1
+    ;DEBUG 1111
+
     cmp.w CAR_NEXT_ZONE_OFFSET(a2),d1
     bne.s no_next_zone_update
     ; I reach this part only when entering LAST zone
     move.w #1,CAR_NEXT_ZONE_OFFSET(a2)
-    ;DEBUG 1111
 no_next_zone_update:
 
 dontresetcolliding:
