@@ -14,6 +14,10 @@ was very fun to play I tried to do my own version for Amiga games and use the Tw
 developer diary. The final outcome is not really like the original RC cars but... I am quite happy
 with the result considering the limitation of the Amiga if compared to a PC of late 90s.
 
+## Screenshots
+![easytrack_a600.png](screenshots/easytrack_a600..png)
+
+
 ## System requirements
 RC cars should run on any classic Amiga with at least 1MB of chip ram, however, following there is
 a list of configurations where I succesfully tested the game.
