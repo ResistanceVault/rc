@@ -95,7 +95,6 @@ SELECT_TRACK_SCREEN:
     jsr PRINT_TRACK_NAME_NEW
 
     ; print screen
-    ;move.l              #START_RACE_SCREEN_FILENAME,MENUSCREEN_IMAGE
     move.l              #0,MENUSCREEN_IMAGE_SIZE
     move.l              #MENU_TRACK_SELECTION_SCREEN,MENUSCREEN_ENTRIES
     move.l              #TXT_TRACK_SELECTION_SCREEN,TXTSCREEN_ENTRIES
@@ -111,70 +110,47 @@ TRACK_PRINT_HALF_IMAGE:
 
 SCREEN_TRACK_SELECT:
 
-    ; for each line
-    move.w #(240/2)-1,d7
-.drawthumbnailstart_y:
-    ; 40 bytes for each row (source image)
-    moveq #20,d6
-.drawthumbnailstart_x:
+    moveq #0,d1
+    moveq #0,d2
 
-    ; fetch a word from source image bpl1
+    ; for each bitplane
+    moveq #5-1,d7
+.eachbitplane:
+
     lea TRACK_DATA_1,a0
-    move.w 0(a0,d4.w),d0
+    adda.l d1,a0
+
+    lea 10+PHAZELOGO+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a1;
+    adda.l d2,a1
+
+    ; for each row
+    moveq #(240/2)-1,d6
+.eachrow:
+
+    ; for each word
+    moveq #(40/2)-1,d5
+.eachword:
+
+    ; fetch data from original image
+    move.w  (a0)+,d0
     jsr HALF_WORD
+    move.b d0,(a1)+
 
-    ; write into screen bpl1
-    lea 10+PHAZELOGO+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a1
-    move.b d0,0(a1,d5.w)
+    dbra    d5,.eachword
 
-    ; fetch a word from source image bpl2
-    lea TRACK_DATA_2,a0
-    move.w 0(a0,d4.w),d0
-    jsr HALF_WORD
+    adda.w  #40,a0 ; on the source image we must skip one row each time to halve the height
+    adda.w  #40-20,a1 ; in the destination screen go to next line
 
-    ; write into screen bpl2
-    lea 10+PHAZELOGO+256*40*1+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a1
-    move.b d0,0(a1,d5.w)
+    dbra    d6,.eachrow
 
-    ; fetch a word from source image bpl3
-    lea TRACK_DATA_3,a0
-    move.w 0(a0,d4.w),d0
-    jsr HALF_WORD
+    add.l   #40*256,d1  ; source image must point to next bitplane skipping the banner area
+    add.l   #40*256,d2 ; destination image must point to next bitplane
+    dbra    d7,.eachbitplane
 
-    ; write into screen bpl3
-    lea 10+PHAZELOGO+256*40*2+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a1
-    move.b d0,0(a1,d5.w)
-
-    ; fetch a word from source image bpl4
-    lea TRACK_DATA_4,a0
-    move.w 0(a0,d4.w),d0
-    jsr HALF_WORD
-
-    ; write into screen bpl4
-    lea 10+PHAZELOGO_4+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a1
-    move.b d0,0(a1,d5.w)
-
-    ; fetch a word from source image bpl5
-    lea TRACK_DATA_5,a0
-    move.w 0(a0,d4.w),d0
-    jsr HALF_WORD
-
-    ; write into screen bpl4
-    lea 10+PHAZELOGO_5+LOAD_TRACK_THUMBNAIL_HEIGHT*40,a1
-    move.b d0,0(a1,d5.w)
-
-    addq #2,d4
-    addq #1,d5
-
-    dbra d6,.drawthumbnailstart_x
-
-    ; skip next 40 bytes for source image
-    add.w #40-2,d4
-    add.w #20-1,d5
-
-    dbra d7,.drawthumbnailstart_y
 
     MEMCPY4				TRACK_DATA_COLORS,MAIN_PALETTE,64/4
+    move.w              #BACKGROUNDCOLOR,MAIN_PALETTE_0
+    move.w              #BACKGROUNDCOLOR,MAIN_PALETTE2_0
 
     movem.l (sp)+,d0-d7/a0-a6
     rts
