@@ -79,8 +79,8 @@ all:
 
 	# Section 6
 	printf "%04x%04x\n" 131 123 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 115 133 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x\n" 48 149 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 85 157 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x\n" 65 148 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 33 151 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 27 165 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	printf "%04x%04x\n" 17 179 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK

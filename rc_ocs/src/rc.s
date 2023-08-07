@@ -719,16 +719,16 @@ Playrtn:
 
 	IFD SOUND
 	SECTION SOUNDS,DATA_C
-MOTOR1_SND:
-	;incbin "assets/sounds/out.raw"
-	incbin "assets/sounds/kef1rave.raw"
 FERRARI_SND:
 	incbin "assets/sounds/ferrari.raw8"
 MCLAREN_SND:
-	incbin "assets/sounds/mclaren.raw8"
-ALFAMARAMEO_SND:
-	incbin "assets/sounds/alfamarameo.raw8"
+	incbin "assets/sounds/mclaren.raw"
 	;dc.b	0,40,90,110,127,110,90,40,0,-40,-90,-110,-127,-110,-90,-40
+
+RENAULT_SND:
+	incbin "assets/sounds/perault.raw"
+ALFAMARAMEO_SND:
+	incbin "assets/sounds/alfamarameo.wav.raw"
 
 	ENDC
 
