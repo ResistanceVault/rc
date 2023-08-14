@@ -1,5 +1,5 @@
 TRACKNAME = TRACK1
-
+DESIRED_FILE_SIZE = 125916
 all:
 	rm -f ./images/rc045_320X240X8.raw ./images/rc045_320X240X8.pal ./images/rc045_320X240X8.raw.*
 	ilbm2raw  ./images/rc045_320X240X8.iff ./images/rc045_320X240X8.raw -p ./images/rc045_320X240X8.pal
@@ -18,13 +18,13 @@ all:
 	cat ./metadata/rc045_320X240X8.data >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 1 position
-	echo 00 74 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 9c 00 c0 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 2 position
 	echo 00 88 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 3 position
-	echo 00 60 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
+	echo 00 74 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
 
 	# car 4 position
 	echo 00 4c 00 c8 00 00 | xxd -r -p >> ../../../buildadf/tracks/TRACK1.TRK
@@ -129,6 +129,14 @@ all:
 
 	# number of zones of the track
 	echo 00 0B | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# hotspot CPU distance
+	echo 00 14 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	@if [ $$(stat -c %s ../../../buildadf/tracks/$(TRACKNAME).TRK) -ne $(DESIRED_FILE_SIZE) ]; then \
+		echo "File $(TRACKNAME).TRK with faulty size"; \
+		exit 1; \
+	fi
 
 	cp ../../../buildadf/tracks/TRACK1.TRK ../../../bin/tracks/TRACK1.TRK
 	chmod -R 777  ../../../bin/tracks

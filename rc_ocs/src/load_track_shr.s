@@ -21,7 +21,7 @@
 ; byte from 125912 to 125913 -> number of sections inside track
 
 TRACKDIR_LENGTH 	equ 10
-TRK_FILE_SIZE		equ 125914
+TRK_FILE_SIZE		equ 125916
 TRK_FILE_FIRST_BPL 	equ 0
 TRK_FILE_SECOND_BPL equ 9600
 TRK_FILE_THIRD_BPL	equ 19200

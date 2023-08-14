@@ -43,14 +43,14 @@ SET_CAR1_START_STATUS:
     lea 	MOVER1,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR1_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR1_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-    move.w  CAR1_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -82,6 +82,9 @@ SET_CAR1_START_STATUS:
 
     clr.w   MOVER_LEADING_LAPS(a0)
 
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
+
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																			   ; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
 																   			   ; because when the race starts, all car must be placed 
@@ -94,14 +97,14 @@ SET_CAR2_START_STATUS:
     lea 	MOVER2,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR2_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR2_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-    move.w  CAR2_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -132,6 +135,8 @@ SET_CAR2_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
 
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
@@ -145,14 +150,14 @@ SET_CAR3_START_STATUS:
     lea 	MOVER3,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR3_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR3_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-	move.w  CAR3_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -183,6 +188,8 @@ SET_CAR3_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
 
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
@@ -195,14 +202,14 @@ SET_CAR4_START_STATUS:
     lea 	MOVER4,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR4_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR4_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-    move.w  CAR4_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -233,6 +240,8 @@ SET_CAR4_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
 
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
@@ -245,14 +254,14 @@ SET_CAR5_START_STATUS:
     lea 	MOVER5,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR5_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR5_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-    move.w  CAR5_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -283,6 +292,8 @@ SET_CAR5_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
 
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
@@ -295,14 +306,14 @@ SET_CAR6_START_STATUS:
     lea 	MOVER6,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR6_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR6_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-    move.w  CAR6_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -333,6 +344,8 @@ SET_CAR6_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
 
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
@@ -345,14 +358,14 @@ SET_CAR7_START_STATUS:
     lea 	MOVER7,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR7_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR7_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-    move.w  CAR7_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -383,6 +396,8 @@ SET_CAR7_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
 
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice
@@ -395,14 +410,14 @@ SET_CAR8_START_STATUS:
     lea 	MOVER8,a0
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR8_START_X_POSITION,d0
+    muls    MOVER_START_X_POSITION_OFFSET(a0),d0
     move.w 	d0,MOVER_X_POSITION_OFFSET(a0) 	 	; initial x position (position)
 
     move.w  #DECIMAL_MULTIPLIER,d0
-    muls    CAR8_START_Y_POSITION,d0
+    muls    MOVER_START_Y_POSITION_OFFSET(a0),d0
 	move.w 	d0,MOVER_Y_POSITION_OFFSET(a0) 	 	; initial y position (position)
 
-    move.w  CAR8_START_DEGREES,MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
+    move.w  MOVER_START_ANGLE_POSITION_OFFSET(a0),MOVER_STEER_DIRECTION_OFFSET(a0) 	 	; where the car should point at the beginning (degrees)? (steer_direction) (range 0-359)
 
     move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_X_VELOCITY_OFFSET(a0)   	 	; initial x velocity (velocity)
 	move.w  #0*DECIMAL_MULTIPLIER/2,MOVER_Y_VELOCITY_OFFSET(a0)   	 	; initial y velocity (velocity)
@@ -433,6 +448,8 @@ SET_CAR8_START_STATUS:
     move.l  #MOVER_DESTINATION,MOVER_HOTSPOT_CPU_PTR(a0)
 
     clr.w   MOVER_LEADING_LAPS(a0)
+    move.w  #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a0)
+    clr.w   CPU_HOTSPOT_SPECIAL_CMDS_OR(a0)
 
     move.w  TRACK_NUM_ZONES,CAR_FRONT_WHEEL_TRACK_PIXEL_DATA_OFFSET(a0) ; put here  in the high nibble the last track zone 
 																		; and in the low nibble 0 for asphalt 1 for grass or 2 for ice

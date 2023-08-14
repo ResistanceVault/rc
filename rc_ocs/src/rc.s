@@ -126,7 +126,14 @@ MOVER_SOUNDWAVE_SIZE_WORDS			EQU 260
 
 MOVER_IMG_SIZE						EQU 262
 
-MOVER_SIZE					 		EQU 264
+MOVER_START_X_POSITION_OFFSET 		EQU 264
+MOVER_START_Y_POSITION_OFFSET 		EQU 266
+MOVER_START_ANGLE_POSITION_OFFSET 	EQU 268
+
+CPU_HOTSPOT_SPECIAL_CMDS_AND		EQU 270
+CPU_HOTSPOT_SPECIAL_CMDS_OR			EQU 272
+
+MOVER_SIZE					 		EQU 274
 
 DECIMAL_MULTIPLIER					EQU 128
 DECIMAL_SHIFT						EQU 7
@@ -324,15 +331,17 @@ load_track_from_disk:
 	move.w              #1,TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
 
+	jsr					CREATE_STANDINGS_ORDER
+	
 	 ; Cars init
-    jsr 	SET_CAR1_START_STATUS
-    jsr 	SET_CAR2_START_STATUS
-    jsr 	SET_CAR3_START_STATUS
-    jsr 	SET_CAR4_START_STATUS
-    jsr 	SET_CAR5_START_STATUS
-    jsr 	SET_CAR6_START_STATUS
-    jsr 	SET_CAR7_START_STATUS
-    jsr 	SET_CAR8_START_STATUS
+    jsr 				SET_CAR1_START_STATUS
+    jsr 				SET_CAR2_START_STATUS
+    jsr 				SET_CAR3_START_STATUS
+    jsr 				SET_CAR4_START_STATUS
+    jsr 				SET_CAR5_START_STATUS
+    jsr 				SET_CAR6_START_STATUS
+    jsr 				SET_CAR7_START_STATUS
+    jsr 				SET_CAR8_START_STATUS
 
 	ELSE
 	jsr 				welcomescreen
@@ -651,6 +660,7 @@ exit:
 	include "banner_manager.s"
 	include "race_manager.s"
 	include "track_info_manager.s"
+	include "standings_operations.s"
 	IFND COLOR
 	include "screens/race_results.s"
 	ENDC
@@ -951,6 +961,7 @@ MOVER_DESTINATION_Y:
 TRACK_PADDING_END:
 
 TRACK_NUM_ZONES: 	 dc.w 0
+TRACK_CPU_POINT_DISTANCE_TRESHOLD: dc.w 0
 TRK_FILE_END:
 
 MAIN_PALETTE2:

@@ -24,7 +24,7 @@ START_RACE_TRACK_NAME_TXT:
     even
 
 START_RACE_NEXT_TRACK_TXT:
-    dc.b "NEXT TRACK",$FF
+    dc.b "NEXT RACE IN ",$FF
     even
 
 LAPS_TXT:

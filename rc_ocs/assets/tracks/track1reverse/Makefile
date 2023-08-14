@@ -1,6 +1,7 @@
 IMAGE8COLORS = rc045reverse_320X240X8
 IMAGE32COLORS = rc045reverse_320X240X32
 TRACKNAME = TRACK1REVERSE
+DESIRED_FILE_SIZE = 125916
 all:
 	ilbm2raw -f ./images/$(IMAGE8COLORS).iff ./images/$(IMAGE8COLORS).raw -p ./images/$(IMAGE8COLORS).pal
 	split -b 9600 ./images/$(IMAGE8COLORS).raw ./images/$(IMAGE8COLORS).raw.
@@ -122,6 +123,14 @@ all:
 
 	# number of zones of the track
 	echo 00 0B | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# hotspot CPU distance
+	echo 00 14 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	
+	@if [ $$(stat -c %s ../../../buildadf/tracks/$(TRACKNAME).TRK) -ne $(DESIRED_FILE_SIZE) ]; then \
+		echo "File $(TRACKNAME).TRK with faulty size"; \
+		exit 1; \
+	fi
 
 	cp ../../../buildadf/tracks/$(TRACKNAME).TRK ../../../bin/tracks/$(TRACKNAME).TRK
 	chmod 777 ../../../bin/tracks/$(TRACKNAME).TRK

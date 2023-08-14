@@ -15,29 +15,38 @@ MOVER_DIRECTION_TO_DESTINATION_X:
 MOVER_DIRECTION_TO_DESTINATION_Y:
     dc.w 0
 
+MOVER_HOTSPOT_CPU_COORDS_CLEANED: dc.l 0
+
 CPUCONTROL:
     move.l a0,a2
 
     SETCARPROPERTYADDR MOVER_HOTSPOT_CPU_PTR,a5
 
-    lea MOVER_POSITION_NORMALIZED(PC),a3
+    lea               MOVER_POSITION_NORMALIZED(PC),a3
 
     ; take X current position and normalize (get rid of decimal part)
     STORECARPROPERTY  MOVER_X_POSITION_OFFSET,d0
-    ;DEBUG 9998
     moveq             #0,d6
-    ;move.w            d0,d6 ; save for later
     lsr.w             #DECIMAL_SHIFT,d0
     move.w            d0,(a3)
 
     ; take Y current position and normalize (get rid of decimal part)
     STORECARPROPERTY  MOVER_Y_POSITION_OFFSET,d0
-    ;DEBUG 9999
     lsr.w             #DECIMAL_SHIFT,d0
     move.w            d0,2(a3)
 
-    ;lea               MOVER_DESTINATION(PC),a0
     move.l            (a5),a0
+
+    ; make a copy of the hot spot coordinates into MOVER_HOTSPOT_CPU_PTR_CLEANED
+    ; the copy will have the high byte of the Y position zeroed because it could have extra hotspot actions
+    move.l            (a0),MOVER_HOTSPOT_CPU_COORDS_CLEANED
+
+    ; analyze hotspot for extra actions
+    bsr.w             analyze_hotspot
+
+    ; get distance between mover position and hotspot
+    lea               MOVER_HOTSPOT_CPU_COORDS_CLEANED(PC),a0
+    move.b            #0,2(a0)
     lea               MOVER_POSITION_NORMALIZED(PC),a1
     SUB2DVECTORSTATIC MOVER_DIRECTION_TO_DESTINATION
 
@@ -57,13 +66,15 @@ CPUCONTROL:
     move.w           2(a4),d1
     muls.w           d1,d1
     add.l            d1,d0
-    ;DEBUG 9997
     SQRT_Q16_0
     ; here d1.w holds the magnitude
 
     ; if the magnitude is < to THRESHOLD then it means we are very close to the destination, we can assume
     ; we reached it and go to the next point
-    cmpi.w           #CPU_NEXT_POINT_THRESHOLD,d1
+    ;lea              TRACK_CPU_POINT_DISTANCE_TRESHOLD,a0
+    ;DEBUG 9876
+    ;cmpi.w           #CPU_NEXT_POINT_THRESHOLD,d1
+    cmp.w            TRACK_CPU_POINT_DISTANCE_TRESHOLD,d1
     bcc.s            .destinationnotreached
     moveq            #4,d0 ; continue accelerating
     move.l           (a5),a0 ; copy address of current point into a0
@@ -81,7 +92,6 @@ CPUCONTROL:
 
 .destinationnotreached:
 
-    ;DEBUG 9996
     divu.w            d1,d6
 
     lea               ACOS_Q9_7(PC),a0
@@ -91,7 +101,8 @@ CPUCONTROL:
 
     ; compare Y position, if destination is on the bottom invert angle
     ;move.w            MOVER_DESTINATION_Y(PC),d6
-    move.l            (a5),a0
+    ;move.l            (a5),a0
+    lea               MOVER_HOTSPOT_CPU_COORDS_CLEANED(PC),a0
     move.w            2(a0),d6
     cmp.w             MOVER_POSITION_NORMALIZED_Y,d6
     bls.s             .noinverseangle
@@ -104,7 +115,6 @@ CPUCONTROL:
     move.w            (a0),d6
     cmp.w             MOVER_POSITION_NORMALIZED_X,d6
     bgt.s             .nominus90
-    ;DEBUG 5454
     subi.w            #180,d0
     add.w             d5,d0
     add.w             d5,d0
@@ -138,8 +148,6 @@ CPUCONTROL:
 
     ; d0.w now holds the angle of the distance vector!!!!
     ; d1.w now hold the angle of the car
-        ;DEBUG 0001
-
 
     ; take abs(d0-d1 and put into d2)
     move.w           d0,d2
@@ -158,23 +166,19 @@ CPUCONTROL:
 .aposless:
 
     ; check abs(angle) if < 180
-    ;DEBUG 1111
     cmpi.w           #180,d2
     bls.s            .counterclockwise
     ;bra.s            .counterclockwise
 
 .clockwise:
-    ;DEBUG 2222
     moveq #2,d0
     bra.s .calculateaccelerationbrake
 
 .counterclockwise:
-    ;DEBUG 3333
     moveq #1,d0
 
     ; now we have to figure out if we want to rotate clockwise on counterclockweise
 .calculateaccelerationbrake:
-    ;DEBUG 4444
     bset              #2,d0 ; always accelerate
 
     ; brake if the angle is too steep
@@ -184,14 +188,23 @@ CPUCONTROL:
     STORECARPROPERTY MOVER_HEADING_MAGNITUDE,d1
     cmpi.w           #CPU_BRAKE_VELOCITY_THRESHOLD,d1
     bls.s            .donotbrake
-
-    ;BETWEEN_UWORD   d2,#9,#360-9,d1
-    ;beq.s           .donotbrakestrong
-
     bset #3,d0
 .donotbrakestrong:
     bclr #2,d0
 .donotbrake:
+    
+    ; apply hot spot special cmds AND
+    cmpi.w            #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a2)
+    beq.s             nocpuhotspotand
+    DEBUG 6666
+nocpuhotspotand:
+    and.w             CPU_HOTSPOT_SPECIAL_CMDS_AND(a2),d0
+
+    tst.w             CPU_HOTSPOT_SPECIAL_CMDS_OR(a2)
+    beq.s             nocpuhotspotor
+    DEBUG 5555
+nocpuhotspotor:
+    or.w              CPU_HOTSPOT_SPECIAL_CMDS_OR(a2),d0
 
     tst.w             MOVER_IS_COLLIDING_OFFSET(a2)
     beq.s             .notcolliding
@@ -199,7 +212,8 @@ CPUCONTROL:
     addq              #1,d1
     cmpi.w            #CPU_STUCK_FRAMES_THRESHOLD,d1
     bls.s             .donotenterinrecovery
-    move.l            (a5),a0
+    ;move.l            (a5),a0
+    lea               MOVER_HOTSPOT_CPU_COORDS_CLEANED(PC),a0
     move.w            (a0),d1
     lsl.w             #DECIMAL_SHIFT,d1
     move.w            d1,MOVER_X_POSITION_OFFSET(a2)
@@ -207,7 +221,6 @@ CPUCONTROL:
     lsl.w             #DECIMAL_SHIFT,d1
     move.w            d1,MOVER_Y_POSITION_OFFSET(a2)
 
-    ;sub.l #4,(a5)
     moveq             #0,d1
 .donotenterinrecovery:
     move.w            d1,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
@@ -218,6 +231,49 @@ CPUCONTROL:
 .notcolliding:
     move.w            #0,MOVER_CPU_CONSECUTIVE_COLLISIONS(a2)
     move.l            a2,a0
+    rts
+
+; this special function changes behaviour on the car if some special bits are found on the most significant
+; byte of the Y position of the HOTSPOT
+; Since the vertical resolution cannot be > 240, all the Y hotspot points are stored in the lower byte,
+; this means the high byte will always be zero, so why dont use it to store special information?
+; bit 15 : if current velocity > 1 px per second, force the car to sail
+; bit 14 : if current velocity > 1 px per second, force the car to brake
+analyze_hotspot:
+    move.w          2(a0),d0
+    
+    ; check bit 15 on Y position (32768) has been added to Y position.
+    ; if set it means the car must sail if current velocity is > 0.5px per second
+    btst            #15,d0
+    beq.s           analyze_hotspot_no_sail_vel_1
+    DEBUG 1112
+    bclr            #15,d0
+    lsr.w           #1,d0
+    andi.w          #$FF10,d0
+    IF_1_GREATER_2_W_U MOVER_HEADING_MAGNITUDE(a2),d0,analyze_hotspot_end,s
+    move.w          #%11111111111111111111111111110011,CPU_HOTSPOT_SPECIAL_CMDS_AND(a2)
+    move.w          #0,CPU_HOTSPOT_SPECIAL_CMDS_OR(a2)
+    rts
+analyze_hotspot_no_sail_vel_1:
+
+    ; check bit 14 on Y position (16384) has been added to Y position.
+    ; if set it means the car must brake if current velocity is > what the file tells us
+    btst            #14,d0
+    beq.s           analyze_hotspot_no_brake_vel_1
+    DEBUG 1113
+    bclr            #14,d0
+    lsr.w           #1,d0
+    andi.w          #$FF10,d0
+    IF_1_GREATER_2_W_U MOVER_HEADING_MAGNITUDE(a2),d0,analyze_hotspot_end,s
+    DEBUG 1114
+    move.w          #%11111111111111111111111111110011,CPU_HOTSPOT_SPECIAL_CMDS_AND(a2)
+    move.w          #8,CPU_HOTSPOT_SPECIAL_CMDS_OR(a2)
+    rts
+analyze_hotspot_no_brake_vel_1:
+
+analyze_hotspot_end:
+    move.w          #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a2)
+    move.w          #0,CPU_HOTSPOT_SPECIAL_CMDS_OR(a2)
     rts
 
 ;#include <stdio.h>
