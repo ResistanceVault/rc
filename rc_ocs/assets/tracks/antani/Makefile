@@ -36,6 +36,7 @@ all:
 	printf "%04x%04x%04x\n" 195 220 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	#add CPU positions
+	 LC_NUMERIC=en_US ../build_trajectory.sh ./metadata/trajectory.xml traiettoria | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 	# Section 1
 	# Section 2
 	# Section 3
@@ -45,7 +46,7 @@ all:
 	# Section 7
 
 	# Padding CPU positions
-	for number in `seq 1 250`; do \
+	for number in `seq 1 176`; do \
         echo FF FF FF FF | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK ;\
     done
 
@@ -53,7 +54,7 @@ all:
 	echo 00 0c | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	# hotspot CPU distance
-	echo 00 14 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	echo 00 19 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	@if [ $$(stat -c %s ../../../buildadf/tracks/$(TRACKNAME).TRK) -ne $(DESIRED_FILE_SIZE) ]; then \
 		echo "File $(TRACKNAME).TRK with faulty size"; \
