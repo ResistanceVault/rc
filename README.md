@@ -10,7 +10,7 @@ ceiling at the end of 2022 and they were still partially working.
 
 In the same period, Phaze 101 launched a game jam on car racing games on Twitch, additionally, he
 asked me to be a regular guest in his channel and talk about Amiga hardware programming. Since RC
-was very fun to play I tried to do my own version for Amiga games and use the Twitch stream as a
+was very fun to play I tried to do my own version for the Amiga and use the Twitch stream as a
 developer diary. The final outcome is not really like the original RC cars but... I am quite happy
 with the result considering the limitation of the Amiga if compared to a PC of late 90s.
 
@@ -40,13 +40,14 @@ drive you can get rid of the S folder which is needed only for booting from flop
 Obviously, RC is not complete. There is much room for expansion in RC. Features planned for the
 future are:
 
-    *   add computer AI for self driven cars.
+    -[x]   add computer AI for self driven cars.
         optimizations.
-    *   AGA and RTG version (maybe restoring the old 640X256 resolution with 256 colors!!!!!!)
 
-    *   add paddle support
+    -[ ]   AGA and RTG version (maybe restoring the old 640X256 resolution with 256 colors!!!!!!)
 
-    If you have any reasonable suggestions, please mail them 
+    -[ ]   add paddle support
+
+    If you have any reasonable suggestions, please email me 
 
 ## Starting RC
 RC is OS friendly, running it should be quite trivial but anyway....
@@ -73,6 +74,7 @@ Supported Input modes for humans are the following:
 * Keyboard arrows
 * Keyboard WASD combination
 * Keyboard IJKL combination
+* Keyboard numpad (not Amiga 600)
 
   Once car setup is complete you can proceed starting the races.
 For each race some points are awarded in this way:
@@ -94,6 +96,9 @@ and the best leader (blu circle).
 The winner of the race is reported with a green circle.
 
 ## Track files specification
+
+For a full tutorial go to [this tutorial](rc_ocs/docs/trackcreationtutorial.md)
+
 Tracks files must be stored inside tracks and tracksshr drawer, 
 the first must contain the file in UNCOMPRESSED format, the second its shrinklerized version.
 Files must have the .TRK extension, no other files must be stored in this drawer.
@@ -117,6 +122,7 @@ The file must hold the following data:
 * byte from 124906 to 124911 -> car 8 start position in this format: first word X position, second word Y position, third word degrees
 * byte from 124912 to 125911 -> cpu points
 * byte from 125912 to 125913 -> number of zones inside track
+* byte from 125914 to 125915 -> CPU hotspot distance
 
 ### Raw planar image
     From byte 0 up to byte 47999 an image file is expected.
