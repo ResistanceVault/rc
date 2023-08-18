@@ -15,6 +15,7 @@ developer diary. The final outcome is not really like the original RC cars but..
 with the result considering the limitation of the Amiga if compared to a PC of late 90s.
 
 ## Screenshots
+![main.png](screenshots/main.png)
 ![easytrack_a600.png](screenshots/easytrack_a600..png)
 
 
