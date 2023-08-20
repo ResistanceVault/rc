@@ -3,7 +3,7 @@ TRACKNAME = ANTANI
 DESIRED_FILE_SIZE = 125916
 
 all:
-	ilbm2raw -f ./images/$(IMAGE32COLORS).iff ./images/$(IMAGE32COLORS).raw -p ./images/$(IMAGE32COLORS).pal -s 17,31 -s 18,28
+	ilbm2raw -f ./images/$(IMAGE32COLORS).iff ./images/$(IMAGE32COLORS).raw -p ./images/$(IMAGE32COLORS).pal -s 17,31 -s 18,28 -s 0,24
 
 	# dd if=/dev/zero of=./images/$(IMAGE32COLORS).raw bs=1 count=1 seek=47999
 	
