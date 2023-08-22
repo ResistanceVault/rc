@@ -797,6 +797,16 @@ CURSOR:
 
 	SECTION	MIOPLANE,DATA_C
 
+LOADING_SCREEN_BPL_0:
+	;dcb.b 40*256,$00
+	incbin "assets/backgrounds/rcfloppy.raw.0"
+LOADING_SCREEN_BPL_1:
+	;dcb.b 40*256,$00
+	incbin "assets/backgrounds/rcfloppy.raw.1"
+LOADING_SCREEN_BPL_2:
+	;dcb.b 40*256,$00
+	incbin "assets/backgrounds/rcfloppy.raw.2"
+
 TRACK_DATA_COLORS:
 	IFD COLOR
 	dcb.b 64,0

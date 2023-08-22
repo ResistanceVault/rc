@@ -1,6 +1,17 @@
 MENU_SET_CALLBACK_BEFORE_LOOP MACRO
     move.l \1,MENU_CALLBACK_BEFORE_LOOP_FUNCT
     ENDM
+ENABLE_LOADING_SCREEN MACRO
+    move.w #1,LOADING_SCREEN_FLAG
+    ENDM
+CLEAR_PROGRESS_BAR MACRO
+    clr.w               LOADINGBARPROGRESS
+    lea                 LOADING_SCREEN_BPL_0+200*40,a0
+    moveq               #320/4-1,d7
+.clearprogress\@:
+    clr.l               (a0)+
+    dbra                d7,.clearprogress\@
+    ENDM
 
 FADE_SPEED                  EQU     3 ; how many frames do I wait before changing color?
 CURSOR_CLEARING             EQU     5 ; how many pixel between the cursor and the text?
@@ -103,11 +114,11 @@ MENUSCREEN:
     MOVE.W				d1,$96(a5)		; DMACON - enable bitplane, copper, sprites and audio (optional).
 
     ; copperlist setup
-    move.l				#COPPERLIST_MAIN,$80(a5)	; Copperlist point
-    move.w				d0,$88(a5)			; Copperlist start
-    move.w				#0,$1fc(a5)			; AGA disable
-    move.w				#$c00,$106(a5)		; AGA disable
-    move.w				#$11,$10c(a5)		; AGA disable
+    ;move.l				#COPPERLIST_MAIN,$80(a5)	; Copperlist point
+    ;move.w				d0,$88(a5)			; Copperlist start
+    ;move.w				#0,$1fc(a5)			; AGA disable
+    ;move.w				#$c00,$106(a5)		; AGA disable
+    ;move.w				#$11,$10c(a5)		; AGA disable
 
     move.l              execBase,a6
 
@@ -119,6 +130,9 @@ MENUSCREEN:
 	bsr.w               PreparaLoad
     moveq	            #50,d1		; wait 50 frames
 	bsr.w	            AspettaBlanks
+
+    moveq #10,d0
+    bsr.w               PRINTLOADINGBAR
 
     move.l              dosBase,a6
     move.l              #MODE_OLDFILE,d2
@@ -136,6 +150,9 @@ MENUSCREEN:
 	move.l	            fd,d1				; result = LVOClose(handle[d1])
     jsr                 _LVOClose(a6)
 
+    moveq               #20,d0
+    bsr.w               PRINTLOADINGBAR
+
     move.l	            #150,d1 ; wait 150 frames
 	bsr.w	            AspettaBlanks
 
@@ -146,11 +163,14 @@ MENUSCREEN:
     moveq               #0,d0
     lea                 SCREEN_0,a0
     lea                 PHAZELOGO,a1
-    move.l              #0,a2
+    move.l              #SHR_PROGRESS,a2
     move.l              #0,a3
     moveq               #0,d2
     moveq               #1,d7
     jsr                 ShrinklerDecompress
+
+    moveq               #90,d0
+    bsr.w               PRINTLOADINGBAR
 
     ; set car cursor colors
     ;move.w              #$d73,MAIN_PALETTE_16
@@ -165,6 +185,8 @@ MENUSCREEN:
 .menu_noclear:
 
     MEMCPY4				MAIN_PALETTE,MAIN_PALETTE2,64/4
+    moveq #99,d0
+    bsr.w               PRINTLOADINGBAR
 
     ; set font color into the colors table - START
     moveq               #7-1,d7
@@ -258,6 +280,13 @@ setcursormain:
     jsr                 (a0)
 .menu_no_callback_before_loop
 
+    ; copperlist setup
+    move.l				#COPPERLIST_MAIN,$dff080	; Copperlist point
+    move.w				d0,$dff088			; Copperlist start
+    move.w				#0,$dff1fc			; AGA disable
+    move.w				#$c00,$dff106		; AGA disable
+    move.w				#$11,$dff10c		; AGA disable
+
 mousemain:
     cmpi.b  			#$ff,$dff006    ; Linea 255?
     bne.s   			mousemain
@@ -340,8 +369,18 @@ nomainfadeout:
 
 exitmainscreen:
     clr.l               MENU_CALLBACK_BEFORE_LOOP_FUNCT
+    tst.w               LOADING_SCREEN_FLAG
+    beq.s               menuend
+    moveq #1,d0
+    CLEAR_PROGRESS_BAR
+    bsr.w               PRINTLOADINGBAR
+    bsr.w               LOADING_SCREEN
+menuend:
+    clr.w               LOADING_SCREEN_FLAG
     movem.l             (sp)+,a0-a6/d0-d7
     rts
+
+LOADING_SCREEN_FLAG: dc.w 0
 
 printstringhigh_small:
     moveq               #0,d6
@@ -844,3 +883,105 @@ MAIN_Fade:
 	addq.w	#4,a1		; prossimo colore in copperlist
 	DBRA	D7,MAIN_Fade		; fai tutti i colori
 	rts
+
+
+LOADING_SCREEN:
+    move.l              #LOADING_SCREEN_BPL_0,d0
+    lea                 BPLPTR1_LOADING,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #LOADING_SCREEN_BPL_1,d0
+    lea                 BPLPTR2_LOADING,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    move.l              #LOADING_SCREEN_BPL_2,d0
+    lea                 BPLPTR3_LOADING,a1
+    bsr.w               POINTINCOPPERLIST_FUNCT
+
+    ; copperlist setup
+    move.l				#COPPERLIST_LOADING,$dff080	; Copperlist point
+    move.w				d0,$dff088			; Copperlist start
+
+loadingdelay1:
+    cmpi.b  			#$ff,$dff006    ; Linea 255?
+    bne.s   			loadingdelay1
+
+loadingdeay2:
+    cmpi.b  			#$ff,$dff006    ; linea 255?
+    beq.s   			loadingdeay2
+
+    ;bra.s               loadingdelay1
+
+    rts
+
+LOADINGBARPROGRESS:     dc.w 0
+PRINTLOADINGBAR:
+    movem.l             d0-d7/a0-a6,-(sp)
+    ;move.w             #127,d0
+    move.w              #0,d1
+    move.w              #100,d2
+    moveq               #0,d3
+    move.w              #320,d4
+    jsr                 MAP
+
+    ; print bar
+    subq                #1,d4
+    
+    cmp.w               #-1,d4
+    beq.s               printloadingbarend
+    sub.w               LOADINGBARPROGRESS,d4
+    cmp.w               #-1,d4
+    beq.s               printloadingbarend
+    DEBUG 8786
+
+printloadingbarloop:
+    DEBUG 8787
+    jsr                 POINT_PROGRESS
+    addi.w              #1,LOADINGBARPROGRESS
+
+    dbra                d4,printloadingbarloop
+printloadingbarend:
+    movem.l             (sp)+,d0-d7/a0-a6
+    rts
+
+POINT_PROGRESS:
+    lea                 LOADING_SCREEN_BPL_0+200*40,a0
+    move.w              LOADINGBARPROGRESS(PC),d6
+    lsr.w               #3,d6
+    adda.w              d6,a0
+
+    move.w              LOADINGBARPROGRESS(PC),d6
+    not.b               d6
+    bset                d6,(a0)
+    rts
+
+SHR_PROGRESS:
+    movem.l             d0-d7/a0-a6,-(sp)
+    lsr.w               #2,d0
+    ;move.w d0,d7
+    ;move.w             #127,d0
+    move.w              #0,d1
+    move.w              #51264/4,d2
+    moveq               #0,d3
+    move.w              #70-1,d4
+    jsr                 MAP
+
+    ; update progress bar
+    move.w              d4,d0
+    addi.w              #20,d0
+
+    cmp.w               SHR_PREV_PROG,d0
+    beq.s               shr_noupd
+        ;DEBUG 5432
+
+    ;cmp.w               LOADINGBARPROGRESS,d0
+    ;beq.s               shr_noupd
+    move.w              d0,SHR_PREV_PROG
+    bsr.w               PRINTLOADINGBAR
+
+shr_noupd:
+
+    movem.l             (sp)+,d0-d7/a0-a6
+    rts
+
+SHR_PREV_PROG: dc.w 0

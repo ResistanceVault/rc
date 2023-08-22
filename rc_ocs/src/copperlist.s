@@ -1,3 +1,9 @@
+; Single playfield mode
+COPSET0BPL MACRO
+  dc.w       $100
+  dc.w       %0000001000000000
+  ENDM
+
     include "AProcessing/libs/copperlistmacros.i"
 
     SECTION	GRAPHIC,DATA_C
@@ -178,7 +184,6 @@ COPHUDCOLOR7:
 
 ; ************ COPPERLIST WELCOME SCREEN START *******************
 
-
 COPPERLIST_WELCOME:
 
 Sprite0Welcomepointers:
@@ -328,7 +333,6 @@ BPLPTR3_INTRO:
 
     dc.w	$FFFF,$FFFE	;
 ; END OF COPPERLIST_INTRO
-
 
 
 ; ************ COPPERLIST TRACK SELECTION START *******************
@@ -653,3 +657,70 @@ COPCOLOR2_MAIN_31:
 	dc.w	$1be,$000	; color31
   dc.w	$FFFF,$FFFE	;
 ; END OF COPPERLIST_MAIN
+
+	IFD COLOR
+COPPERLIST_LOADING:
+;Sprite0pointers:
+  dc.w       $120,$0000,$122,$0000
+
+;Sprite1pointers:
+  dc.w       $124,$0000,$126,$0000
+
+;Sprite2pointers:
+  dc.w       $128,$0000,$12a,$0000
+
+;Sprite3pointers:
+  dc.w       $12c,$0000,$12e,$0000
+
+;Sprite4pointers:
+  dc.w       $130,$0000,$132,$0000
+
+;Sprite5pointers:
+  dc.w       $134,$0000,$136,$0000
+
+;Sprite6pointers;
+  dc.w       $138,$0000,$13a,$0000
+
+;Sprite7pointers:
+  dc.w       $13c,$0000,$13e,$0000
+
+  dc.w	$8E,$2c81	; DiwStrt
+  dc.w	$90,$2cc1	; DiwStop
+  dc.w	$92,$0038	; DdfStart
+  dc.w	$94,$00d0	; DdfStop
+  dc.w	$102,0		; BplCon1
+  dc.w	$104,$24	; BplCon2
+  dc.w	$108,0		; Bpl1Mod
+  dc.w	$10a,0		; Bpl2Mod
+
+ 
+
+  COPSET3BPL
+
+COPCOLOR_LOADING_0:
+  dc.w	$0180,$0	; color0
+COPCOLOR_LOADING_1:
+  dc.w	$0182,$29e	; color1
+COPCOLOR_LOADING_2:
+  dc.w	$0184,$999	; color2
+COPCOLOR_LOADING_3:
+  dc.w	$0186,$444	; color4
+COPCOLOR_LOADING_4:
+  dc.w	$0188,$fff	; color5
+COPCOLOR_LOADING_5:
+  dc.w	$018a,$666	; color6
+COPCOLOR_LOADING_6:
+  dc.w	$018c,$888	; color7
+COPCOLOR_LOADING_7:
+  dc.w	$018f,$27a	; color8
+
+   ; Bitplanes Pointers
+BPLPTR1_LOADING:
+  dc.w       $e0,$0000,$e2,$0000                                       ;first	 bitplane - BPL0PT
+BPLPTR2_LOADING:
+  dc.w       $e4,$0000,$e6,$0000                                       ;second bitplane - BPL1PT
+BPLPTR3_LOADING:
+  dc.w       $e8,$0000,$ea,$0000                                       ;third	 bitplane - BPL2PT
+
+  dc.w	$FFFF,$FFFE
+  ENDC

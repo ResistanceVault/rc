@@ -218,3 +218,6 @@ all:
 	chmod +r ../../bin/$(FILENAME_7).shr
 	cp $(FILENAME_7).shr ../../buildadf/$(FILENAME_7).shr
 	chmod +r ../../buildadf/$(FILENAME_7).shr
+
+	ilbm2raw -b -f rcfloppy.iff rcfloppy.raw -p rcfloppy.pal
+	cp rcfloppy.raw.* ../../src/assets/backgrounds/

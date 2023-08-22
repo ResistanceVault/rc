@@ -58,10 +58,6 @@ MENU_OPTIONS_RACE_COUNTER_TXT:
     dc.b "2",$FF
     even
 
-;MENU_OPTIONS_SOUND_STATUS_OFF_TXT:
- ;   dc.b "OFF   ",$FF
- ;   even
-
 MENU_OPTIONS_SCREEN:
 
     dc.w 1,9
@@ -167,21 +163,6 @@ OPTIONS_CHANGE_SOUND_FUNCT:
     jsr                 REFRESH_TXT_ENTRY
     rts
 
-;OPTIONS_CHANGE_SOUND_FUNCT:
-;    tst.w               PLAY_SOUND
-;    beq.s               .turn_sound_on
-;    move.w              #0,PLAY_SOUND
-;    jsr                 OPTIONS_SCREEN_SET_SOUND_DESC
-;    lea                 TXT_OPTIONS_SOUND_STATUS(PC),a1
-;    jsr                 REFRESH_TXT_ENTRY
-;    rts
-;.turn_sound_on
-;    move.w              #1,PLAY_SOUND
-;    jsr                 OPTIONS_SCREEN_SET_SOUND_DESC
-;    lea                 TXT_OPTIONS_SOUND_STATUS(PC),a1
-;    jsr                 REFRESH_TXT_ENTRY
-;    rts
-
 REFRESH_TXT_ENTRY:
     movem.l              d0-d7/a0-a6,-(sp)
     move.l               a1,a6
@@ -257,18 +238,6 @@ restorebackground_tile_big_start_loop:
 
     movem.l             (sp)+,d0/d1/d6/a0-a6
     rts
-
-;OPTIONS_SCREEN_SET_SOUND_DESC:
-    ; read sound status
-;    lea     TXT_OPTIONS_SOUND_STATUS(PC),a0
-;    tst.w   PLAY_SOUND
-;    beq.s   .option_screen_no_sound
-;    move.l  #MENU_OPTIONS_SOUND_STATUS_SFX_TXT,txt_DescPtr(a0)
-;    bra.s   .option_screen_sound_end
-;.option_screen_no_sound
-;     move.l  #MENU_OPTIONS_SOUND_STATUS_OFF_TXT,txt_DescPtr(a0)
-;.option_screen_sound_end:
-;    rts
 
 OPTIONS_SCREEN_SET_SOUND_DESC:
     ; read pointer to sound options into a1
