@@ -559,8 +559,9 @@ moversloop:
 	bsr.w   			CHECK_MAP
 	ENDC
 
-    ; check collisions
-    ;bsr.w 	CHECK_COLLISIONS
+    ; skip check collisions if current car completed the race
+	tst.w				RACE_COMPLETED_OFFSET(a0)
+	beq.w				check_collisions_with_other_cars_loop_end
 
 	; check collisions with other cars
 	lea					MOVERS,a1
@@ -582,6 +583,7 @@ check_collisions_with_other_cars_loop:
 skip_check_collisions_with_other_cars:
 	adda.l  			#MOVER_SIZE,a1
 	dbra 				d6,check_collisions_with_other_cars_loop
+check_collisions_with_other_cars_loop_end:
 
 	; show the mover object on the screen
 	bsr.w				DISPLAY
