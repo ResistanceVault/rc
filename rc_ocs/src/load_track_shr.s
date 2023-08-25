@@ -44,7 +44,15 @@ _LVOOpen	EQU	-30
 _LVOClose	EQU	-36
 _LVORead     EQU   -42
 
-pathString
+PRINT_TRACK_PROGRESS MACRO
+	tst.w	LOADING_TRACK_FLAG
+	beq.s	.track_progress_1\@
+	moveq   \1,d0
+    bsr.w   PRINTLOADINGBAR
+.track_progress_1\@
+	ENDM
+
+pathString:
     dc.b    "tracksshr/",0
     even
 
@@ -141,8 +149,10 @@ LOAD_TRACK:
 	move.l	fd,d1				; result = LVOClose(handle[d1])
     jsr     _LVOClose(a6)
 
+	PRINT_TRACK_PROGRESS #15
+
 	move.w		#1,SHR_DECOMPRESS
-    bra.s .exit
+    bra.s 		.exit
 
 ; get next directory entry
 .next:
@@ -163,21 +173,23 @@ LOAD_TRACK:
     move.l	#150,d1		; num. di frames da aspettare
 	bsr.w	AspettaBlanks	; aspetta 5 frames
 
-    bsr.w DopoLoad
+    bsr.w 	DopoLoad
 
 	tst.w	SHR_DECOMPRESS
 	beq.w	.shr_no_decompress
 
 	; decompress stage start
+	PRINT_TRACK_PROGRESS #20
     moveq               #0,d0
     lea                 TRACK_DATA_1,a0
     lea                 TRK_FILE_END-TRK_FILE_SIZE,a1
-    move.l              #0,a2
+    move.l              #SHR_TRK_PROGRESS,a2
     move.l              #0,a3
     moveq               #0,d2
     moveq               #1,d7
     jsr                 ShrinklerDecompress
 	clr.w				SHR_DECOMPRESS
+	PRINT_TRACK_PROGRESS #90
 
 	; start copying Bitplanes
 	MEMCPY4				TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_FIRST_BPL,TRACK_DATA_1,9600/4
@@ -192,6 +204,7 @@ LOAD_TRACK:
 	MEMCPY4				TRK_FILE_END-TRK_FILE_SIZE+TRK_FILE_POSITIONS,CAR_INFO_DATA,6*8/4
 
 .shr_no_decompress:
+	PRINT_TRACK_PROGRESS #99
     clr.b               KEY_ESC
     clr.w               JOY1FIREPRESSED
     jsr                 SETPOT
@@ -346,3 +359,29 @@ NoSpritez:
 	MOVE.W	OLDINTENAL(PC),$9A(A5)	; INTENA STATUS
 	MOVE.W	OLDINTREQL(PC),$9C(A5)	; INTREQ
 	rts
+
+SHR_TRK_PROGRESS:
+	movem.l             d0-d7/a0-a6,-(sp)
+    lsr.w               #3,d0
+    
+    move.w              #0,d1
+    move.w              #TRK_FILE_SIZE/8,d2
+    moveq               #0,d3
+    move.w              #70-1,d4
+    jsr                 MAP
+
+    ; update progress bar
+    move.w              d4,d0
+    addi.w              #20,d0
+
+    cmp.w               SHR_TRK_PREV_PROG,d0
+    beq.s               shr_trk_noupd
+
+    move.w              d0,SHR_TRK_PREV_PROG
+    bsr.w               PRINTLOADINGBAR
+
+shr_trk_noupd:
+    movem.l             (sp)+,d0-d7/a0-a6
+	rts
+
+SHR_TRK_PREV_PROG: 		dc.w 0

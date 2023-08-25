@@ -53,7 +53,7 @@ LOAD_TRACK:
     lea	    $dff000,a5
 	MOVE.L	#$7FFF7FFF,$9A(A5)	; INTERRUPTS & INTREQS DISABLE
 
-	bsr.w PreparaLoad
+	bsr.w   PreparaLoad
     moveq	#50,d1		; num. di frames da aspettare
 	bsr.w	AspettaBlanks	; aspetta 5 frames
 

@@ -4,6 +4,9 @@ MENU_SET_CALLBACK_BEFORE_LOOP MACRO
 ENABLE_LOADING_SCREEN MACRO
     move.w #1,LOADING_SCREEN_FLAG
     ENDM
+ENABLE_LOADING_TRACK MACRO
+    move.w #1,LOADING_TRACK_FLAG
+    ENDM
 CLEAR_PROGRESS_BAR MACRO
     clr.w               LOADINGBARPROGRESS
     clr.w               SHR_PREV_PROG
@@ -382,10 +385,12 @@ exitmainscreen:
     bsr.w               LOADING_SCREEN
 menuend:
     clr.w               LOADING_SCREEN_FLAG
+    clr.w               LOADING_TRACK_FLAG
     movem.l             (sp)+,a0-a6/d0-d7
     rts
 
 LOADING_SCREEN_FLAG: dc.w 0
+LOADING_TRACK_FLAG:  dc.w 0
 
 printstringhigh_small:
     moveq               #0,d6

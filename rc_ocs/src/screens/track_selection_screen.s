@@ -74,6 +74,7 @@ ACTION_TRACK_SELECTION_SCREEN_PREVIOUS:
     tst.w   TRACK_NUMBER
     bne.s   .previous_is_ok
     move.w  #1,TRACK_NUMBER
+    ENABLE_LOADING_SCREEN
     rts
 .previous_is_ok:
     move.l  #SELECT_TRACK_SCREEN,NEXT_SCREEN
@@ -96,6 +97,7 @@ ACTION_TRACK_SELECTION_SCREEN_BACK:
     rts
 
 SELECT_TRACK_SCREEN:
+    ENABLE_LOADING_TRACK
     move.w              #1,TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
 
