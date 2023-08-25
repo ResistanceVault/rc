@@ -939,7 +939,7 @@ PRINTLOADINGBAR:
 
     ; print bar
     subq                #1,d4
-    
+
     cmp.w               #-1,d4
     beq.s               printloadingbarend
     sub.w               LOADINGBARPROGRESS,d4
@@ -948,10 +948,10 @@ PRINTLOADINGBAR:
     BETWEEN_UWORD       d4,#0,#320,d1
     tst.b               d1
     bne.s               printloadingbarend
-    DEBUG 8786
+    ;DEBUG 8786
 
 printloadingbarloop:
-    DEBUG 8787
+    ;DEBUG 8787
     jsr                 POINT_PROGRESS
     addi.w              #1,LOADINGBARPROGRESS
 
