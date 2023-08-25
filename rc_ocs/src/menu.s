@@ -6,13 +6,18 @@ ENABLE_LOADING_SCREEN MACRO
     ENDM
 CLEAR_PROGRESS_BAR MACRO
     clr.w               LOADINGBARPROGRESS
+    clr.w               SHR_PREV_PROG
     lea                 LOADING_SCREEN_BPL_0+200*40,a0
     moveq               #320/4-1,d7
 .clearprogress\@:
     clr.l               (a0)+
     dbra                d7,.clearprogress\@
     ENDM
-
+CLEAR_PROGRESS_BAR_F
+    movem.l d0/d7-a0/a6,-(sp)
+    CLEAR_PROGRESS_BAR
+    movem.l (sp)+,d0/d7-a0/a6
+    rts
 FADE_SPEED                  EQU     3 ; how many frames do I wait before changing color?
 CURSOR_CLEARING             EQU     5 ; how many pixel between the cursor and the text?
 CURSOR_CLEARING_STR         EQU     1 ;
@@ -131,7 +136,7 @@ MENUSCREEN:
     moveq	            #50,d1		; wait 50 frames
 	bsr.w	            AspettaBlanks
 
-    moveq #10,d0
+    moveq               #10,d0
     bsr.w               PRINTLOADINGBAR
 
     move.l              dosBase,a6
@@ -185,7 +190,7 @@ MENUSCREEN:
 .menu_noclear:
 
     MEMCPY4				MAIN_PALETTE,MAIN_PALETTE2,64/4
-    moveq #99,d0
+    moveq               #99,d0
     bsr.w               PRINTLOADINGBAR
 
     ; set font color into the colors table - START
@@ -371,7 +376,7 @@ exitmainscreen:
     clr.l               MENU_CALLBACK_BEFORE_LOOP_FUNCT
     tst.w               LOADING_SCREEN_FLAG
     beq.s               menuend
-    moveq #1,d0
+    moveq               #1,d0
     CLEAR_PROGRESS_BAR
     bsr.w               PRINTLOADINGBAR
     bsr.w               LOADING_SCREEN
@@ -898,6 +903,12 @@ LOADING_SCREEN:
     lea                 BPLPTR3_LOADING,a1
     bsr.w               POINTINCOPPERLIST_FUNCT
 
+.loop
+    move.l	$dff004,d0
+	and.l	#$1ff00,d0
+	cmp.l	#303<<8,d0
+	bne.b	.loop
+
     ; copperlist setup
     move.l				#COPPERLIST_LOADING,$dff080	; Copperlist point
     move.w				d0,$dff088			; Copperlist start
@@ -909,6 +920,8 @@ loadingdelay1:
 loadingdeay2:
     cmpi.b  			#$ff,$dff006    ; linea 255?
     beq.s   			loadingdeay2
+
+
 
     ;bra.s               loadingdelay1
 
@@ -932,6 +945,9 @@ PRINTLOADINGBAR:
     sub.w               LOADINGBARPROGRESS,d4
     cmp.w               #-1,d4
     beq.s               printloadingbarend
+    BETWEEN_UWORD       d4,#0,#320,d1
+    tst.b               d1
+    bne.s               printloadingbarend
     DEBUG 8786
 
 printloadingbarloop:

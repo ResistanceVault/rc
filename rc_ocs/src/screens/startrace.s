@@ -98,8 +98,8 @@ MENU_START_RACE_CURRENTLY_SELECTED:
     dc.l    MENU_START_RACE_SCREEN
 
 ACTION_START_RACE_NEW:
-    move.w  #1,MAIN_EXIT
-    clr.w   LOAD_NEXT_TRACK_FLAG
+    move.w              #1,MAIN_EXIT
+    clr.w               LOAD_NEXT_TRACK_FLAG
 
     ;disable non playing car
     ; for each car
@@ -120,69 +120,8 @@ ACTION_START_RACE_NEW:
 ACTION_SELECT_TRACK_NEW:
     move.l              #SELECT_TRACK_SCREEN,NEXT_SCREEN
     move.w              #1,MAIN_EXIT
-    rts
 
-    move.w              #1,SET_TRACK_SELECT_BITPLANE
-    movem.l             a0-a6/d0/d7,-(sp)
-
-    ; clean background image
-    lea                 PHAZELOGO,a3
-    lea                 PHAZELOGO+40*256*1,a4
-    lea                 PHAZELOGO+40*256*2,a5
-
-    move.w              #40*256/4-1,d7
-.clearbakgroundloop
-    clr.l               40*256*1(a5)
-    clr.l               40*256*2(a5)
-
-    clr.l              (a3)+
-    clr.l              (a4)+
-    clr.l              (a5)+
-    dbra                d7,.clearbakgroundloop
-
-    jsr                 SCREEN_TRACK_SELECT
-
-    ; restore background image
-    lea                 SCREEN_0,a0
-    lea                 SCREEN_1,a1
-    lea                 SCREEN_00,a2
-    lea                 SCREEN_11,a6
-
-    lea                 PHAZELOGO,a3
-    lea                 PHAZELOGO+40*256*1,a4
-    lea                 PHAZELOGO+40*256*2,a5
-
-    move.w              #40*256/4-1,d7
-.restorebakgroundloop
-    move.l              (a6)+,40*256*1(a5)
-    clr.l               40*256*2(a5)
-
-    move.l              (a0)+,(a3)+
-    move.l              (a1)+,(a4)+
-    move.l              (a2)+,(a5)+
-    dbra                d7,.restorebakgroundloop
-
-    bsr.w               PRINT_TRACK_NAME_NEW
-
-    lea                 TXT_START_RACE_SCREEN(PC),a1
-    jsr                 REFRESH_TXT_ENTRY
-
-    lea                 TXT_START_RACE_SCREEN+txt_SIZEOF,a1
-    jsr                 REFRESH_TXT_ENTRY
-
-    lea                 MENU_START_RACE_SCREEN+menu_SIZEOF*0,a1
-    jsr                 REFRESH_MENU_ENTRY
-
-    lea                 MENU_START_RACE_SCREEN+menu_SIZEOF*1,a1
-    jsr                 REFRESH_MENU_ENTRY
-
-    lea                 MENU_START_RACE_SCREEN+menu_SIZEOF*2,a1
-    jsr                 REFRESH_MENU_ENTRY
-
-    movem.l             (sp)+,a0-a6/d0/d7
-
-    move.l				#COPPERLIST_MAIN,$dff080	; Copperlist point
-	move.w				d0,$dff088			; Copperlist start
+    ENABLE_LOADING_SCREEN
     rts
 
 ACTION_CHANGE_LAPS:

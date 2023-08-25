@@ -172,6 +172,11 @@ MANAGE_END_STATE:
     IFND COLOR
     bra.w               RACE_RESULTS_SCREEN
     ELSE
+
+    jsr                 CLEAR_PROGRESS_BAR_F
+    jsr                 LOADING_SCREEN
+    move.w              #1,LOADING_SCREEN_FLAG
+
     jsr                 RESULTSCREEN
     jsr                 STANDINGSSCREEN
     beq.w				welcomescreen_start
