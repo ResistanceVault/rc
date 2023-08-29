@@ -1,3 +1,5 @@
+OPTION_SCREEN_TXT_X_POSITION EQU 9
+
 OPTIONS_SCREEN_SOUNDS_OPTIONS:
     dc.l MENU_OPTIONS_SOUND_STATUS_SFX_TXT
     dc.l MENU_OPTIONS_SOUND_STATUS_SFX_ACTION
@@ -54,11 +56,30 @@ CHAMPIONSHIP_RACES_TXT:
     dc.b "RACES",$FF
     even
 
+SCREECH_TXT:
+    dc.b "SCREECH",$FF
+    even
+
 MENU_OPTIONS_RACE_COUNTER_TXT:
     dc.b "2",$FF
     even
 
+MENU_OPTIONS_SCREECH_ON_TXT:
+    dc.b "ON ",$FF
+    even
+
+MENU_OPTIONS_SCREECH_OFF_TXT:
+    dc.b "OFF",$FF
+    even
+
 MENU_OPTIONS_SCREEN:
+
+    dc.w 1,7
+    dc.l SCREECH_TXT
+    dc.l ACTION_CHANGE_SCREECH
+    dc.l 0
+    dc.w 16
+    dc.w 16
 
     dc.w 1,9
     dc.l CHAMPIONSHIP_RACES_TXT
@@ -85,14 +106,20 @@ MENU_OPTIONS_SCREEN:
 
 TXT_OPTIONS_SCREEN:
 
+TXT_OPTION_SCREECH_OPTION:
+    dc.w OPTION_SCREEN_TXT_X_POSITION,7
+    dc.l MENU_OPTIONS_SCREECH_OFF_TXT
+    dc.w 16
+    dc.w 16
+
 TXT_OPTION_RACE_COUNTER:
-    dc.w 7,9
+    dc.w OPTION_SCREEN_TXT_X_POSITION,9
     dc.l MENU_OPTIONS_RACE_COUNTER_TXT
     dc.w 16
     dc.w 16
 
 TXT_OPTIONS_SOUND_STATUS:
-    dc.w 7,11
+    dc.w OPTION_SCREEN_TXT_X_POSITION,11
     dc.l MENU_OPTIONS_SOUND_STATUS_TXT
     dc.w 16
     dc.w 16
@@ -101,6 +128,10 @@ TXT_OPTIONS_SOUND_STATUS:
 
 
 OPTIONS_SCREEN:
+
+    ; prepare screech number with default value
+    move.w  SCREECH_OPTION,d0
+    bsr.w   option_set_screech_desc
 
     ; prepare race number with default value
     move.w  MAX_RACES,d0
@@ -118,17 +149,24 @@ OPTIONS_SCREEN:
     jsr     MENUSCREEN
     rts
 
+ACTION_CHANGE_SCREECH:
+    bchg                #0,SCREECH_OPTION+1
+    bsr.w               option_set_screech_desc
+    lea                 TXT_OPTION_SCREECH_OPTION(PC),a1
+    jsr                 REFRESH_TXT_ENTRY
+    rts
+
 ACTION_CHANGE_RACE_COUNT:
-    addi.w  #1,MAX_RACES
+    addi.w              #1,MAX_RACES
     IF_1_LESS_EQ_2_W_U #10,MAX_RACES,.donotresetracescounter,s
-    move.w  #1,MAX_RACES
+    move.w              #1,MAX_RACES
 .donotresetracescounter:
 
-    move.w  MAX_RACES,d0
-    addi.w  #$30,d0
-    lsl.w   #8,d0
-    move.b  #$FF,d0
-    move.w  d0,MENU_OPTIONS_RACE_COUNTER_TXT
+    move.w              MAX_RACES,d0
+    addi.w              #$30,d0
+    lsl.w               #8,d0
+    move.b              #$FF,d0
+    move.w              d0,MENU_OPTIONS_RACE_COUNTER_TXT
 
     lea                 TXT_OPTION_RACE_COUNTER(PC),a1
     jsr                 REFRESH_TXT_ENTRY
@@ -251,5 +289,15 @@ OPTIONS_SCREEN_SET_SOUND_DESC:
     move.l              (a1),txt_DescPtr(a0)
 
     rts
+
+option_set_screech_desc:
+    tst.w SCREECH_OPTION
+    bne.s set_screech_on
+    move.l #MENU_OPTIONS_SCREECH_OFF_TXT,TXT_OPTION_SCREECH_OPTION+4
+    rts
+set_screech_on:
+    move.l #MENU_OPTIONS_SCREECH_ON_TXT,TXT_OPTION_SCREECH_OPTION+4
+    rts
+
 
 

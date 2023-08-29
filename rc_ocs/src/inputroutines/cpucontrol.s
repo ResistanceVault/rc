@@ -194,16 +194,16 @@ CPUCONTROL:
 .donotbrake:
     
     ; apply hot spot special cmds AND
-    cmpi.w            #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a2)
-    beq.s             nocpuhotspotand
-    DEBUG 6666
-nocpuhotspotand:
+    ;cmpi.w            #-1,CPU_HOTSPOT_SPECIAL_CMDS_AND(a2)
+    ;beq.s             nocpuhotspotand
+    ;DEBUG 6666
+;nocpuhotspotand:
     and.w             CPU_HOTSPOT_SPECIAL_CMDS_AND(a2),d0
 
-    tst.w             CPU_HOTSPOT_SPECIAL_CMDS_OR(a2)
-    beq.s             nocpuhotspotor
-    DEBUG 5555
-nocpuhotspotor:
+    ;tst.w             CPU_HOTSPOT_SPECIAL_CMDS_OR(a2)
+    ;beq.s             nocpuhotspotor
+    ;DEBUG 5555
+;nocpuhotspotor:
     or.w              CPU_HOTSPOT_SPECIAL_CMDS_OR(a2),d0
 
     tst.w             MOVER_IS_COLLIDING_OFFSET(a2)
@@ -246,7 +246,6 @@ analyze_hotspot:
     ; if set it means the car must sail if current velocity is > 0.5px per second
     btst            #15,d0
     beq.s           analyze_hotspot_no_sail_vel_1
-    DEBUG 1112
     bclr            #15,d0
     lsr.w           #1,d0
     andi.w          #$FF10,d0
@@ -260,12 +259,11 @@ analyze_hotspot_no_sail_vel_1:
     ; if set it means the car must brake if current velocity is > what the file tells us
     btst            #14,d0
     beq.s           analyze_hotspot_no_brake_vel_1
-    DEBUG 1113
     bclr            #14,d0
     lsr.w           #1,d0
     andi.w          #$FF10,d0
     IF_1_GREATER_2_W_U MOVER_HEADING_MAGNITUDE(a2),d0,analyze_hotspot_end,s
-    DEBUG 1114
+    ;DEBUG 1114
     move.w          #%11111111111111111111111111110011,CPU_HOTSPOT_SPECIAL_CMDS_AND(a2)
     move.w          #8,CPU_HOTSPOT_SPECIAL_CMDS_OR(a2)
     rts

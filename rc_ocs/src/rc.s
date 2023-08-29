@@ -95,6 +95,8 @@ MOVER_FRONT_RIGHT_CORNER_OFFSET 	EQU 196
 MOVER_BACK_RIGHT_CORNER_OFFSET 		EQU 200
 MOVER_FRONT_LEFT_CORNER_OFFSET 		EQU 204
 MOVER_BACK_LEFT_CORNER_OFFSET 		EQU 208
+MOVER_BACK_LEFT_CORNER_OFFSET_X		EQU 208
+MOVER_BACK_LEFT_CORNER_OFFSET_Y		EQU 210
 
 MOVER_HALF_WIDTH_DISTANCE_OFFSET	EQU 212
 
@@ -145,7 +147,7 @@ MAX_CARS							EQU 8
 
 LAPS_COUNT_DEFAULT					EQU 2
 
-BACKGROUNDCOLOR						EQU $0889
+BACKGROUNDCOLOR						EQU $0555
 
                     rsset   0
 fib_DiskKey         rs.l    1
@@ -218,7 +220,6 @@ MY_P61_END MACRO
 
 DMASET EQU %1000011111100000 ;Master,Copper,Blitter,Bitplanes;Sprites
 WaitDisk	EQU	30
-
 	include "AProcessing/libs/precalc/half_word.s"
 	include "AProcessing/libs/precalc/map.s"
 	include "AProcessing/libs/precalc/bubble_sort_4_bytes.s"
@@ -244,6 +245,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/packers/ShrinklerDecompress.S"
 
 RACES_COUNTER:  dc.w 0
+SCREECH_OPTION: dc.w 1
 MAX_RACES:		dc.w 3
 PLAY_SOUND: 	dc.w 1
 PLAY_MUSIC:		dc.w 0

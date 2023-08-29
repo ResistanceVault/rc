@@ -33,11 +33,11 @@ MOVE:
     IF_1_GREATER_EQ_2_W_U d0,d1,nosound2,s
 
     ; scale to the audio range
-    moveq #0,d1
-    move.w #CAR1_MAX_SPEED,d2
-    move.w #0,d3
-    move.w #200,d4
-    jsr MAP
+    moveq               #0,d1
+    move.w              #CAR1_MAX_SPEED,d2
+    moveq               #0,d3
+    move.w              #200,d4
+    jsr                 MAP
            
     STORECARPROPERTY    MOVER_SAMPLE_RATE,d1
     sub.w               d4,d1
@@ -48,18 +48,18 @@ MOVE:
     move.w              MOVER_HEADING_MAGNITUDE(a2),d0
     add.w               MOVER_HEADING_MAGNITUDE(a0),d0
 
-    moveq #0,d1
-    move.w #CAR1_MAX_SPEED*2,d2
-    move.w #10,d3
-    move.w #64,d4
-    jsr MAP
+    moveq               #0,d1
+    move.w              #CAR1_MAX_SPEED*2,d2
+    moveq               #10,d3
+    moveq               #64,d4
+    jsr                 MAP
 
     move.w              d4,8(a1) ; set volume
 
 nosound2:
     ENDC
 
-    ;Velocity is Q4,12 format but POSITION is Q16,6 format - normalize HEADING
+    ;Velocity is Q4,12 format but POSITION is Q10,6 format - normalize HEADING
     SETCARPROPERTYADDR  MOVER_HEADING_OFFSET,a0
     NORMALIZEVECTOR     #6,(a0)
 
