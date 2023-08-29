@@ -160,9 +160,6 @@ START_RACE_SCREEN:
     move.w              #0,Sprite7pointers+2
     move.w              #0,Sprite7pointers+6
 
-    ;reset race flag in case we are returning here after the race
-    move.w              #0,START_RACE_FLAG
-
     move.w 	   			#DMASET,d1
     MOVE.W				d1,$dff096		; DMACON - enable bitplane, copper, sprites and audio (optional).
     move.w              #$000F,$dff096

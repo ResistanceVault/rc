@@ -18,7 +18,6 @@ firenotpressed_ok:
     lea                 $dff000,a5
 
     ;reset race flag in case we are returning here after the race
-    move.w              #0,START_RACE_FLAG
     move.w              #1,LOAD_NEXT_TRACK_FLAG
 
     ; Init tiles bitplanes

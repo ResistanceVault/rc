@@ -206,7 +206,6 @@ LOAD_TRACK:
 .shr_no_decompress:
 	PRINT_TRACK_PROGRESS #99
     clr.b               KEY_ESC
-    clr.w               JOY1FIREPRESSED
     jsr                 SETPOT
 	move.w				#1,COPY_METADATA
     rts

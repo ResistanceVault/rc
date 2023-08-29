@@ -128,8 +128,6 @@ KEYDOWNPRESSED: dc.w 0
 JOY1UPPRESSED: dc.w 0
 KEYUPPRESSED: dc.w 0
 START_RACE_FLAG: dc.w 0
-EXIT_TO_OS_FLAG: dc.w 0
-LOAD_NEXT_TRACK_FLAG: dc.w 1
 
 welcomescreen:
     ; clean bitplanes

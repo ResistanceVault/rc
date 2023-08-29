@@ -230,10 +230,7 @@ LOAD_TRACK:
 
     bsr.w DopoLoad
     
-    
-    
     clr.b               KEY_ESC
-    clr.w               JOY1FIREPRESSED
     jsr                 SETPOT
     rts
 

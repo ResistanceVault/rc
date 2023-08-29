@@ -244,6 +244,8 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/math/operations.s"
 	include "AProcessing/libs/packers/ShrinklerDecompress.S"
 
+EXIT_TO_OS_FLAG: dc.w 0
+LOAD_NEXT_TRACK_FLAG: dc.w 1
 RACES_COUNTER:  dc.w 0
 SCREECH_OPTION: dc.w 1
 MAX_RACES:		dc.w 3
@@ -661,9 +663,9 @@ exit:
 	include "car_management.s"
 	include "check_against_map.s"
 	include "hud.s"
-	;IFND COLOR
+	IFND COLOR
 	include "screens/welcomescreen.s"
-	;ENDC
+	ENDC
 	include "banner_manager.s"
 	include "race_manager.s"
 	include "track_info_manager.s"
