@@ -21,6 +21,8 @@ EXIT_TO_OS_TXT:
     even
 
 START_RACE_FUNCTION:
+    move.w  #1,LOAD_NEXT_TRACK_FLAG
+    clr.w   TRACK_NUMBER
     move.w  #1,MAIN_EXIT
     clr.l   NEXT_SCREEN
     ENABLE_LOADING_SCREEN

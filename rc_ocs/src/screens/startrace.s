@@ -172,13 +172,12 @@ START_RACE_SCREEN:
     beq.s               .no_load_next_track
     addi.w              #1,TRACK_NUMBER
     addi.w              #1,RACES_COUNTER
-    move.w MAX_RACES,d1
+    move.w              MAX_RACES,d1
     IF_1_GREATER_2_W_U  RACES_COUNTER,d1,.racesnotfinish,s
     jsr                 championsip_end_screen
     move.l              #MAINSCREEN,NEXT_SCREEN
     rts
 
-    DEBUG 5555
 .racesnotfinish
     clr.w               TRACK_OPEN_FILE
     jsr                 LOAD_TRACK
