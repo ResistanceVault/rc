@@ -953,10 +953,8 @@ PRINTLOADINGBAR:
     BETWEEN_UWORD       d4,#0,#320,d1
     tst.b               d1
     bne.s               printloadingbarend
-    ;DEBUG 8786
 
 printloadingbarloop:
-    ;DEBUG 8787
     jsr                 POINT_PROGRESS
     addi.w              #1,LOADINGBARPROGRESS
 
@@ -993,7 +991,6 @@ SHR_PROGRESS:
 
     cmp.w               SHR_PREV_PROG,d0
     beq.s               shr_noupd
-        ;DEBUG 5432
 
     ;cmp.w               LOADINGBARPROGRESS,d0
     ;beq.s               shr_noupd

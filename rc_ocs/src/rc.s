@@ -482,7 +482,6 @@ looptrackcolors2:
 	jsr P61_Init
 .nomusicinit
 
-
 	; Start of gameloop
 mouse:
     cmpi.b  			#$ff,$dff006    ; Linea 255?
