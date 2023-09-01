@@ -14,6 +14,11 @@ MOVE:
     GET2DMAGNITUDE_Q4_12_TABLE_LOOKUP
     move.w              d0,MOVER_HEADING_MAGNITUDE(a2)
 
+    ; round to zero for low velocity
+    bne.s               moveallowed
+    move.l              #0,MOVER_HEADING_OFFSET(a2)
+moveallowed:
+
     ; Play sample at frequency relative to car speed
     IFD SOUND
     tst.w               PLAY_SOUND
