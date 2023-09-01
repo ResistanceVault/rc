@@ -1,4 +1,10 @@
+TXT_STANDINGS_HEADER: dc.b "STANDINGS",$FF
+    even
+
 STANDINGSSCREEN:
+    move.w              #5,HEADER_X
+    move.l              #TXT_STANDINGS_HEADER,HEADER_TXT
+
     ; clean all txt first
 
     ; clear best lap row
