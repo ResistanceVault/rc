@@ -3,8 +3,8 @@
 
 First of all the RC concept is not mine, I used to play an RC game in the late 90s on my Pentium
 75Mhz machine (well... I remember the Amiga was already collecting dust in my ceiling at that
-time). I dont remember where I found the game... I just remember it was a shareware game and my
-friend bought the full version and the original author, Fabio Antoniazzi, sent an envelope to him
+time). I don't remember where I found the game... I just remember it was a shareware game and my
+friend bought the full version from the original author, Fabio Antoniazzi, then he sent back an envelope to him 
 with 4 HD floppy disks inside. Well... for some strange reason I found this floppy disk on my
 ceiling at the end of 2022 and they were still partially working.
 
@@ -61,7 +61,7 @@ just ensure you have enough CHIP ram available when you run it.
  (1MB should be more than enough).
 
 Running the game from CLI is also possible, just go into the directory where you installed the game
-and type "RC".
+and type "rc32".
 
 ## How to Play
 RC is a multiplayer game, it's meant to be played with friends, however, it is possible to setup also some
