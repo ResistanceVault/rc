@@ -327,7 +327,7 @@ CARS_SETUP_SCREEN:
 ;        a1 will have zero if the entry is not found in list
 CARS_SETUP_FIND_CAR_CONTROL:
     movem.l a2/a4/a5,-(sp)
-    lea     ROUTINES_INPUTLIST,a4
+    lea     ROUTINES_INPUTLIST(PC),a4
 
 car_setup_find_car_control_start_loop:
     lea     input_routines_Function(a4),a5
@@ -375,12 +375,21 @@ CARS_SETUP_FIND_NEXT_INPUT_ROUTINE:
     bsr.w   CARS_SETUP_FIND_CAR_CONTROL
     cmp.l   #0,a1
     beq.s   cars_setup_find_next_input_routine_end
+next_input_routine_repeat:
     adda.l  #input_routines_SIZEOF,a1
     tst.l   input_routines_Description(a1)
     bne.s   cars_setup_find_next_input_routine_end
     ; if we are here it means we are at the end of the list, start again
     lea     ROUTINES_INPUTLIST,a1
 cars_setup_find_next_input_routine_end:
+
+    ; check for conflicts with other players
+    tst.w   STRICT_COMMANDS
+    beq.s   .nostrictcommands
+    bsr.w   INPUTLIST_CHECK_CONFLICTS
+    tst.w   d0
+    bne.s   next_input_routine_repeat ; error, already taken
+.nostrictcommands
     rts
 
 ACTION_TEST:
@@ -506,4 +515,89 @@ restorebackground_tile_small_start_loop:
     dbra                d6,restorebackground_tile_small_start_loop
 
     movem.l             (sp)+,d0/d1/d6/a0-a6
+    rts
+
+; this routine just checks if the input routined pointed by a1 is already assigned to another player
+; if yes it returns non zero into d0 and means the control is already taken, the routine calling this should propose something else
+; if the routine is good, it returns 0 into d0
+INPUTLIST_CHECK_CONFLICTS:
+    movem.l             a0/d7,-(sp)
+    move.l              input_routines_Function(a1),d0
+
+    ; if a1 points to off check if there is at least 1 human player
+    ;tst.l               d0
+    bne.s               nocpucontrol_conflict_off
+    bsr.w               COUNT_HUMAN_PLAYERS
+    tst.w               d0
+    bne.s               nocpucontrol_conflict_off
+    moveq               #1,d0
+    movem.l             (sp)+,a0/d7
+    rts
+nocpucontrol_conflict_off:
+    
+    ; if a1 points to cpu check if there is at least 1 human player
+    cmp.l               #CPUCONTROL,d0
+    bne.s               nocpucontrol_conflict
+    bsr.w               COUNT_HUMAN_PLAYERS
+    ; if there are no human players , setting the cpu is not allowed, for this reason return 0
+    ; if (human players<2)
+    ;IF_1_LESS_2_W_U d0,#2,nocpucontrol_conflict,s
+    ;IF_1_GREATER_EQ_2_W_U #1,d0,nocpucontrol_conflict,s
+    tst.w               d0
+    bne.s               nocpucontrol_conflict
+    moveq               #1,d0
+    movem.l             (sp)+,a0/d7
+    rts
+nocpucontrol_conflict:
+    lea                 MOVERS,a0
+    move.w 				#MAX_CARS-1,d7
+inputlist_check_conflicts_loop:
+    cmp.l               INPUT_ROUTINE_OFFSET(a0),d0
+    bne.s               inputlist_not_found
+
+    ; we allow cpu duplicates
+    cmp.l               #CPUCONTROL,INPUT_ROUTINE_OFFSET(a0)
+    beq.s               inputlist_not_found
+
+    ; we allow off duplicates
+    tst.l               INPUT_ROUTINE_OFFSET(a0)
+    beq.s               inputlist_not_found
+
+    DEBUG 9999
+    moveq               #1,d0
+    movem.l             (sp)+,a0/d7
+    rts
+inputlist_not_found:
+    DEBUG 9998
+    adda.w  			#MOVER_SIZE,a0
+	dbra 				d7,inputlist_check_conflicts_loop
+
+    moveq               #0,d0
+    movem.l             (sp)+,a0/d7
+    rts
+
+; this counts how many human players are in play
+; returns count into d0
+COUNT_HUMAN_PLAYERS:
+    movem.l             a0/a2/d7,-(sp)
+    move.l              a0,a2
+    moveq               #0,d0
+        DEBUG 1000
+
+    lea                 MOVERS,a0
+    move.w 				#MAX_CARS-1,d7
+human_check_conflicts_loop:
+    cmp.l               #CPUCONTROL,INPUT_ROUTINE_OFFSET(a0)
+    beq.s               nohumanplayerfound
+    ; off cars are not counted as humans
+    tst.l               INPUT_ROUTINE_OFFSET(a0)
+    beq.s               nohumanplayerfound
+    ; current car is not counted
+    cmp.l               a0,a2
+    beq.s               nohumanplayerfound
+    addq                #1,d0
+nohumanplayerfound:
+    adda.w  			#MOVER_SIZE,a0
+	dbra 				d7,human_check_conflicts_loop
+    movem.l             (sp)+,a0/a2/d7
     rts

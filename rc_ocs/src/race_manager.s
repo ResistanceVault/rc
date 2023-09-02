@@ -93,6 +93,15 @@ moversloop_pause:
     btst 				#2,d0
     ; if yes transition to banner 3 stage
     beq.s               movers_no_disable_pause
+
+    ; it doesnt count for cpu driven car
+    tst.w               STRICT_COMMANDS
+    beq.s               .nostrictcommands
+    DEBUG 7654
+    cmp.l               #CPUCONTROL,INPUT_ROUTINE_OFFSET(a0)
+    beq.s               movers_no_disable_pause
+.nostrictcommands:
+
     move.w              #RACE_WAIT_3,RACE_PROGRESS
     move.w              #RACE_WAIT_BETWEEN_STAGES,RACE_MANAGER_TIMER
 movers_no_disable_pause:

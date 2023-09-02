@@ -244,6 +244,7 @@ WaitDisk	EQU	30
 	include "AProcessing/libs/math/operations.s"
 	include "AProcessing/libs/packers/ShrinklerDecompress.S"
 
+STRICT_COMMANDS: dc.w 1
 EXIT_TO_OS_FLAG: dc.w 0
 LOAD_NEXT_TRACK_FLAG: dc.w 1
 RACES_COUNTER:  dc.w 0
