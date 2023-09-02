@@ -539,10 +539,7 @@ nocpucontrol_conflict_off:
     cmp.l               #CPUCONTROL,d0
     bne.s               nocpucontrol_conflict
     bsr.w               COUNT_HUMAN_PLAYERS
-    ; if there are no human players , setting the cpu is not allowed, for this reason return 0
-    ; if (human players<2)
-    ;IF_1_LESS_2_W_U d0,#2,nocpucontrol_conflict,s
-    ;IF_1_GREATER_EQ_2_W_U #1,d0,nocpucontrol_conflict,s
+    ; if there are no human players , setting the cpu is not allowed, for this reason return 1
     tst.w               d0
     bne.s               nocpucontrol_conflict
     moveq               #1,d0
@@ -563,12 +560,10 @@ inputlist_check_conflicts_loop:
     tst.l               INPUT_ROUTINE_OFFSET(a0)
     beq.s               inputlist_not_found
 
-    DEBUG 9999
     moveq               #1,d0
     movem.l             (sp)+,a0/d7
     rts
 inputlist_not_found:
-    DEBUG 9998
     adda.w  			#MOVER_SIZE,a0
 	dbra 				d7,inputlist_check_conflicts_loop
 
@@ -582,7 +577,6 @@ COUNT_HUMAN_PLAYERS:
     movem.l             a0/a2/d7,-(sp)
     move.l              a0,a2
     moveq               #0,d0
-        DEBUG 1000
 
     lea                 MOVERS,a0
     move.w 				#MAX_CARS-1,d7
