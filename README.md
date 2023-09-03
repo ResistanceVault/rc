@@ -47,24 +47,25 @@ future are:
 
     -[ ]   add paddle support
 
-    If you have any reasonable suggestions, please email me 
+    If you have any reasonable suggestion, please email me 
 
 ## Starting RC
 RC is OS friendly, running it should be quite trivial but anyway....
 
-The most easy way to run it is to use the self bootable disk provided on the github page. Just
+The easy way to run it is to use the self bootable disk provided on the github page. Just
 insert the disk in your Amiga (or Gotek floppy emulator) and turn on the Amiga. The game should
 also boot from external floppy drive readers (DF1: DF2 and DF3:).
 
 If you installed the game on HD, then just double click on the rc icon, the game is OS friendly,
 just ensure you have enough CHIP ram available when you run it.
  (1MB should be more than enough).
+In order to install the game on hard drive just drag and drop the floppy icon from your workbench into the destination drawer, there is no installation script so far.
 
 Running the game from CLI is also possible, just go into the directory where you installed the game
 and type "rc32".
 
 ## How to Play
-RC is a multiplayer game, it's meant to be played with friends, however, it is possible to setup also some
+RC is a multiplayer game, it's meant to be played with friends, however, it is possible to put in play some
 CPU driven cars.
 Before starting the game I suggest to access the "Car setup screen" to set proper controls and CPU cars.
 Supported Input modes for humans are the following:
@@ -76,7 +77,7 @@ Supported Input modes for humans are the following:
 * Keyboard IJKL combination
 * Keyboard numpad (not Amiga 600)
 
-  Once car setup is complete you can proceed starting the races.
+  Once car setup is complete you can proceed starting the championship.
 For each race some points are awarded in this way:
 
 * 10 points for the first place
@@ -94,6 +95,10 @@ Finally an extra point is awarded to the best leader (the car able to perform mo
 An circle shape indicator on the HUD screen, next to each car, will report the car currently holding the best lap (red inner circle)
 and the best leader (blu circle).
 The winner of the race is reported with a green circle.
+
+During the race you can pause/unpause the game using the __spacebar__.
+The race is considered completed only if all cars completed the expected number of laps.
+Pressing __esc__ results in a race abort, no points are awarded and the race must be repeated in order to complete the championship.
 
 ## Track files specification
 
@@ -132,7 +137,7 @@ The file must hold the following data:
     you have to use some pre-defined values in order to do not change the colors of the cars.
     Here's the list of colors you should not change:
 
-    * $DFF1A2 COLOR17 $0000
+    * $DFF1A2 COLOR17   $0000
     * $DFF1A4 COLOR18	$0921
 
     * $DFF1AA COLOR21	$0000
