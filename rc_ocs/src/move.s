@@ -14,8 +14,10 @@ MOVE:
     GET2DMAGNITUDE_Q4_12_TABLE_LOOKUP
     move.w              d0,MOVER_HEADING_MAGNITUDE(a2)
 
-    ; round to zero for low velocity
+    ; round to zero for low velocity if race completed
     bne.s               moveallowed
+    tst.w               RACE_COMPLETED_OFFSET(a2)
+    beq.s               moveallowed
     move.l              #0,MOVER_HEADING_OFFSET(a2)
 moveallowed:
 
