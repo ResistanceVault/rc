@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="antani" tilewidth="320" tileheight="240" tilecount="1" columns="1">
+ <editorsettings>
+  <export target="trajectory.xml" format="tsx"/>
+ </editorsettings>
  <image source="../../../../../../../../../Scrivania/Antani/antani.png" width="320" height="240"/>
  <tile id="0">
   <objectgroup draworder="index" id="2">
