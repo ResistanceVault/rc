@@ -169,6 +169,40 @@ Refer to the screenshot below:
 
 Save the new image in the metadata directory just to have a reference in the future if you want to change these placeholders, then take note of all the coordinates of the red squares, we will need them shortly.
 
+### CPU points
+
+In order to let the CPU cars drive through the track you must provide a set of coordinates X,Y.
+Each coordinate will instruct the CPU driven car the right direction.
+Coordinates as usual are stored in words, so, each XY pair will take 4 bytes.
+Since Y resolution of the track is 240px we have the most significant byte free to use.
+Because of this additional commands are stored in this memory area:
+- bit 7 forces the car to sail
+- bit 6 forces the car to brake
+
+Remaining 6 bits are used to set a speed where the action defined in the upper nibble is applied.
+For example, byte
+```
+1010 0000
+```
+Is stating that when the car is pointing to this coordinate, it's forced to sail (not press the accellerator and not press the brake) if the current velocity is greater than 1px per frame.
+
+Another example, byte
+```
+0101 0000
+```
+will force the car to brake only if the current velocity is half pixel per frame.
+
+In order to build this map you can pick whatever software/tool/technique you want, I personally take advantage of Tiled, a free software available at https://www.mapeditor.org/.
+
+The procedure is the following, create a new project and add a tile with resolution x:320, y=240 then go to collision tile editor:
+![editorcollisionitile](editorcollisionitile.png).
+- Select the triangle icon and start placing points following the ideal trajectory of the car, pay attention to the rotation of the track (clockwise or counterclockwise). Continue placing points until you get a closed polygon.Name this object with the name "trajectory",
+![trajectory](trajectory.png).
+
+- Optionally place squares/rectangles to force car behaviours (braking or sailing). This object must have 0 degrees of rotation and must have the class "modifier". In the custom property field put a string with name "action" and and integer with name "treshold".
+The first one will take the strings "sail" or "brake" as a value. The other is just the value of the treshold where the action must be activated.
+![trajectoryandmodifier](trajectoryandmodifier.png).
+
 ### Start scripting
 In this tutorial I am going to use a Makefile in order to create the final .TRK file needed for RC, feel free to use whatever you want.
 
