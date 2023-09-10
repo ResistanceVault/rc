@@ -201,7 +201,7 @@ The procedure is the following, create a new project and add a tile with resolut
 
 - Optionally place squares/rectangles to force car behaviours (braking or sailing). This object must have 0 degrees of rotation and must have the class "modifier". In the custom property field put a string with name "action" and and integer with name "threshold".
 The first one will take the strings "sail" or "brake" as a value. The other is just the value of the threshold where the action must be activated.
-![trajectoryandmodifier](trajectoryandmodifierexample.png).
+![trajectoryandmodifierexample](trajectoryandmodifierexample.png).
 
 ### Start scripting
 In this tutorial I am going to use a Makefile in order to create the final .TRK file needed for RC, feel free to use whatever you want.
