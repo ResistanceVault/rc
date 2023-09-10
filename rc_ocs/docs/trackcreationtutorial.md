@@ -201,6 +201,7 @@ The procedure is the following, create a new project and add a tile with resolut
 
 - Optionally place squares/rectangles to force car behaviours (braking or sailing). This object must have 0 degrees of rotation and must have the class "modifier". In the custom property field put a string with name "action" and and integer with name "threshold".
 The first one will take the strings "sail" or "brake" as a value. The other is just the value of the threshold where the action must be activated.
+Remember that treshold is value multiplied by 32, so, for example if you want your action to be active when the currenct velocity of the car is more than 1px per frame you must set the "threshold value" to 32, if you want half pixel per frame put 16 and so on. Keep in mind that the car max speed is 1.5px per second so if you set this value too high the action will be never triggered.
 ![trajectoryandmodifierexample](trajectoryandmodifierexample.png).
 
 ### Start scripting
