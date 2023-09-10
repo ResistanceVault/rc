@@ -201,7 +201,7 @@ The procedure is the following, create a new project and add a tile with resolut
 
 - Optionally place squares/rectangles to force car behaviours (braking or sailing). This object must have 0 degrees of rotation and must have the class "modifier". In the custom property field put a string with name "action" and and integer with name "threshold".
 The first one will take the strings "sail" or "brake" as a value. The other is just the value of the threshold where the action must be activated.
-![trajectoryandmodifier](trajectoryandmodifier.png).
+![trajectoryandmodifier](trajectoryandmodifierexample.png).
 
 ### Start scripting
 In this tutorial I am going to use a Makefile in order to create the final .TRK file needed for RC, feel free to use whatever you want.
@@ -221,11 +221,11 @@ DESIRED_FILE_SIZE = 125916
 all:
 	ilbm2raw -f ./images/$(IMAGE32COLORS).iff ./images/$(IMAGE32COLORS).raw -p ./images/$(IMAGE32COLORS).pal
 
-    @# Enable this only if you need bitplane padding (your image is not 32 colors)
+    	@# Enable this only if you need bitplane padding (your image is not 32 colors)
 	#dd if=/dev/zero of=./images/$(IMAGE32COLORS).raw bs=1 count=1 seek=47999
 	
 	@# Enable this only if you need padding on the color (it needs to be 64 bytes)
-    # pad palette color for team 1
+    	# pad palette color for team 1
 	#echo 00 00 00 00 09 21 00 00 | xxd -r -p >> ./images/$(IMAGE32COLORS).pal
 	# pad palette color for team 2
 	#echo 00 00 00 00 02 5b 00 00 | xxd -r -p >> ./images/$(IMAGE32COLORS).pal
@@ -254,18 +254,17 @@ all:
 	printf "%04x%04x%04x\n" 70 210 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	#add CPU positions
-	# Section 1
-	# Section 2
-	# Section 3
-	# Section 4
-	# Section 5
-	# Section 6
-	# Section 7
+	../build_trajectory.sh ./metadata/trajectory.xml | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+
+	# Pad with $FF until file is 125912 bytes
+	@DIMENSIONE_FILE=$$(stat -c %s ../../../buildadf/tracks/$(TRACKNAME).TRK);\
+		DIFF=$$(expr $(DESIRED_FILE_SIZE) - $$DIMENSIONE_FILE - 4); \
+		printf '\377%.0s' $$(seq 1 $$DIFF) | dd of=../../../buildadf/tracks/$(TRACKNAME).TRK bs=1 seek=$$DIMENSIONE_FILE conv=notrunc;
 
 	# Padding CPU positions
 	for number in `seq 1 250`; do \
         echo FF FF FF FF | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK ;\
-    done
+    	done
 
 	# number of zones of the track
 	echo 00 07 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
