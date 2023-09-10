@@ -204,6 +204,8 @@ The first one will take the strings "sail" or "brake" as a value. The other is j
 Remember that treshold is value multiplied by 32, so, for example if you want your action to be active when the currenct velocity of the car is more than 1px per frame you must set the "threshold value" to 32, if you want half pixel per frame put 16 and so on. Keep in mind that the car max speed is 1.5px per second so if you set this value too high the action will be never triggered.
 ![trajectoryandmodifierexample](trajectoryandmodifierexample.png).
 
+When done, proceed to export to xml, the script __rc_ocs/assets/tracks/build_trajectory.sh__ will be able to parse it and print the resulting coordinates for the game to stdout, use this like in the following script:
+
 ### Start scripting
 In this tutorial I am going to use a Makefile in order to create the final .TRK file needed for RC, feel free to use whatever you want.
 
