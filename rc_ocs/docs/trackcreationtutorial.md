@@ -199,8 +199,8 @@ The procedure is the following, create a new project and add a tile with resolut
 - Select the triangle icon and start placing points following the ideal trajectory of the car, pay attention to the rotation of the track (clockwise or counterclockwise). Continue placing points until you get a closed polygon.Name this object with the name "trajectory",
 ![trajectory](trajectory.png).
 
-- Optionally place squares/rectangles to force car behaviours (braking or sailing). This object must have 0 degrees of rotation and must have the class "modifier". In the custom property field put a string with name "action" and and integer with name "treshold".
-The first one will take the strings "sail" or "brake" as a value. The other is just the value of the treshold where the action must be activated.
+- Optionally place squares/rectangles to force car behaviours (braking or sailing). This object must have 0 degrees of rotation and must have the class "modifier". In the custom property field put a string with name "action" and and integer with name "threshold".
+The first one will take the strings "sail" or "brake" as a value. The other is just the value of the threshold where the action must be activated.
 ![trajectoryandmodifier](trajectoryandmodifier.png).
 
 ### Start scripting

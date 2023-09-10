@@ -17,17 +17,16 @@ function get_value() {
     fi
   fi
   
-  if [[ $line1 =~ name=\"([^\"]+)\" && "${BASH_REMATCH[1]}" == "treshold" ]]; then
-    # Se l'attributo name è "treshold", estrai il valore
+  if [[ $line1 =~ name=\"([^\"]+)\" && "${BASH_REMATCH[1]}" == "threshold" ]]; then
+    # Se l'attributo name è "threshold", estrai il valore
     if [[ $line1 =~ value=\"([^\"]+)\" ]]; then
-      treshold="${BASH_REMATCH[1]}"
-      #echo "Il valore per treshold è: $value"
+      threshold="${BASH_REMATCH[1]}"
     fi
   fi
 }
 function check_square_zone() {
   action=0
-  treshold=0
+  threshold=0
   while IFS= read -r line; do
     if [[ $line == *"<object"* && $line == *"type=\"modifier\""* ]]; then
         x1_value=$(echo "$line" | grep -o 'x="[^"]*' | awk -F'"' '{print $2}')
@@ -102,8 +101,8 @@ for point in "${point_array[@]}"; do
 
   check_square_zone
   #echo "action $action"
-  #echo "treshold $treshold"
-  hexy=$(($hexy + $action + $treshold * 256))
+  #echo "threshold $threshold"
+  hexy=$(($hexy + $action + $threshold * 256))
 
   printf "%04x %04x " $hexx $hexy
 done

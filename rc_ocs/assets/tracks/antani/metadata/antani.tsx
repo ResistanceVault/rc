@@ -12,31 +12,31 @@
    <object id="5" name="sail1" type="modifier" x="274.728" y="29.0909" width="36.8209" height="50.9091">
     <properties>
      <property name="action" value="sail"/>
-     <property name="treshold" type="int" value="32"/>
+     <property name="threshold" type="int" value="32"/>
     </properties>
    </object>
    <object id="6" name="sail2" type="modifier" x="147.949" y="70.4549" width="32.8783" height="25.9708">
     <properties>
      <property name="action" value="sail"/>
-     <property name="treshold" type="int" value="20"/>
+     <property name="threshold" type="int" value="20"/>
     </properties>
    </object>
    <object id="7" name="sail3" type="modifier" x="37.9167" y="196.875" width="23.4583" height="12.1667">
     <properties>
      <property name="action" value="sail"/>
-     <property name="treshold" type="int" value="32"/>
+     <property name="threshold" type="int" value="32"/>
     </properties>
    </object>
    <object id="8" name="sail4" type="modifier" x="15.5758" y="75.3333" width="17.7273" height="16.9091">
     <properties>
      <property name="action" value="sail"/>
-     <property name="treshold" type="int" value="32"/>
+     <property name="threshold" type="int" value="32"/>
     </properties>
    </object>
    <object id="9" name="sail5" type="modifier" x="79.8182" y="148.182">
     <properties>
      <property name="action" value="sail"/>
-     <property name="treshold" type="int" value="32"/>
+     <property name="threshold" type="int" value="32"/>
     </properties>
    </object>
   </objectgroup>
