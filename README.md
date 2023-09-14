@@ -57,17 +57,16 @@ insert the disk in your Amiga (or Gotek floppy emulator) and turn on the Amiga. 
 also boot from external floppy drive readers (DF1: DF2 and DF3:).
 
 If you installed the game on HD, then just double click on the rc icon, the game is OS friendly,
-just ensure you have enough CHIP ram available when you run it.
- (1MB should be more than enough).
+just ensure you have enough CHIP ram available when you run it (700kb should be more than enough).
 In order to install the game on hard drive just drag and drop the floppy icon from your workbench into the destination drawer, there is no installation script so far.
 
 Running the game from CLI is also possible, just go into the directory where you installed the game
-and type "rc32".
+and type "rc32" which is the name of the executable.
 
 ## How to Play
 RC is a multiplayer game, it's meant to be played with friends, however, it is possible to put in play some
 CPU driven cars.
-Before starting the game I suggest to access the "Car setup screen" to set proper controls and CPU cars.
+Before starting the race I suggest to access the "Car setup screen" to set proper controls and CPU cars.
 Supported Input modes for humans are the following:
 * Joy on port 1
 * Joy on port 0 (mouse port)
@@ -77,7 +76,7 @@ Supported Input modes for humans are the following:
 * Keyboard IJKL combination
 * Keyboard numpad (not Amiga 600)
 
-  Once car setup is complete you can proceed starting the championship.
+Once car setup is complete you can proceed starting the championship.
 For each race some points are awarded in this way:
 
 * 10 points for the first place
@@ -90,7 +89,7 @@ For each race some points are awarded in this way:
 *  1 points for the eigth place
 
 Additionally, 3 extra points are awarded to the car able to perform the best lap.
-Finally an extra point is awarded to the best leader (the car able to perform most laps as a leader of the race).
+Finally an extra point is awarded to the best leader (the player able to perform most laps as a leader of the race).
 
 An circle shape indicator on the HUD screen, next to each car, will report the car currently holding the best lap (red inner circle)
 and the best leader (blu circle).
