@@ -361,12 +361,12 @@ NoSpritez:
 
 SHR_TRK_PROGRESS:
 	movem.l             d0-d7/a0-a6,-(sp)
-    lsr.w               #3,d0
-    
+    lsr.l               #3,d0
+
     move.w              #0,d1
     move.w              #TRK_FILE_SIZE/8,d2
     moveq               #0,d3
-    move.w              #70-1,d4
+    moveq               #70-1,d4
     jsr                 MAP
 
     ; update progress bar
@@ -376,7 +376,7 @@ SHR_TRK_PROGRESS:
     cmp.w               SHR_TRK_PREV_PROG,d0
     beq.s               shr_trk_noupd
 
-    move.w              d0,SHR_TRK_PREV_PROG
+	move.w              d0,SHR_TRK_PREV_PROG
     bsr.w               PRINTLOADINGBAR
 
 shr_trk_noupd:

@@ -97,7 +97,6 @@ moversloop_pause:
     ; it doesnt count for cpu driven car
     tst.w               STRICT_COMMANDS
     beq.s               .nostrictcommands
-    DEBUG 7654
     cmp.l               #CPUCONTROL,INPUT_ROUTINE_OFFSET(a0)
     beq.s               movers_no_disable_pause
 .nostrictcommands:

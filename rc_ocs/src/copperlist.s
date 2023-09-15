@@ -269,6 +269,7 @@ BPLPTR4_WELCOME:
 ; END OF COPPERLIST_WELCOME
 
 ; ************ COPPERLIST WELCOME INTRO START *******************
+	IFD INTRO
 COPPERLIST_INTRO:
 
 Sprite0Intropointers:
@@ -333,7 +334,7 @@ BPLPTR3_INTRO:
 
     dc.w	$FFFF,$FFFE	;
 ; END OF COPPERLIST_INTRO
-
+	ENDC
 
 ; ************ COPPERLIST TRACK SELECTION START *******************
 

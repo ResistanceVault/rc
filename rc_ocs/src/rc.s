@@ -340,7 +340,7 @@ load_track_from_disk:
     jsr                 LOAD_TRACK
 
 	jsr					CREATE_STANDINGS_ORDER
-	
+
 	 ; Cars init
     jsr 				SET_CAR1_START_STATUS
     jsr 				SET_CAR2_START_STATUS
@@ -480,7 +480,7 @@ looptrackcolors2:
 	sub.l 				a2,a2
 	moveq 				#0,d0
 	;lea 				p61coppoke+3,a4		;only used in P61mode >=3
-	jsr P61_Init
+	jsr 				P61_Init
 .nomusicinit
 
 	; Start of gameloop

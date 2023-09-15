@@ -230,7 +230,7 @@ The file must hold the following data:
     Unused data left from the 1000 bytes reserved must be padded with $FFFFFFFF data.
 
 ### Number or zones
-    Byte from 125912 to 125913 is an unsigned double byte number storing the number of zones used in the track, see section "Track metadata".
+    Byte from 125912 to 125913 is an unsigned word number storing the number of zones used in the track, see section "Track metadata".
     The RC game will use this value in order to initialize the car and realize when the car completed a lap.
 
 ### License

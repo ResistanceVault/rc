@@ -85,11 +85,11 @@ MENU_CALLBACK_BEFORE_LOOP_FUNCT:
                             dc.l    0
 
 MENU_INPUT_FUNCT_LIST:
-    dc.l READJOY1_WELCOME
-    dc.l KEYBOARD_WASD_WELCOME
-    dc.l KEYBOARD_ARROWS
-    dc.l KEYBOARD_IJKL
-    dc.l 0
+    dc.l                    READJOY1_WELCOME
+    dc.l                    KEYBOARD_WASD_WELCOME
+    dc.l                    KEYBOARD_ARROWS
+    dc.l                    KEYBOARD_IJKL
+    dc.l                    0
 
 MENUSCREEN:
     movem.l             a0-a6/d0-d7,-(sp)
@@ -935,9 +935,8 @@ loadingdeay2:
 LOADINGBARPROGRESS:     dc.w 0
 PRINTLOADINGBAR:
     movem.l             d0-d7/a0-a6,-(sp)
-    ;move.w             #127,d0
-    move.w              #0,d1
-    move.w              #100,d2
+    moveq               #0,d1
+    moveq               #100,d2
     moveq               #0,d3
     move.w              #320,d4
     jsr                 MAP
@@ -979,7 +978,7 @@ SHR_PROGRESS:
     lsr.w               #2,d0
     ;move.w d0,d7
     ;move.w             #127,d0
-    move.w              #0,d1
+    moveq               #0,d1
     move.w              #51264/4,d2
     moveq               #0,d3
     move.w              #70-1,d4
