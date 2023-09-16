@@ -1,4 +1,4 @@
-IMAGE32COLORS = ving1
+IMAGE32COLORS = ving1PA
 TRACKNAME = VING1
 DESIRED_FILE_SIZE = 125916
 
@@ -19,7 +19,7 @@ define generate_cpu_point_extended
 endef
 
 all:
-	ilbm2raw -f ./images/$(IMAGE32COLORS).iff ./images/$(IMAGE32COLORS).raw -p ./images/$(IMAGE32COLORS).pal -s 17,19
+	ilbm2raw -f ./images/$(IMAGE32COLORS).iff ./images/$(IMAGE32COLORS).raw -p ./images/$(IMAGE32COLORS).pal
 	
 	# add raw image data
 	cp ./images/$(IMAGE32COLORS).raw ../../../buildadf/tracks/$(TRACKNAME).TRK

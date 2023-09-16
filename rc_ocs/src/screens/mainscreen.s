@@ -4,6 +4,10 @@ MAIN_FILENAME:
 
 MAIN_FILENAME_SIZE EQU 13560
 
+TXT_PASSIONE_AMIGA_DAY: 
+    dc.b "PASSIONE AMIGA DAY 2023 EDITION",$FF
+    even
+
 START_GAME_TXT:
     dc.b "START GAME",$FF
     even
@@ -83,6 +87,11 @@ MENU_MAIN:
     dc.w 0
 
 TXT_MAIN:
+
+    dc.w 4,35
+    dc.l TXT_PASSIONE_AMIGA_DAY
+    dc.w 8,7
+
     dc.w 0,0
     dc.l 0
 
