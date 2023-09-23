@@ -221,3 +221,35 @@ all:
 
 	ilbm2raw -b -f rcfloppy.iff rcfloppy.raw -p rcfloppy.pal
 	cp rcfloppy.raw.* ../../src/assets/backgrounds/
+
+	ilbm2raw -f RSEnew2t1b3D.iff resistance.raw -p resistance.pal
+	cp resistance.raw ../../bin/resistance.data
+	dd if=/dev/zero bs=1 count=10240 >> ../../bin/resistance.data
+	cat resistance.pal >> ../../bin/resistance.data
+	dd if=/dev/zero bs=1 count=32 >> ../../bin/resistance.data
+	chmod 666 ../../bin/resistance.data
+	chown 1000:1000 ../../bin/resistance.data
+	cp ../../bin/resistance.data ../../buildadf/resistance.data
+	ln -sf ../../bin/resistance.data ./resistance.data
+	../../Shrinkler --data resistance.data resistance.shr
+	chmod 777 resistance.shr
+	cp resistance.shr ../../bin/resistance.shr
+	chmod +r ../../bin/resistance.shr
+	cp resistance.shr ../../buildadf/resistance.shr
+	chmod +r ../../buildadf/resistance.shr
+
+	ilbm2raw -f phaze.iff phaze.raw -p phaze.pal
+	cp phaze.raw ../../bin/phaze.data
+	dd if=/dev/zero bs=1 count=10240 >> ../../bin/phaze.data
+	cat phaze.pal >> ../../bin/phaze.data
+	dd if=/dev/zero bs=1 count=32 >> ../../bin/phaze.data
+	chmod 666 ../../bin/phaze.data
+	chown 1000:1000 ../../bin/phaze.data
+	cp ../../bin/phaze.data ../../buildadf/phaze.data
+	ln -sf ../../bin/phaze.data ./phaze.data
+	../../Shrinkler --data phaze.data phaze.shr
+	chmod 777 phaze.shr
+	cp phaze.shr ../../bin/phaze.shr
+	chmod +r ../../bin/phaze.shr
+	cp phaze.shr ../../buildadf/phaze.shr
+	chmod +r ../../buildadf/phaze.shr

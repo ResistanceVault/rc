@@ -299,6 +299,12 @@ clearintroscreen:
 	jsr					CAR7_INIT
 	jsr					CAR8_INIT
 
+	; open resistance_screen
+	IFD					COLOR
+	jsr					RESISTANCE_SCREEN
+	jsr					PHAZE_SCREEN
+	ENDC
+
 	; Open main screen
 	IFD COLOR
 print_screen:
@@ -678,6 +684,8 @@ exit:
 	ENDC
 	IFD COLOR
 	include "menu.s"
+	include "screens/resistance_screen.s"
+	include "screens/phaze_screen.s"
 	include "screens/mainscreen.s"
 	include "screens/cars_setup_screen.s"
 	include "screens/resultscreen.s"

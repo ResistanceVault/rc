@@ -24,6 +24,7 @@ CLEAR_PROGRESS_BAR_F
 FADE_SPEED                  EQU     3 ; how many frames do I wait before changing color?
 CURSOR_CLEARING             EQU     5 ; how many pixel between the cursor and the text?
 CURSOR_CLEARING_STR         EQU     1 ;
+AUTOEXIT_TIMER_DURATION     EQU     350
 
 ; Struct describing an entry
                             rsset   0
@@ -80,6 +81,9 @@ MAIN_IJKL_FIRE_2_PRESSED:   dc.b    0
 MAIN_EXIT:                  dc.w    0
 
 FADE_SPEED_COUNTER:         dc.w    FADE_SPEED
+MENU_AUTOEXIT:              dc.w    0
+MENU_AUTOEXIT_TIMER:        dc.w    0
+MENU_AUTOEXIT_LOADING_SCREEN: dc.w  0
 
 MENU_CALLBACK_BEFORE_LOOP_FUNCT:
                             dc.l    0
@@ -252,6 +256,19 @@ menutxtloopend:
     ; draw txt - END
 
     move.l               MENUSCREEN_ENTRIES(PC),a6
+
+    ; if no menuscreen entries use a counter to auto exit
+    clr.w                MENU_AUTOEXIT
+    tst.l                8(a6)
+    bne.s                .noautoexit
+    move.w               #1,MENU_AUTOEXIT
+    tst.w                MENU_AUTOEXIT_LOADING_SCREEN
+    beq.s                .menuautoexitnolodinscreen
+    ENABLE_LOADING_SCREEN
+.menuautoexitnolodinscreen:
+    move.w               #AUTOEXIT_TIMER_DURATION,MENU_AUTOEXIT_TIMER
+    clr.w                MENU_AUTOEXIT_LOADING_SCREEN
+.noautoexit
 menuloop:
     tst.l                menu_DescPtr(a6)
     beq.s                setcursormain
@@ -309,6 +326,16 @@ waitmain:
     bsr.w               MAIN_FadeIn
     move.w              #FADE_SPEED,FADE_SPEED_COUNTER
 nomainfadein:
+
+    ; manage auto Out
+    tst.w               MENU_AUTOEXIT
+    beq.s               continuewithnormalcontrols
+    subi.w              #1,MENU_AUTOEXIT_TIMER
+    bne.s               menuautoexitnotcompleted
+    move.w              #1,MAIN_EXIT
+menuautoexitnotcompleted:
+    bra.w               menu_input_list_loop_end
+continuewithnormalcontrols:
 
     lea                 MENU_INPUT_FUNCT_LIST(PC),a3
     lea                 MAIN_JOY1_UP_PRESSED-1,a6

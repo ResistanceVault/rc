@@ -1,0 +1,30 @@
+PHAZE_FILENAME:
+    dc.b "phaze.shr",0
+    even
+
+PHAZE_FILENAME_SIZE EQU 2829
+
+PHAZE_MAIN:
+    dc.w 0,0
+    dc.l 0
+    dc.l 0
+    dc.l 0
+    dc.w 0
+    dc.w 0
+
+PHAZE_MAIN_TXT:
+    dc.w 0,0
+    dc.l 0
+
+PHAZE_MAIN_CURRENTLY_SELECTED:
+    dc.l    MENU_MAIN;+menu_SIZEOF
+
+PHAZE_SCREEN:
+    move.l  #PHAZE_FILENAME,MENUSCREEN_IMAGE
+    move.l  #PHAZE_FILENAME_SIZE,MENUSCREEN_IMAGE_SIZE
+    move.l  #PHAZE_MAIN,MENUSCREEN_ENTRIES
+    move.l  #PHAZE_MAIN_TXT,TXTSCREEN_ENTRIES
+    move.l  PHAZE_MAIN_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY
+    move.w  #1,MENU_AUTOEXIT_LOADING_SCREEN
+    jsr     MENUSCREEN
+    rts
