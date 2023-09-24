@@ -107,7 +107,7 @@ Pressing __esc__ results in a race abort, no points are awarded and the race mus
 
 ## Physical release
 There is no physical release of this game but if you really want you can just write the adf file provided in this github releases page into a floppy disk.
-Additionally we provide this [box pdf](docs/RCmini_Box_Cover-1.pdf), just print it and glue it on a box, we did that with a cereal box with excellent results.
+Additionally we provide this [box pdf](rc_ocs/docs/RCmini_Box_Cover-1.pdf), just print it and glue it on a box, we did that with a cereal box with excellent results.
 The box will fit the floppy disk in any direction.
 ## Track files specification
 
