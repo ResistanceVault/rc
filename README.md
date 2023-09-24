@@ -95,10 +95,20 @@ An circle shape indicator on the HUD screen, next to each car, will report the c
 and the best leader (blu circle).
 The winner of the race is reported with a green circle.
 
+To drive the car use the following controls:
+- up: (or fire for joysticks) accelerate
+- down: (or fire2 for joysticks) brake
+- left: rotate the car counterclockwise
+- right: rotate the car clockwise
+
 During the race you can pause/unpause the game using the __spacebar__.
 The race is considered completed only if all cars completed the expected number of laps.
 Pressing __esc__ results in a race abort, no points are awarded and the race must be repeated in order to complete the championship.
 
+## Physical release
+There is no physical release of this game but if you really want you can just write the adf file provided in this github releases page into a floppy disk.
+Additionally we provide this [box pdf](docs/RCmini_Box_Cover-1.pdf), just print it and glue it on a box, we did that with a cereal box with excellent results.
+The box will fit the floppy disk in any direction.
 ## Track files specification
 
 For a full tutorial go to [this tutorial](rc_ocs/docs/trackcreationtutorial.md)
