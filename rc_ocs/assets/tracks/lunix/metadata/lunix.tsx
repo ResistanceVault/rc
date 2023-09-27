@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tileset version="1.10" tiledversion="1.10.2" name="lunix" tilewidth="320" tileheight="240" tilecount="1" columns="1">
+ <editorsettings>
+  <export target="lunix.xml" format="tsx"/>
+ </editorsettings>
+ <image source="../images/lunix.png" width="320" height="240"/>
+ <tile id="0">
+  <objectgroup draworder="index" id="2">
+   <object id="1" name="trajectory" x="124.75" y="200.25">
+    <polygon points="0,0 23.75,-7.75 72,-54.5 99,-76.25 134.5,-75.25 153,-63.25 150.5,-47.5 130.955,-45.7273 106.659,-46.3864 96,-23.25 100.25,-14.25 114.75,-13 126.25,-21.5 125.5,-104.5 125,-140.75 83.5,-160.5 -54.5,-164.5 -87.625,-144.75 -82.875,-115.5 -38.75,-110.25 9.25,-108.25 29.5,-92.125 29,-68.25 -42.75,-67 -80.5,-54.875 -86.75,-25.75 -74.875,-2.625 -29.75,-1.5"/>
+   </object>
+   <object id="2" name="brake1" type="modifier" x="218.5" y="134" width="65.75" height="75.75">
+    <properties>
+     <property name="action" value="brake"/>
+     <property name="threshold" type="int" value="16"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+</tileset>
