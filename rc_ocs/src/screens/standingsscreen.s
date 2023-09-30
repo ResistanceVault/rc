@@ -443,6 +443,7 @@ standings_draw_menu:
     move.l              #RESULT_MENU_MAIN,MENUSCREEN_ENTRIES     ; point "entry" data structure
     move.l              #TXT_RESULT,TXTSCREEN_ENTRIES            ; point "txt" data structure
     move.l              MENU_RESULTS_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY ; where the cursor is at the beginning?
+    move.l              #ModuleMenu,MENU_MUSIC_PTR
     jsr                 MENUSCREEN
 
     rts

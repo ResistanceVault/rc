@@ -1027,6 +1027,7 @@ MAIN_PALETTE2_31:    dc.w 0    ; color 31
 
 	include "AProcessing/libs/math/sqrt_table_q16_0.i"
 Module1:
-	;incbin "src/assets/music/P61.new_ditty"				;CIA, usecode $c00b43b
-
 	incbin "src/assets/music/P61.alfetta"				;CIA, usecode $80009D7E
+ModuleMenu:
+	incbin "src/assets/music/P61.rctrack"				;CIA, usecode $9001
+

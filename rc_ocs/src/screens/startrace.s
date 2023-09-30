@@ -198,6 +198,7 @@ START_RACE_SCREEN:
     move.l              #MENU_START_RACE_SCREEN,MENUSCREEN_ENTRIES
     move.l              #TXT_START_RACE_SCREEN,TXTSCREEN_ENTRIES
     move.l              MENU_START_RACE_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY
+    move.l              #ModuleMenu,MENU_MUSIC_PTR
     jsr                 MENUSCREEN
     rts
 

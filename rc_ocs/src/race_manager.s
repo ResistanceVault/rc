@@ -195,7 +195,7 @@ MANAGE_END_STATE:
 
     jsr                 RESULTSCREEN
     jsr                 STANDINGSSCREEN
-    beq.w				welcomescreen_start
+    bra.w				welcomescreen_start
     ENDIF
 no_real_end_race:
     bra.w               before_moversloop

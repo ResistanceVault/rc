@@ -107,5 +107,6 @@ loopresetstandings:
     move.l  #MENU_MAIN,MENUSCREEN_ENTRIES
     move.l  #TXT_MAIN,TXTSCREEN_ENTRIES
     move.l  MENU_MAIN_CURRENTLY_SELECTED,MENUSCREEN_SELECTED_ENTRY
+    move.l  #ModuleMenu,MENU_MUSIC_PTR
     jsr     MENUSCREEN
     rts

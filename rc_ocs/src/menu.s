@@ -87,6 +87,7 @@ MENU_AUTOEXIT_LOADING_SCREEN: dc.w  0
 
 MENU_CALLBACK_BEFORE_LOOP_FUNCT:
                             dc.l    0
+MENU_MUSIC_PTR              dc.l    0
 
 MENU_INPUT_FUNCT_LIST:
     dc.l                    READJOY1_WELCOME
@@ -305,6 +306,16 @@ setcursormain:
     jsr                 (a0)
 .menu_no_callback_before_loop
 
+    ; init menu music
+    tst.l               MENU_MUSIC_PTR
+    beq.s               .nomenumusic
+    move.l 				MENU_MUSIC_PTR,a0
+	sub.l 				a1,a1
+	sub.l 				a2,a2
+	moveq 				#0,d0
+	jsr 				P61_Init
+.nomenumusic:
+
     ; copperlist setup
     move.l				#COPPERLIST_MAIN,$dff080	; Copperlist point
     move.w				d0,$dff088			; Copperlist start
@@ -413,6 +424,11 @@ exitmainscreen:
 menuend:
     clr.w               LOADING_SCREEN_FLAG
     clr.w               LOADING_TRACK_FLAG
+    tst.l               MENU_MUSIC_PTR
+    beq.s               .nomenumusicend
+    clr.l               MENU_MUSIC_PTR
+    jsr 				P61_End
+.nomenumusicend
     movem.l             (sp)+,a0-a6/d0-d7
     rts
 
