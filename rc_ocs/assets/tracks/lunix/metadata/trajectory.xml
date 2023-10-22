@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="lunix" tilewidth="320" tileheight="240" tilecount="1" columns="1">
- <image source="../images/lunix.png" width="320" height="240"/>
+<tileset version="1.10" tiledversion="1.10.2" name="rc046b_320X240X32" tilewidth="320" tileheight="240" tilecount="1" columns="1">
+ <image source="../images/rc046b_320X240X32.png" width="320" height="240"/>
  <tile id="0">
   <objectgroup draworder="index" id="2">
-   <object id="1" name="trajectory" x="124.75" y="200.25">
-    <polygon points="0,0 23.75,-7.75 72,-54.5 99,-76.25 134.5,-75.25 160.75,-64.5 156.75,-46 135.5,-37 103.75,-36.75 90,-22.5 94,-11 117.25,-4.5 126.25,-21.5 125.5,-104.5 125,-140.75 83.5,-160.5 -54.5,-164.5 -86,-140.5 -85.25,-123.5 -38.75,-110.25 9.25,-108.25 26.5,-88.25 29,-68.25 -42.75,-67 -68.5,-46.75 -86.75,-25.75 -61.5,-6.25 -29.75,-1.5"/>
+   <object id="1" name="trajectory" type="trajectory" x="124" y="34.3333">
+    <polygon points="0,0 -90.6667,7.66667 -98.3333,28.6667 -88.3333,57.6667 -67.6667,58 -21.3333,57 3,71 0.666667,100 -45,106 -88.3333,104.667 -96,119.667 -99,147.667 -84.6667,170.667 -11.6667,160 74.6667,79 153,70.3333 163.333,108 136.333,125 88.3333,124.333 80.6667,151 89.3333,164.333 111,165.667 115.333,146.333 127,26.3333 72.6667,2.66667"/>
+   </object>
+   <object id="3" name="sail1" type="modifier" x="208.667" y="177.667" width="45" height="27.3333">
+    <properties>
+     <property name="action" value="sail"/>
+     <property name="threshold" type="int" value="32"/>
+    </properties>
    </object>
   </objectgroup>
  </tile>

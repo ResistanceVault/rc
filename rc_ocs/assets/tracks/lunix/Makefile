@@ -1,4 +1,4 @@
-IMAGE32COLORS = lunix
+IMAGE32COLORS = rc046b_320X240X32
 TRACKNAME = LUNIX
 DESIRED_FILE_SIZE = 125916
 
@@ -16,14 +16,14 @@ all:
 	cat ./metadata/$(IMAGE32COLORS).data >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	# add starting positions
-	printf "%04x%04x%04x\n" 96 193 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x%04x\n" 86 204 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x%04x\n" 76 193 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x%04x\n" 66 204 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x%04x\n" 56 193 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x%04x\n" 46 204 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x%04x\n" 44 190 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
-	printf "%04x%04x%04x\n" 31 190 0 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 150 28 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 160 38 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 170 28 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 180 38 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 190 28 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 200 38 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 210 28 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	printf "%04x%04x%04x\n" 220 38 180 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	#add CPU positions
 	../build_trajectory.sh ./metadata/trajectory.xml | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
@@ -33,7 +33,7 @@ all:
 		printf '\377%.0s' $$(seq 1 $$DIFF) | dd of=../../../buildadf/tracks/$(TRACKNAME).TRK bs=1 seek=$$DIMENSIONE_FILE conv=notrunc;
 
 	# number of zones of the track
-	echo 00 0F | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
+	echo 00 07 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
 
 	# hotspot CPU distance
 	echo 00 10 | xxd -r -p >> ../../../buildadf/tracks/$(TRACKNAME).TRK
