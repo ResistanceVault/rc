@@ -18,6 +18,15 @@ with the result considering the limitation of the Amiga if compared to a PC of l
 ![main.png](screenshots/main.png)
 ![easytrack_a600.png](screenshots/easytrack_a600..png)
 
+## Credits
+Rc is a collective effort from the following people:
+- Ozzyboshi / concept and code
+- Vectrex28 / fonts
+- Z3K / Tracks and background images
+- Lunix / Tracks
+- Oriens / Tracks
+- Maze / mod.alfetta background music
+- O. Stokka (4pLaY) / Coordination
 
 ## System requirements
 RC cars should run on any classic Amiga with at least 1MB of chip ram, however, following there is
